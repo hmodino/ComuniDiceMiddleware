@@ -1,0 +1,64 @@
+2019-02-20 10:16:26.853 INFO  CompraServiceImpl:101 - 60.0
+2019-02-20 10:16:55.788 INFO  CompraServiceImpl:101 - 60.0
+2019-02-20 10:17:40.389 INFO  CompraServiceImpl:101 - 60.0
+2019-02-20 10:18:08.333 INFO  CompraServiceImpl:99 - 60.0
+2019-02-20 10:20:16.354 INFO  CompraServiceImpl:98 - 60.0
+2019-02-20 10:25:00.333 INFO  CompraServiceImpl:98 - 60.0
+2019-02-20 11:48:46.219 INFO  CompraServiceImpl:96 - 60.0
+2019-02-20 11:48:46.229 INFO  CompraServiceImpl:98 - 60.0
+2019-02-20 11:52:27.051 INFO  CompraServiceImpl:96 - 60.0
+2019-02-20 11:52:27.059 INFO  CompraServiceImpl:98 - 60.0
+2019-02-20 11:52:56.313 INFO  CompraServiceImpl:96 - 60.0
+2019-02-20 11:52:56.322 INFO  CompraServiceImpl:98 - 60.0
+2019-02-20 12:00:44.818 INFO  CompraServiceImpl:96 - 60.0
+2019-02-20 12:00:44.827 INFO  CompraServiceImpl:98 - 60.0
+2019-02-20 12:03:11.669 INFO  CompraServiceImpl:96 - 60.0
+2019-02-20 12:03:11.681 INFO  CompraServiceImpl:98 - 60.0
+2019-02-20 12:03:11.799 INFO  CompraServiceImpl:107 - La compra ha sido realizada con éxito
+2019-02-20 12:05:25.489 INFO  CompraServiceImpl:105 - La compra ha sido realizada con éxito
+2019-02-20 12:06:05.439 INFO  CompraServiceImpl:107 - La compra ha sido realizada con éxito
+2019-02-20 12:09:32.326 INFO  CompraServiceImpl:111 - cosa rara
+2019-02-20 12:14:19.517 INFO  CompraServiceImpl:109 - Inserta lineas de compra
+2019-02-20 12:14:35.132 INFO  CompraServiceImpl:106 - La compra ha sido realizada con éxito
+2019-02-20 12:27:10.226 INFO  CompraServiceImpl:46 - com.rollanddice.comunidice.model.Compra@5e0e82ae[idCompra=20,nLinea=[],idUsuario=7,subtotal=60.0,gastosEnvio=3.0,total=63.0,modoPago=1,fechaCompra=2019-02-20]
+2019-02-20 12:34:40.588 INFO  CompraServiceImpl:70 - [com.rollanddice.comunidice.model.Compra@30c15d8b[idCompra=2,nLinea=<null>,idUsuario=7,subtotal=0.0,gastosEnvio=3.0,total=3.0,modoPago=1,fechaCompra=2019-02-19], com.rollanddice.comunidice.model.Compra@36fc695d[idCompra=3,nLinea=<null>,idUsuario=7,subtotal=0.0,gastosEnvio=3.0,total=3.0,modoPago=1,fechaCompra=2019-02-19], com.rollanddice.comunidice.model.Compra@28701274[idCompra=9,nLinea=<null>,idUsuario=7,subtotal=0.0,gastosEnvio=3.0,total=3.0,modoPago=1,fechaCompra=2019-02-20], com.rollanddice.comunidice.model.Compra@13c9d689[idCompra=10,nLinea=<null>,idUsuario=7,subtotal=0.0,gastosEnvio=3.0,total=3.0,modoPago=1,fechaCompra=2019-02-20], com.rollanddice.comunidice.model.Compra@3754a4bf[idCompra=20,nLinea=<null>,idUsuario=7,subtotal=60.0,gastosEnvio=3.0,total=63.0,modoPago=1,fechaCompra=2019-02-20]]
+2019-02-20 17:01:27.138 INFO  CompraServiceImpl:70 - [com.rollanddice.comunidice.model.Compra@30c15d8b[idCompra=2,nLinea=<null>,idUsuario=7,subtotal=0.0,gastosEnvio=3.0,total=3.0,modoPago=1,fechaCompra=2019-02-19], com.rollanddice.comunidice.model.Compra@36fc695d[idCompra=3,nLinea=<null>,idUsuario=7,subtotal=0.0,gastosEnvio=3.0,total=3.0,modoPago=1,fechaCompra=2019-02-19], com.rollanddice.comunidice.model.Compra@28701274[idCompra=9,nLinea=<null>,idUsuario=7,subtotal=0.0,gastosEnvio=3.0,total=3.0,modoPago=1,fechaCompra=2019-02-20], com.rollanddice.comunidice.model.Compra@13c9d689[idCompra=10,nLinea=<null>,idUsuario=7,subtotal=0.0,gastosEnvio=3.0,total=3.0,modoPago=1,fechaCompra=2019-02-20], com.rollanddice.comunidice.model.Compra@3754a4bf[idCompra=20,nLinea=<null>,idUsuario=7,subtotal=60.0,gastosEnvio=3.0,total=63.0,modoPago=1,fechaCompra=2019-02-20]]
+2019-02-20 17:01:56.811 INFO  CompraServiceImpl:107 - La compra ha sido realizada con éxito
+2019-02-20 17:54:48.139 DEBUG UsuarioDAOImpl:152 - id = 7 email = false contraseña = false nombre = Estela apellido = Quijada apellido = Viña nombre usuario v fecha alta null descripción null telefono 468794132
+2019-02-20 17:54:48.417 DEBUG UsuarioDAOImpl:187 - id = 7 email = false contraseña = false nombre = Estela apellido = Quijada apellido = Viña nombre usuario v fecha alta null descripción null telefono 468794132
+2019-02-20 17:54:48.510 INFO  UsuarioServiceImpl:116 - Usuario creado con éxito
+2019-02-20 17:58:30.858 DEBUG UsuarioDAOImpl:152 - id = 7 email = false contraseña = false nombre = Estela apellido = Quijada apellido = Viña nombre usuario b fecha alta null descripción null telefono 468794132
+2019-02-20 17:58:31.151 WARN  UsuarioDAOImpl:193 - Duplicate entry 'KCDLSÑOLVJ' for key 'EMAIL'
+com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Duplicate entry 'KCDLSÑOLVJ' for key 'EMAIL'
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method) ~[?:1.8.0_191]
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(Unknown Source) ~[?:1.8.0_191]
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(Unknown Source) ~[?:1.8.0_191]
+	at java.lang.reflect.Constructor.newInstance(Unknown Source) ~[?:1.8.0_191]
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.mysql.jdbc.Util.getInstance(Util.java:408) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:936) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3978) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3914) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:2530) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:2683) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2495) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.mysql.jdbc.PreparedStatement.executeInternal(PreparedStatement.java:1903) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.mysql.jdbc.PreparedStatement.executeUpdateInternal(PreparedStatement.java:2124) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.mysql.jdbc.PreparedStatement.executeUpdateInternal(PreparedStatement.java:2058) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.mysql.jdbc.PreparedStatement.executeLargeUpdate(PreparedStatement.java:5158) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.mysql.jdbc.PreparedStatement.executeUpdate(PreparedStatement.java:2043) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.rollanddice.comunidice.dao.impl.UsuarioDAOImpl.create(UsuarioDAOImpl.java:178) [bin/:?]
+	at com.rollanddice.comunidice.service.impl.UsuarioServiceImpl.signUp(UsuarioServiceImpl.java:112) [bin/:?]
+	at UsuarioServiceTest.main(UsuarioServiceTest.java:25) [bin/:?]
+2019-02-20 17:58:31.182 WARN  UsuarioServiceImpl:121 - null
+java.lang.Exception: null
+	at com.rollanddice.comunidice.dao.impl.UsuarioDAOImpl.create(UsuarioDAOImpl.java:194) ~[bin/:?]
+	at com.rollanddice.comunidice.service.impl.UsuarioServiceImpl.signUp(UsuarioServiceImpl.java:112) [bin/:?]
+	at UsuarioServiceTest.main(UsuarioServiceTest.java:25) [bin/:?]
+2019-02-20 17:58:47.851 DEBUG UsuarioDAOImpl:152 - id = 7 email = false contraseña = false nombre = Estela apellido = Quijada apellido = Viña nombre usuario b fecha alta null descripción null telefono 468794132
+2019-02-20 17:58:48.092 DEBUG UsuarioDAOImpl:187 - id = 7 email = false contraseña = false nombre = Estela apellido = Quijada apellido = Viña nombre usuario b fecha alta null descripción null telefono 468794132
+2019-02-20 17:58:48.164 WARN  UsuarioServiceImpl:121 - null
+org.apache.commons.mail.EmailException: null
+	at com.rollanddice.comunidice.service.impl.MailServiceImpl.emailService(MailServiceImpl.java:34) ~[bin/:?]
+	at com.rollanddice.comunidice.service.impl.UsuarioServiceImpl.signUp(UsuarioServiceImpl.java:113) [bin/:?]
+	at UsuarioServiceTest.main(UsuarioServiceTest.java:25) [bin/:?]
