@@ -9,16 +9,25 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.rollanddice.comunidice.dao.spi.ProductoDAO;
 import com.rollanddice.comunidice.dao.util.DaoUtils;
 import com.rollanddice.comunidice.dao.util.JDBCUtils;
+import com.rollanddice.comunidice.exception.DataException;
+import com.rollanddice.comunidice.exception.DuplicateInstanceException;
+import com.rollanddice.comunidice.exception.InstanceNotFoundException;
 import com.rollanddice.comunidice.model.Criteria;
 import com.rollanddice.comunidice.model.Producto;
+import com.rollanddice.comunidice.model.Results;
 
 public class ProductoDAOImpl implements ProductoDAO{
 
+	private static Logger logger = LogManager.getLogger(ProductoDAOImpl.class.getName());
+	
 	@Override
-	public Producto findById(Connection c, Integer id, String idioma) throws Exception {
+	public Producto findById(Connection c, Integer id, String idioma) throws InstanceNotFoundException, DataException{
 		
 		Producto p= null;
 		
@@ -39,13 +48,13 @@ public class ProductoDAOImpl implements ProductoDAO{
 			resultSet = preparedStatement.executeQuery();			
 			
 			if (resultSet.next()) {				
-				p = loadNext(c, resultSet);				
+				p = loadNext(resultSet);				
 			} else {
-				throw new Exception("El producto que buscas no existe");
+				throw new InstanceNotFoundException(id, "ProductoDAOImplfindById");
 			}				
 		} 
-		catch (Exception ex) {
- 
+		catch (SQLException ex) {
+			throw new DataException(ex);
 		} 
 		finally {            
 			JDBCUtils.closeResultSet(resultSet);
@@ -56,10 +65,12 @@ public class ProductoDAOImpl implements ProductoDAO{
 }	
 
 	@Override
-	public List<Producto> findByCriteria(Connection c, Criteria criteria, String idioma) throws Exception {
+	public Results<Producto> findByCriteria(Connection c, Criteria criteria, String idioma, int startIndex, int count) 
+			throws InstanceNotFoundException, DataException{
 		
 		Producto p= null;
 		List<Producto> productos = new ArrayList<Producto>();
+		Results<Producto> results = null;
 		
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -67,8 +78,8 @@ public class ProductoDAOImpl implements ProductoDAO{
 		try {
 
 			sql = new StringBuilder(
-					" SELECT P.ID_PRODUCTO, P.ID_CATEGORIA, P.PRECIO, P.FECHA_ENTRADA, P.STOCK, P.IMAGEN, I.DESCRIPCION, I.NOMBRE "
-					+" FROM PRODUCTO P INNER JOIN IDIOMA_PRODUCTO I ON(P.ID_PRODUCTO = I.ID_PRODUCTO) "
+					" SELECT P.ID_PRODUCTO, P.ID_CATEGORIA, P.PRECIO, P.FECHA_ENTRADA, P.STOCK, P.IMAGEN, I.DESCRIPCION, "
+					+" I.NOMBRE FROM PRODUCTO P INNER JOIN IDIOMA_PRODUCTO I ON(P.ID_PRODUCTO = I.ID_PRODUCTO) "
 					+" WHERE I.IDIOMA LIKE ? ");
 			
 			boolean first = false;
@@ -137,30 +148,44 @@ public class ProductoDAOImpl implements ProductoDAO{
 			
 			resultSet = preparedStatement.executeQuery();			
 			
-			if (resultSet.next()) {				
-				while(resultSet.next()) {
-					p = loadNext(c, resultSet);
-					productos.add(p);
-				}
-			} else {
-				throw new Exception("La búsqueda que has introducido no ha producido ningún resultado");
-			}				
+			int currentCount = 0;
+
+			if ((startIndex >=1) && resultSet.absolute(startIndex)) {
+				do {
+					p = loadNext(resultSet);
+					productos.add(p);               	
+					currentCount++;                	
+				} while ((currentCount < count) && resultSet.next()) ;
+			}
+					
+			int totalRows = JDBCUtils.getTotalRows(resultSet);	
+			if(totalRows == 0) {
+				throw new InstanceNotFoundException(criteria, "ProductoDAOImpl.findByCriteria");
+			}
+			
+			results = new Results<Producto>(productos, startIndex, totalRows); 
+			
+			if (logger.isDebugEnabled()) {
+				logger.debug("Total rows: {}", totalRows);
+			}
+			
+			return results;
+						
 		} 
-		catch (Exception ex) {
-			throw new Exception(ex);
+		catch (SQLException ex) {
+			throw new DataException(ex);
 		} 
 		finally {            
 			JDBCUtils.closeResultSet(resultSet);
 			JDBCUtils.closeStatement(preparedStatement);
 		}  	
-			
-		return productos;
+
 	}
 	
 
 	@Override
-	public void create(Connection c, Producto p) throws Exception {
-		System.out.println("" + p);
+	public void create(Connection c, Producto p) throws DuplicateInstanceException, DataException {
+		
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 		try {
@@ -182,7 +207,7 @@ public class ProductoDAOImpl implements ProductoDAO{
 			int insertedRows = preparedStatement.executeUpdate();	
 			
 			if(insertedRows == 0) {
-				throw new SQLException("Operación fallida");
+				throw new DuplicateInstanceException(p, "ProductoDAOImpl.create");
 			}
 			
 			resultSet = preparedStatement.getGeneratedKeys();
@@ -192,8 +217,7 @@ public class ProductoDAOImpl implements ProductoDAO{
 			System.out.println(p.getIdProducto().toString());
 		} 
 		catch (SQLException ex) {
-			ex.printStackTrace();
-			throw new Exception();
+			throw new DataException();
 			
 		} 
 		finally {            
@@ -203,9 +227,7 @@ public class ProductoDAOImpl implements ProductoDAO{
 	}
 
 	@Override
-	public void createIdioma(Connection c, Producto p, String idioma) throws Exception {
-		System.out.println("" + p);
-		System.out.println(idioma);
+	public void createIdioma(Connection c, Producto p, String idioma) throws DuplicateInstanceException, DataException{
 		
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -227,13 +249,13 @@ public class ProductoDAOImpl implements ProductoDAO{
 			int insertedRows = preparedStatement.executeUpdate();	
 			
 			if(insertedRows == 0) {
-				throw new SQLException("Operación fallida");
+				throw new DuplicateInstanceException(p, "ProductoDAOImpl.createIdioma");
 			}
 			
 			resultSet = preparedStatement.getGeneratedKeys();
 		} 
 		catch (SQLException ex) {
-			throw new Exception();
+			throw new DataException();
 		} 
 		finally {            
 			JDBCUtils.closeResultSet(resultSet);
@@ -241,7 +263,7 @@ public class ProductoDAOImpl implements ProductoDAO{
 		}  	
 	}
 	
-	private Producto loadNext(Connection c, ResultSet resultSet) throws Exception {
+	private Producto loadNext(ResultSet resultSet) throws SQLException {
 		
 		Producto p= new Producto();
 		 

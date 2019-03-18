@@ -10,12 +10,15 @@ import java.util.List;
 import com.mysql.jdbc.Statement;
 import com.rollanddice.comunidice.dao.spi.LineaCompraDAO;
 import com.rollanddice.comunidice.dao.util.JDBCUtils;
+import com.rollanddice.comunidice.exception.DataException;
+import com.rollanddice.comunidice.exception.DuplicateInstanceException;
+import com.rollanddice.comunidice.exception.InstanceNotFoundException;
 import com.rollanddice.comunidice.model.LineaCompra;
 
 public class LineaCompraDAOImpl implements LineaCompraDAO{
 
 	@Override
-	public List<LineaCompra> findByCompra(Connection c, Integer idCompra) throws Exception {
+	public List<LineaCompra> findByCompra(Connection c, Integer idCompra) throws InstanceNotFoundException, DataException {
 		
 		List<LineaCompra> lcs = new ArrayList<LineaCompra>();
 		LineaCompra lc = null;
@@ -37,18 +40,19 @@ public class LineaCompraDAOImpl implements LineaCompraDAO{
 			resultSet = preparedStatement.executeQuery();	
 			
 			if (resultSet.next()) {				
-				while(resultSet.next()) {
+				do {
 					lc = loadNext(resultSet);
 					lcs.add(lc);
 				}
+				while(!resultSet.isLast()); 
 			} else {
-				throw new Exception("La búsqueda que has realizado no ha producido ningún resultado");
+				throw new InstanceNotFoundException(idCompra, "LineaCompraDAOImpl.findByCompra");
 			}				
 			
 			return lcs;
 		} 
 		catch (SQLException ex) {
-			throw new Exception(ex);
+			throw new DataException(ex);
 		} 
 		finally {            
 			JDBCUtils.closeResultSet(resultSet);
@@ -57,7 +61,7 @@ public class LineaCompraDAOImpl implements LineaCompraDAO{
 	}
 
 	@Override
-	public void create(Connection c, LineaCompra lc, Integer idCompra) throws Exception {
+	public void create(Connection c, LineaCompra lc, Integer idCompra) throws DuplicateInstanceException, DataException {
 		
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -79,13 +83,13 @@ public class LineaCompraDAOImpl implements LineaCompraDAO{
 			int insertedRows = preparedStatement.executeUpdate();	
 			
 			if(insertedRows == 0) {
-				throw new SQLException("Operación fallida");
+				throw new DuplicateInstanceException(lc, "LineaCompraDAOImpl.create");
 			}
 			
 			resultSet = preparedStatement.getGeneratedKeys();
 		} 
 		catch (SQLException ex) {
-			throw new Exception(ex);
+			throw new DataException(ex);
 		} 
 		finally {            
 			JDBCUtils.closeResultSet(resultSet);
@@ -94,7 +98,7 @@ public class LineaCompraDAOImpl implements LineaCompraDAO{
 	}
 
 	@Override
-	public void delete(Connection c, LineaCompra lc, Integer idCompra) throws Exception {
+	public void delete(Connection c, LineaCompra lc, Integer idCompra) throws InstanceNotFoundException, DataException{
 		
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -111,11 +115,11 @@ public class LineaCompraDAOImpl implements LineaCompraDAO{
 			int insertedRows = preparedStatement.executeUpdate();	
 			
 			if(insertedRows == 0) {
-				throw new SQLException("Operación fallida");
+				throw new InstanceNotFoundException(lc, "LineaCompraDAOImpl.delete");
 			}
 		} 
 		catch (SQLException ex) {
-			throw new Exception(ex);
+			throw new DataException(ex);
 		} 
 		finally {            
 			JDBCUtils.closeResultSet(resultSet);
@@ -123,7 +127,7 @@ public class LineaCompraDAOImpl implements LineaCompraDAO{
 		}  	
 	}
 
-	private LineaCompra loadNext(ResultSet resultSet) throws Exception {
+	private LineaCompra loadNext(ResultSet resultSet) throws SQLException {
 		
 		LineaCompra lc = new LineaCompra();
 		

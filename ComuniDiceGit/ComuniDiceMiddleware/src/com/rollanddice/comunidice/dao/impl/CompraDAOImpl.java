@@ -11,12 +11,14 @@ import java.util.List;
 import com.mysql.jdbc.Statement;
 import com.rollanddice.comunidice.dao.spi.CompraDAO;
 import com.rollanddice.comunidice.dao.util.JDBCUtils;
+import com.rollanddice.comunidice.exception.DataException;
+import com.rollanddice.comunidice.exception.InstanceNotFoundException;
 import com.rollanddice.comunidice.model.Compra;
 
 public class CompraDAOImpl implements CompraDAO{
 
 	@Override
-	public Compra findById(Connection c, Integer id) throws Exception {
+	public Compra findById(Connection c, Integer id) throws InstanceNotFoundException, DataException{
 		
 		Compra compra= null;
 		
@@ -36,13 +38,13 @@ public class CompraDAOImpl implements CompraDAO{
 			resultSet = preparedStatement.executeQuery();			
 			
 			if (resultSet.next()) {				
-				compra = loadNext(c, resultSet);				
-			} else {
-				throw new Exception("La búsqueda que has introducido no ha producido ningún resultado");
+				compra = loadNext(resultSet);				
+			}else {
+				throw new InstanceNotFoundException(id, "CompraDAOImpl.findById");
 			}				
 		} 
-		catch (Exception ex) {
-			throw new Exception(ex);
+		catch (SQLException ex) {
+			throw new DataException(ex);
 		} 
 		finally {            
 			JDBCUtils.closeResultSet(resultSet);
@@ -53,7 +55,7 @@ public class CompraDAOImpl implements CompraDAO{
 	}
 
 	@Override
-	public List<Compra> findByUsuario(Connection c, Integer idUsuario) throws Exception {
+	public List<Compra> findByUsuario(Connection c, Integer idUsuario) throws InstanceNotFoundException, DataException {
 		
 		Compra compra= null;
 		List<Compra> compras = new ArrayList<Compra>();
@@ -73,17 +75,17 @@ public class CompraDAOImpl implements CompraDAO{
 			preparedStatement.setInt(i++, idUsuario);
 			resultSet = preparedStatement.executeQuery();			
 			
-			if (resultSet.next()) {	
-				while(resultSet.next()) {
-					compra = loadNext(c, resultSet);
+			if (resultSet.next()) {
+				do {
+					compra = loadNext(resultSet);
 					compras.add(compra);
-				}				
+				}while(!resultSet.isLast());
 			} else {
-				throw new Exception("La búsqueda que has introducido no ha producido ningún resultado");
+				throw new InstanceNotFoundException(idUsuario, "CompraDAOImpl.findByUsuario");
 			}				
 		} 
-		catch (Exception ex) {
-			throw new Exception(ex);
+		catch (SQLException ex) {
+			throw new DataException();
 		} 
 		finally {            
 			JDBCUtils.closeResultSet(resultSet);
@@ -94,7 +96,7 @@ public class CompraDAOImpl implements CompraDAO{
 	}
 
 	@Override
-	public void create(Connection c, Compra compra) throws Exception {
+	public void create(Connection c, Compra compra) throws DataException {
 		
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -117,7 +119,7 @@ public class CompraDAOImpl implements CompraDAO{
 			int insertedRows = preparedStatement.executeUpdate();	
 			
 			if(insertedRows == 0) {
-				throw new SQLException("Operación fallida");
+				throw new DataException();
 			}
 			
 			resultSet = preparedStatement.getGeneratedKeys();
@@ -126,7 +128,7 @@ public class CompraDAOImpl implements CompraDAO{
 			}
 		} 
 		catch (SQLException ex) {
-			throw new Exception(ex);
+			throw new DataException(ex);
 		} 
 		finally {            
 			JDBCUtils.closeResultSet(resultSet);
@@ -135,7 +137,7 @@ public class CompraDAOImpl implements CompraDAO{
 	}
 
 	@Override
-	public void delete(Connection c, Compra compra) throws Exception {
+	public void delete(Connection c, Compra compra) throws InstanceNotFoundException, DataException {
 		
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -153,12 +155,12 @@ public class CompraDAOImpl implements CompraDAO{
 			int deletedRows = preparedStatement.executeUpdate();	
 			
 			if(deletedRows == 0) {
-				throw new SQLException("Operación fallida");
+				throw new InstanceNotFoundException(compra, "CompraDAOImpl.delete");
 			}	
 
 		} 
 		catch (SQLException ex) {
-			throw new Exception(ex);
+			throw new DataException(ex);
 		} 
 		finally {            
 			JDBCUtils.closeResultSet(resultSet);
@@ -166,7 +168,7 @@ public class CompraDAOImpl implements CompraDAO{
 		}  	
 	}
 	
-	private Compra loadNext(Connection c, ResultSet resultSet) throws Exception {
+	private Compra loadNext(ResultSet resultSet) throws SQLException{
 		
 		Compra compra = new Compra();
 		

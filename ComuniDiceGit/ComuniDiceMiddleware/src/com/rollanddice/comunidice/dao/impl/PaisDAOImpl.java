@@ -3,17 +3,20 @@ package com.rollanddice.comunidice.dao.impl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.rollanddice.comunidice.dao.spi.PaisDAO;
 import com.rollanddice.comunidice.dao.util.JDBCUtils;
+import com.rollanddice.comunidice.exception.DataException;
+import com.rollanddice.comunidice.exception.InstanceNotFoundException;
 import com.rollanddice.comunidice.model.Pais;
 
 public class PaisDAOImpl implements PaisDAO{
 
 	@Override
-	public Pais findById(Connection c, Integer id) throws Exception {
+	public Pais findById(Connection c, Integer id) throws InstanceNotFoundException, DataException{
 		
 		Pais p = null;
 		
@@ -35,11 +38,11 @@ public class PaisDAOImpl implements PaisDAO{
 			if (resultSet.next()) {				
 				p = loadNext(resultSet);				
 			} else {
-				throw new Exception("La búsqueda que has introducido no ha producido ningún resultado");
+				throw new InstanceNotFoundException(id, "PaisDAOImpl.findById");
 			}				
 		} 
-		catch (Exception ex) {
-			throw new Exception(ex);
+		catch (SQLException ex) {
+			throw new DataException(ex);
 		} 
 		finally {            
 			JDBCUtils.closeResultSet(resultSet);
@@ -50,7 +53,7 @@ public class PaisDAOImpl implements PaisDAO{
 	}
 
 	@Override
-	public List<Pais> findAll(Connection c) throws Exception {
+	public List<Pais> findAll(Connection c) throws DataException{
 		
 		Pais p = null;
 		List<Pais> ps = new ArrayList<Pais>();
@@ -68,16 +71,14 @@ public class PaisDAOImpl implements PaisDAO{
 			resultSet = preparedStatement.executeQuery();			
 			
 			if (resultSet.next()) {	
-				while(resultSet.next()) {
+				do{
 					p = loadNext(resultSet);
 					ps.add(p);
-				}				
-			} else {
-				throw new Exception("La búsqueda que has introducido no ha producido ningún resultado");
-			}				
+				}while(resultSet.isLast());				
+			}
 		} 
-		catch (Exception ex) {
-			throw new Exception(ex);
+		catch (SQLException ex) {
+			throw new DataException(ex);
 		} 
 		finally {            
 			JDBCUtils.closeResultSet(resultSet);
@@ -87,7 +88,7 @@ public class PaisDAOImpl implements PaisDAO{
 		return ps;
 	}
 
-	private Pais loadNext(ResultSet resultSet) throws Exception {
+	private Pais loadNext(ResultSet resultSet) throws SQLException {
 		
 		Pais p = new Pais();
 		

@@ -13,7 +13,6 @@ import com.rollanddice.comunidice.dao.spi.ComentarioDAO;
 import com.rollanddice.comunidice.dao.util.DaoUtils;
 import com.rollanddice.comunidice.dao.util.JDBCUtils;
 import com.rollanddice.comunidice.exception.DataException;
-import com.rollanddice.comunidice.exception.DuplicateInstanceException;
 import com.rollanddice.comunidice.exception.InstanceNotFoundException;
 import com.rollanddice.comunidice.model.Comentario;
 
@@ -41,7 +40,7 @@ public class ComentarioDAOImpl implements ComentarioDAO{
 			resultSet = preparedStatement.executeQuery();	
 			
 			if (resultSet.next()) {				
-					coment = loadNext(resultSet);
+				coment = loadNext(resultSet);
 			} else {
 				throw new InstanceNotFoundException(idComentario, "ComentarioDAOImpl.findById");
 			}				
@@ -65,6 +64,7 @@ public class ComentarioDAOImpl implements ComentarioDAO{
 		List<Comentario> comentarios = new ArrayList<Comentario>();
 		Comentario coment = null;
 		StringBuilder sql = null;
+		Integer id = null;
 		
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -76,10 +76,12 @@ public class ComentarioDAOImpl implements ComentarioDAO{
 			boolean first = true;
 			if(idProducto!=null) {
 				DaoUtils.anadir(sql, first, " ID_PRODUCTO = ? ");
+				id = idProducto;
 				first = false;
 			}
 			if(idForo != null) {
 				DaoUtils.anadir(sql, first, " ID_FORO = ? ");
+				id = idForo;
 				first = false;
 			}
 			preparedStatement = c.prepareStatement(sql.toString(), ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -93,11 +95,14 @@ public class ComentarioDAOImpl implements ComentarioDAO{
 			}
 			resultSet = preparedStatement.executeQuery();	
 						
-				while(resultSet.next()) {
+			if(resultSet.next()) {
+				do {
 					coment = loadNext(resultSet);
 					comentarios.add(coment);
-					System.out.println(coment);
-				}
+				}while(!resultSet.isLast());
+			}else {
+				throw new InstanceNotFoundException(id, "ComentarioDAOImpl.findByProductoOForo");
+			}
 						
 
 		} 
@@ -119,6 +124,7 @@ public class ComentarioDAOImpl implements ComentarioDAO{
 		List<Comentario> comentarios = new ArrayList<Comentario>();
 		Comentario coment = null;
 		StringBuilder sql = null;
+		Integer id = null;
 		
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -131,11 +137,11 @@ public class ComentarioDAOImpl implements ComentarioDAO{
 			boolean first = false;
 			if(idProducto!=null) {
 				DaoUtils.anadir(sql, first, " ID_PRODUCTO = ? ");
-				first = false;
+				id = idProducto;
 			}
 			if(idForo != null) {
 				DaoUtils.anadir(sql, first, " ID_FORO = ? ");
-				first = false;
+				id = idForo;
 			}
 			preparedStatement = c.prepareStatement(sql.toString(), ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			
@@ -149,10 +155,14 @@ public class ComentarioDAOImpl implements ComentarioDAO{
 			}
 			resultSet = preparedStatement.executeQuery();	
 						
-				while(resultSet.next()) {
+			if(resultSet.next()) {
+				do {
 					coment = loadNext(resultSet);
 					comentarios.add(coment);
-				}
+				}while(!resultSet.isLast());
+			}else {
+				throw new InstanceNotFoundException(id, "ComentarioDAOImpl.findByUsuarioProductoOForo");
+			}
 		} 
 		catch (SQLException ex) {
 			throw new DataException(ex);
@@ -172,6 +182,7 @@ public class ComentarioDAOImpl implements ComentarioDAO{
 		List<Comentario> comentarios = new ArrayList<Comentario>();
 		Comentario coment = null;
 		StringBuilder sql = null;
+		String tipo = null;
 		
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -184,11 +195,11 @@ public class ComentarioDAOImpl implements ComentarioDAO{
 			boolean first = false;
 			if(booleano==true) {
 				DaoUtils.anadir(sql, first, " ID_PRODUCTO IS NOT NULL ");
-				first = false;
+				tipo = "producto";
 			}
 			if(booleano==false) {
 				DaoUtils.anadir(sql, first, " ID_FORO IS NOT NULL ");
-				first = false;
+				tipo = "foro";
 			}
 			preparedStatement = c.prepareStatement(sql.toString(), ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			
@@ -196,12 +207,15 @@ public class ComentarioDAOImpl implements ComentarioDAO{
 			preparedStatement.setInt(i++, idUsuario);
 			resultSet = preparedStatement.executeQuery();	
 			
-				while(resultSet.next()) {
+			if(resultSet.next()) {
+				do {
 					coment = loadNext(resultSet);
 					comentarios.add(coment);
-				}			
-
-		} 
+				}while(!resultSet.isLast());		
+			}else {
+				throw new InstanceNotFoundException(tipo, "ComentarioDAOImpl.findByUsuarioTipo");
+			}
+		}
 		catch (SQLException ex) {
 			throw new DataException(ex);
 		} 
@@ -215,7 +229,7 @@ public class ComentarioDAOImpl implements ComentarioDAO{
 
 	@Override
 	public void create(Connection c, Comentario comentario, Integer idProducto, Integer idForo) 
-			throws InstanceNotFoundException, DataException {
+			throws DataException {
 		
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -247,7 +261,7 @@ public class ComentarioDAOImpl implements ComentarioDAO{
 			int insertedRows = preparedStatement.executeUpdate();	
 			
 			if(insertedRows == 0) {
-				throw new DuplicateInstanceException(c, "ComentarioDAOImpl.create");
+				throw new DataException();
 			}
 			
 			resultSet = preparedStatement.getGeneratedKeys();
@@ -281,7 +295,7 @@ public class ComentarioDAOImpl implements ComentarioDAO{
 			int deletedRows = preparedStatement.executeUpdate();
 			
 			if(deletedRows == 0) {
-				throw new SQLException("Operación fallida");
+				throw new InstanceNotFoundException(comentario, "ComentarioDAOImpl.delete");
 			}
 		} 
 		catch (SQLException ex) {
@@ -293,7 +307,7 @@ public class ComentarioDAOImpl implements ComentarioDAO{
 		}  	
 	}
 	
-	private Comentario loadNext(ResultSet resultSet) throws SQLException, DataException {
+	private Comentario loadNext(ResultSet resultSet) throws SQLException{
 		
 		Comentario coment = new Comentario();
 

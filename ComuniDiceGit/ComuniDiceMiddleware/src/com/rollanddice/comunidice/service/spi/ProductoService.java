@@ -1,23 +1,22 @@
 package com.rollanddice.comunidice.service.spi;
 
-import java.util.List;
-
 import com.rollanddice.comunidice.model.Criteria;
 import com.rollanddice.comunidice.model.Juego;
 import com.rollanddice.comunidice.model.Producto;
+import com.rollanddice.comunidice.model.Results;
 
 public interface ProductoService {
 	
 	public Producto findById(Integer id, String idioma)
 		throws Exception;
 		
-	public List<Producto> findByCriteria(Criteria criteria, String idioma)
+	public Results<Producto> findByCriteria(Criteria criteria, String idioma, int startIndex, int count)
 		throws Exception;
 
 	public Juego findJuegoById(Integer id) 
 		throws Exception;
 
-	public List<Juego> findJuegoByCriteria(Criteria criteria) 
+	public Results<Juego> findJuegoByCriteria(Criteria criteria, int startIndex, int count) 
 		throws Exception;
 	
 	public void create(Producto p, String idioma)

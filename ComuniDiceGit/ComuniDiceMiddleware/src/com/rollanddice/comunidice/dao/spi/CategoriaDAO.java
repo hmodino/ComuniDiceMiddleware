@@ -11,7 +11,4 @@ public interface CategoriaDAO {
 	
 	public List<Categoria> findAll(Connection c)
 		throws InstanceNotFoundException, DataException;
-
-	Categoria findById(Connection c, Integer id) 
-			throws InstanceNotFoundException, DataException;
 }

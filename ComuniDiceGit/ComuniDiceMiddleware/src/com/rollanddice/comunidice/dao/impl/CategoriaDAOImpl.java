@@ -14,45 +14,6 @@ import com.rollanddice.comunidice.exception.InstanceNotFoundException;
 import com.rollanddice.comunidice.model.Categoria;
 
 public class CategoriaDAOImpl implements CategoriaDAO{
-
-	@Override
-	public Categoria findById(Connection c, Integer id) throws InstanceNotFoundException, DataException {
-		
-		Categoria categoria = null;
-		
-		PreparedStatement preparedStatement = null;
-		ResultSet resultSet = null;
-		try {
-
-			String sql;
-			sql =  "SELECT ID_CATEGORIA, NOMBRE "
-				  +" FROM CATEGORIA "
-				  +" WHERE ID_CATEGORIA = ? ";
-			
-			preparedStatement = c.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-			
-			int i = 1;
-			preparedStatement.setInt(i++, id);
-			
-			resultSet = preparedStatement.executeQuery();	
-			
-			if (resultSet.next()) {				
-					categoria = loadNext(resultSet);
-			} else {
-				throw new InstanceNotFoundException(id, "CategoriaDAOImpl.findById");
-			}				
-
-		} 
-		catch (SQLException ex) {
-			throw new DataException(ex);
-		} 
-		finally {            
-			JDBCUtils.closeResultSet(resultSet);
-			JDBCUtils.closeStatement(preparedStatement);
-		}  	
-		
-		return categoria;
-	}
 	
 	@Override
 	public List<Categoria> findAll(Connection c) throws InstanceNotFoundException, DataException {
@@ -73,12 +34,12 @@ public class CategoriaDAOImpl implements CategoriaDAO{
 			resultSet = preparedStatement.executeQuery();	
 			
 			if (resultSet.next()) {				
-				while(!resultSet.isLast()) {
+				do {
 					categoria = loadNext(resultSet);
 					categorias.add(categoria);
-				}
+				}while(!resultSet.isLast());
 			} else {
-				throw new InstanceNotFoundException(categorias, "CategoriaDAOImpl.dinfById");
+				throw new InstanceNotFoundException("Categorias", "CategoriaDAOImpl.findById");
 			}				
 
 		} 
@@ -93,7 +54,7 @@ public class CategoriaDAOImpl implements CategoriaDAO{
 		return categorias;
 	}
 	
-private Categoria loadNext(ResultSet resultSet) throws DataException, SQLException{
+	private Categoria loadNext(ResultSet resultSet) throws SQLException{
 		
 		Categoria categoria = new Categoria();
 		

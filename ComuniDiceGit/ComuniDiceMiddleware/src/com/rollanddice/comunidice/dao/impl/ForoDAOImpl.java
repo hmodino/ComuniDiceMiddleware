@@ -11,13 +11,16 @@ import com.mysql.jdbc.Statement;
 import com.rollanddice.comunidice.dao.spi.ForoDAO;
 import com.rollanddice.comunidice.dao.util.DaoUtils;
 import com.rollanddice.comunidice.dao.util.JDBCUtils;
+import com.rollanddice.comunidice.exception.DataException;
+import com.rollanddice.comunidice.exception.DuplicateInstanceException;
+import com.rollanddice.comunidice.exception.InstanceNotFoundException;
 import com.rollanddice.comunidice.model.Criteria;
 import com.rollanddice.comunidice.model.Foro;
 
 public class ForoDAOImpl implements ForoDAO{
 
 	@Override
-	public Foro findById(Connection c, Integer id) throws Exception {
+	public Foro findById(Connection c, Integer id) throws InstanceNotFoundException, DataException{
 		
 		Foro f= null;
 		
@@ -37,13 +40,13 @@ public class ForoDAOImpl implements ForoDAO{
 			resultSet = preparedStatement.executeQuery();			
 			
 			if (resultSet.next()) {				
-				f = loadNext(c, resultSet);				
+				f = loadNext(resultSet);				
 			} else {
-				throw new Exception("El foro que buscas no existe");
+				throw new InstanceNotFoundException(id, "ForoDAOImpl.findById");
 			}				
 		} 
-		catch (Exception ex) {
-			throw new Exception(ex);
+		catch (SQLException ex) {
+			throw new DataException(ex);
 		} 
 		finally {            
 			JDBCUtils.closeResultSet(resultSet);
@@ -54,7 +57,7 @@ public class ForoDAOImpl implements ForoDAO{
 	}
 
 	@Override
-	public List<Foro> findByCriteria(Connection c, Criteria criteria) throws Exception {
+	public List<Foro> findByCriteria(Connection c, Criteria criteria) throws InstanceNotFoundException, DataException{
 		
 		Foro f = null;
 		List<Foro> foros = new ArrayList<Foro>();
@@ -90,14 +93,16 @@ public class ForoDAOImpl implements ForoDAO{
 			}
 			
 			resultSet = preparedStatement.executeQuery();			
-					
-				while(resultSet.next()) {
-					f = loadNext(c, resultSet);
+				
+			if(resultSet.next()) {
+				do {
+					f = loadNext(resultSet);
 					foros.add(f);
-			} 
+				}while(!resultSet.isLast());
+			}		 
 		} 
-		catch (Exception ex) {
-			throw new Exception(ex);
+		catch (SQLException ex) {
+			throw new DataException(ex);
 		} 
 		finally {            
 			JDBCUtils.closeResultSet(resultSet);
@@ -108,7 +113,7 @@ public class ForoDAOImpl implements ForoDAO{
 	}
 
 	@Override
-	public void create(Connection c, Foro foro) throws Exception {
+	public void create(Connection c, Foro foro) throws DuplicateInstanceException, DataException {
 		
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -130,13 +135,13 @@ public class ForoDAOImpl implements ForoDAO{
 			int insertedRows = preparedStatement.executeUpdate();	
 			
 			if(insertedRows == 0) {
-				throw new SQLException("Operación fallida");
+				throw new DuplicateInstanceException(foro, "ForoDAOImpl.create");
 			}
 			
 			resultSet = preparedStatement.getGeneratedKeys();
 		} 
 		catch (SQLException ex) {
-			throw new Exception(ex);
+			throw new DataException(ex);
 		} 
 		finally {            
 			JDBCUtils.closeResultSet(resultSet);
@@ -145,7 +150,7 @@ public class ForoDAOImpl implements ForoDAO{
 	}
 
 	@Override
-	public void delete(Connection c, Foro foro) throws Exception {
+	public void delete(Connection c, Foro foro) throws InstanceNotFoundException, DataException{
 		
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -163,11 +168,11 @@ public class ForoDAOImpl implements ForoDAO{
 			int deletedRows = preparedStatement.executeUpdate();	
 			
 			if(deletedRows == 0) {
-				throw new SQLException("Operación fallida");
+				throw new InstanceNotFoundException(foro, "ForoDAOImpl.delete");
 			}
 		} 
 		catch (SQLException ex) {
-			throw new Exception(ex);
+			throw new DataException(ex);
 		} 
 		finally {            
 			JDBCUtils.closeResultSet(resultSet);
@@ -175,7 +180,7 @@ public class ForoDAOImpl implements ForoDAO{
 		}  	
 	}
 	
-	private Foro loadNext(Connection c, ResultSet resultSet) throws Exception {
+	private Foro loadNext(ResultSet resultSet) throws SQLException{
 		
 		Foro f = new Foro();
 		

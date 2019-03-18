@@ -9,12 +9,16 @@ import java.util.List;
 
 import com.rollanddice.comunidice.dao.spi.FavoritoDAO;
 import com.rollanddice.comunidice.dao.util.JDBCUtils;
+import com.rollanddice.comunidice.exception.DataException;
+import com.rollanddice.comunidice.exception.DuplicateInstanceException;
+import com.rollanddice.comunidice.exception.InstanceNotFoundException;
 import com.rollanddice.comunidice.model.Favorito;
 
 public class FavoritoDAOImpl implements FavoritoDAO{
 
 	@Override
-	public List<Favorito> findByFavoritosUsuario(Connection c, Integer idUsuario) throws Exception {
+	public List<Favorito> findByFavoritosUsuario(Connection c, Integer idUsuario) 
+			throws InstanceNotFoundException, DataException{
 		
 		List<Favorito> favoritos = new ArrayList<Favorito>();
 		Favorito f = null;
@@ -36,17 +40,17 @@ public class FavoritoDAOImpl implements FavoritoDAO{
 			resultSet = preparedStatement.executeQuery();	
 			
 			if (resultSet.next()) {				
-				while(resultSet.next()) {
+				do{
 					f = loadNext(resultSet);
 					favoritos.add(f);
-				}
+				}while(!resultSet.isLast()); 
 			} else {
-				throw new Exception("Todavía no tienes ningún producto favorito");
+				throw new InstanceNotFoundException(idUsuario, "FavoritoDAOImpl.findByFavoritosUsuario");
 			}				
 			return favoritos;
 		} 
 		catch (SQLException ex) {
-			throw new Exception(ex);
+			throw new DataException(ex);
 		} 
 		finally {            
 			JDBCUtils.closeResultSet(resultSet);
@@ -55,7 +59,8 @@ public class FavoritoDAOImpl implements FavoritoDAO{
 	}
 
 	@Override
-	public List<Favorito> findByValoracionesUsuario(Connection c, Integer idUsuario) throws Exception {
+	public List<Favorito> findByValoracionesUsuario(Connection c, Integer idUsuario) 
+			throws InstanceNotFoundException, DataException {
 		
 		List<Favorito> favoritos = new ArrayList<Favorito>();
 		Favorito f = null;
@@ -77,17 +82,17 @@ public class FavoritoDAOImpl implements FavoritoDAO{
 			resultSet = preparedStatement.executeQuery();	
 			
 			if (resultSet.next()) {				
-				while(resultSet.next()) {
+				do{
 					f = loadNext(resultSet);
 					favoritos.add(f);
-				}
+				}while(!resultSet.isLast());
 			} else {
-				throw new Exception("Todavia no has valorado ningún producto");
+				throw new InstanceNotFoundException(idUsuario,"FavoritoDAOImpl.findValoracionesUsuario");
 			}				
 			return favoritos;
 		} 
 		catch (SQLException ex) {
-			throw new Exception(ex);
+			throw new DataException(ex);
 		} 
 		finally {            
 			JDBCUtils.closeResultSet(resultSet);
@@ -96,7 +101,7 @@ public class FavoritoDAOImpl implements FavoritoDAO{
 	}
 
 	@Override
-	public Double countFavoritos(Connection c, Integer idProducto) throws Exception {
+	public Double countFavoritos(Connection c, Integer idProducto) throws InstanceNotFoundException, DataException {
 		
 		Double f = null;
 		PreparedStatement preparedStatement = null;
@@ -118,12 +123,12 @@ public class FavoritoDAOImpl implements FavoritoDAO{
 			if (resultSet.next()) {				
 				f = loadNextP(resultSet);
 			} else {
-				throw new Exception("Este producto no ha sido marcado como favorito por nadie. ¡Sé el primero!");
+				throw new InstanceNotFoundException(idProducto, "FavoritoDAOImpl.countFavoritos");
 			}				
 			return f;
 		} 
 		catch (SQLException ex) {
-			throw new Exception(ex);
+			throw new DataException(ex);
 		} 
 		finally {            
 			JDBCUtils.closeResultSet(resultSet);
@@ -132,7 +137,8 @@ public class FavoritoDAOImpl implements FavoritoDAO{
 	}
 
 	@Override
-	public List<Double> findValoracionesByProducto(Connection c, Integer idProducto) throws Exception {
+	public List<Double> findValoracionesByProducto(Connection c, Integer idProducto) 
+			throws InstanceNotFoundException, DataException {
 		
 		Double f = null;
 		List<Double> fs = new ArrayList<Double>();
@@ -158,12 +164,12 @@ public class FavoritoDAOImpl implements FavoritoDAO{
 					fs.add(f);
 				}
 			} else {
-				throw new Exception("Este producto no ha sido valorado por nadie. ¡Sé el primero!");
+				throw new InstanceNotFoundException(idProducto, "FavoritoDAOImpl.findValoracionesByProducto");
 			}				
 			return fs;
 		} 
 		catch (SQLException ex) {
-			throw new Exception(ex);
+			throw new DataException(ex);
 		} 
 		finally {            
 			JDBCUtils.closeResultSet(resultSet);
@@ -172,7 +178,7 @@ public class FavoritoDAOImpl implements FavoritoDAO{
 	}
 
 	@Override
-	public Double mediaValoraciones(Connection c, Integer idProducto) throws Exception {
+	public Double mediaValoraciones(Connection c, Integer idProducto) throws InstanceNotFoundException, DataException {
 		
 		Double f = null;
 		PreparedStatement preparedStatement = null;
@@ -194,12 +200,12 @@ public class FavoritoDAOImpl implements FavoritoDAO{
 			if (resultSet.next()) {				
 					f = loadNextP(resultSet);
 			} else {
-				throw new Exception("Este producto no ha sido marcado como favorito por nadie. ¡Sé el primero!");
+				throw new InstanceNotFoundException(idProducto, "FavoritoDAOImpl.mediaValoraciones");
 			}				
 			return f;
 		} 
 		catch (SQLException ex) {
-			throw new Exception(ex);
+			throw new DataException(ex);
 		} 
 		finally {            
 			JDBCUtils.closeResultSet(resultSet);
@@ -208,7 +214,7 @@ public class FavoritoDAOImpl implements FavoritoDAO{
 	}
 
 	@Override
-	public void create(Connection c, Favorito favorito, Integer idUsuario) throws Exception {
+	public void create(Connection c, Favorito favorito, Integer idUsuario) throws DuplicateInstanceException, DataException {
 		
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -229,11 +235,11 @@ public class FavoritoDAOImpl implements FavoritoDAO{
 			int insertedRows = preparedStatement.executeUpdate();	
 			
 			if(insertedRows == 0) {
-				throw new SQLException("Operación fallida");
+				throw new DuplicateInstanceException(favorito, "FavoritoDAOImpl.create");
 			}
 		} 
 		catch (SQLException ex) {
-			throw new Exception(ex);
+			throw new DataException(ex);
 		} 
 		finally {            
 			JDBCUtils.closeResultSet(resultSet);
@@ -242,7 +248,8 @@ public class FavoritoDAOImpl implements FavoritoDAO{
 	}
 
 	@Override
-	public void update(Connection c, Favorito favorito, Integer idUsuario, Integer idProducto) throws Exception {
+	public void update(Connection c, Favorito favorito, Integer idUsuario, Integer idProducto) 
+			throws InstanceNotFoundException, DataException {
 		
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -264,7 +271,7 @@ public class FavoritoDAOImpl implements FavoritoDAO{
 			int insertedRows = preparedStatement.executeUpdate();	
 			
 			if(insertedRows == 0) {
-				throw new SQLException("Operación fallida");
+				throw new InstanceNotFoundException(favorito, "FavoritoDAOImpl.update");
 			}
 			
 			resultSet = preparedStatement.getResultSet();
@@ -273,7 +280,7 @@ public class FavoritoDAOImpl implements FavoritoDAO{
 			}
 		} 
 		catch (SQLException ex) {
-			throw new Exception(ex);
+			throw new DataException(ex);
 		} 
 		finally {            
 			JDBCUtils.closeResultSet(resultSet);
@@ -282,7 +289,8 @@ public class FavoritoDAOImpl implements FavoritoDAO{
 	}
 
 	@Override
-	public void delete(Connection c, Favorito favorito, Integer idUsuario, Integer idProducto) throws Exception {
+	public void delete(Connection c, Favorito favorito, Integer idUsuario, Integer idProducto) 
+			throws InstanceNotFoundException, DataException {
 		
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -300,11 +308,11 @@ public class FavoritoDAOImpl implements FavoritoDAO{
 			int deletedRows = preparedStatement.executeUpdate();
 			
 			if(deletedRows == 0) {
-				throw new SQLException("Operación fallida");
+				throw new InstanceNotFoundException(favorito, "FavoritoDAOImpl.delete");
 			}
 		} 
 		catch (SQLException ex) {
-			throw new Exception(ex);
+			throw new DataException(ex);
 		} 
 		finally {            
 			JDBCUtils.closeResultSet(resultSet);
@@ -313,7 +321,7 @@ public class FavoritoDAOImpl implements FavoritoDAO{
 	}
 	
 
-	private Favorito loadNext(ResultSet resultSet) throws Exception {
+	private Favorito loadNext(ResultSet resultSet) throws SQLException{
 		
 		Favorito f = new Favorito();
 		
@@ -331,7 +339,7 @@ public class FavoritoDAOImpl implements FavoritoDAO{
 		return f;
 	}
 	
-	private Double loadNextP(ResultSet resultSet) throws Exception{
+	private Double loadNextP(ResultSet resultSet) throws SQLException{
 		
 		int i = 1;
 		Double f = resultSet.getDouble(i++);

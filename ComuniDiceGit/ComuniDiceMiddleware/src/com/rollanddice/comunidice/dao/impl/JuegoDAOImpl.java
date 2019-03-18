@@ -4,21 +4,30 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.rollanddice.comunidice.dao.spi.JuegoDAO;
 import com.rollanddice.comunidice.dao.util.DaoUtils;
 import com.rollanddice.comunidice.dao.util.JDBCUtils;
+import com.rollanddice.comunidice.exception.DataException;
+import com.rollanddice.comunidice.exception.DuplicateInstanceException;
+import com.rollanddice.comunidice.exception.InstanceNotFoundException;
 import com.rollanddice.comunidice.model.Criteria;
 import com.rollanddice.comunidice.model.Juego;
+import com.rollanddice.comunidice.model.Producto;
+import com.rollanddice.comunidice.model.Results;
 
 public class JuegoDAOImpl implements JuegoDAO{
 
+	private static Logger logger = LogManager.getLogger(JuegoDAOImpl.class.getName());
+	
 	@Override
-	public Juego findById(Connection c, Integer id) throws Exception {
+	public Juego findById(Connection c, Integer id) throws InstanceNotFoundException, DataException{
 		
 		Juego j= null;
 		
@@ -39,13 +48,13 @@ public class JuegoDAOImpl implements JuegoDAO{
 			resultSet = preparedStatement.executeQuery();			
 			
 			if (resultSet.next()) {				
-				j = loadNext(c, resultSet);				
+				j = loadNext(resultSet);				
 			} else {
-				throw new Exception("El producto que buscas no existe");
+				throw new InstanceNotFoundException(id, "JuegoDAOImpl.findById");
 			}				
 		} 
-		catch (Exception ex) {
-			throw new Exception(ex);
+		catch (SQLException ex) {
+			throw new DataException(ex);
 		} 
 		finally {            
 			JDBCUtils.closeResultSet(resultSet);
@@ -56,10 +65,12 @@ public class JuegoDAOImpl implements JuegoDAO{
 	}
 
 	@Override
-	public List<Juego> findByCriteria(Connection c, Criteria criteria) throws Exception {
+	public Results<Juego> findByCriteria(Connection c, Criteria criteria, int startIndex, int count) 
+			throws InstanceNotFoundException, DataException{
 		
 		Juego j = null;
 		List<Juego> juegos = new ArrayList<Juego>();
+		Results<Juego> results = null;
 		
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -67,9 +78,9 @@ public class JuegoDAOImpl implements JuegoDAO{
 		try {
 
 			sql = new StringBuilder(
-					" SELECT P.ID_PRODUCTO, P.ID_CATEGORIA, J.NOMBRE, P.PRECIO, J.DESCRIPCION, P.FECHA_ENTRADA, P.STOCK, P.IMAGEN, "
-							+" J.ID_USUARIO, J.FORMATO, J.PAGINAS, J.TIPO_VENDEDOR, J.ANO_PUBLICACION, J.TIPO_TAPA "
-							+" FROM PRODUCTO P INNER JOIN JUEGO J ON(P.ID_PRODUCTO = J.ID_PRODUCTO) ");
+					" SELECT P.ID_PRODUCTO, P.ID_CATEGORIA, J.NOMBRE, P.PRECIO, J.DESCRIPCION, P.FECHA_ENTRADA, P.STOCK, "
+					+" P.IMAGEN, J.ID_USUARIO, J.FORMATO, J.PAGINAS, J.TIPO_VENDEDOR, J.ANO_PUBLICACION, J.TIPO_TAPA "
+					+" FROM PRODUCTO P INNER JOIN JUEGO J ON(P.ID_PRODUCTO = J.ID_PRODUCTO) ");
 			boolean first = true;
 			
 			if(criteria.getIdCategoria()!=null) {
@@ -177,28 +188,40 @@ public class JuegoDAOImpl implements JuegoDAO{
 			
 			resultSet = preparedStatement.executeQuery();			
 			
-			if (resultSet.next()) {				
-				while(resultSet.next()) {
-					j = loadNext(c, resultSet);
-					juegos.add(j);
-				}
-			} else {
-				throw new Exception("La búsqueda que has introducido no ha producido ningún resultado");
-			}				
+			int currentCount = 0;
+
+			if ((startIndex >=1) && resultSet.absolute(startIndex)) {
+				do {
+					j = loadNext(resultSet);
+					juegos.add(j);               	
+					currentCount++;                	
+				} while ((currentCount < count) && resultSet.next()) ;
+			}
+					
+			int totalRows = JDBCUtils.getTotalRows(resultSet);	
+			if(totalRows == 0) {
+				throw new InstanceNotFoundException(criteria, "JuegoDAOImpl.findByCriteria");
+			}
+			
+			results = new Results<Juego>(juegos, startIndex, totalRows); 
+			
+			if (logger.isDebugEnabled()) {
+				logger.debug("Total rows: {}", totalRows);
+			}
+			
+			return results;				
 		} 
-		catch (Exception ex) {
-			throw new Exception(ex);
+		catch (SQLException ex) {
+			throw new DataException(ex);
 		} 
 		finally {            
 			JDBCUtils.closeResultSet(resultSet);
 			JDBCUtils.closeStatement(preparedStatement);
 		}  	
-			
-		return juegos;
 	}
 	
 	@Override
-	public void create(Connection c, Juego j) throws Exception {
+	public void create(Connection c, Juego j) throws DuplicateInstanceException, DataException{
 	
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -206,11 +229,11 @@ public class JuegoDAOImpl implements JuegoDAO{
 
 			String sql;
 			if(j.getIdVendedor()!=null) {
-			sql =  "INSERT INTO JUEGO (ID_PRODUCTO, NOMBRE, DESCRIPCION, FORMATO, PAGINAS, TIPO_VENDEDOR, ANO_PUBLICACION, TIPO_TAPA, ID_USUARIO) "
-				  +" VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+				sql =  "INSERT INTO JUEGO (ID_PRODUCTO, NOMBRE, DESCRIPCION, FORMATO, PAGINAS, TIPO_VENDEDOR, ANO_PUBLICACION, "
+						+" TIPO_TAPA, ID_USUARIO) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			}else {
-				sql =  "INSERT INTO JUEGO (ID_PRODUCTO, NOMBRE, DESCRIPCION, FORMATO, PAGINAS, TIPO_VENDEDOR, ANO_PUBLICACION, TIPO_TAPA) "
-						  +" VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+				sql =  "INSERT INTO JUEGO (ID_PRODUCTO, NOMBRE, DESCRIPCION, FORMATO, PAGINAS, TIPO_VENDEDOR, ANO_PUBLICACION, "
+						+ " TIPO_TAPA) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 			}
 			preparedStatement = c.prepareStatement(sql);
 			
@@ -226,17 +249,16 @@ public class JuegoDAOImpl implements JuegoDAO{
 			if(j.getIdVendedor()!=null) {
 				preparedStatement.setInt(i++,  j.getIdVendedor());
 			}
-			System.out.println(preparedStatement);
 			
 			int insertedRows = preparedStatement.executeUpdate();	
 
 			if(insertedRows == 0) {
-				throw new Exception("Operación fallida");
+				throw new DuplicateInstanceException(j, "JuegoDAOImpl.create");
 			}
 			
 		} 
 		catch (SQLException ex) {
-			throw new Exception();
+			throw new DataException();
 		} 
 		finally {            
 			JDBCUtils.closeResultSet(resultSet);
@@ -244,7 +266,7 @@ public class JuegoDAOImpl implements JuegoDAO{
 		}  	
 	}
 	
-	private Juego loadNext(Connection c, ResultSet resultSet) throws Exception {
+	private Juego loadNext(ResultSet resultSet) throws SQLException {
 		
 		Juego j= new Juego();
 		

@@ -10,12 +10,15 @@ import java.util.List;
 import com.mysql.jdbc.Statement;
 import com.rollanddice.comunidice.dao.spi.LineaVentaDAO;
 import com.rollanddice.comunidice.dao.util.JDBCUtils;
+import com.rollanddice.comunidice.exception.DataException;
+import com.rollanddice.comunidice.exception.DuplicateInstanceException;
+import com.rollanddice.comunidice.exception.InstanceNotFoundException;
 import com.rollanddice.comunidice.model.LineaVenta;
 
 public class LineaVentaDAOImpl implements LineaVentaDAO{
 
 	@Override
-	public List<LineaVenta> findByVenta(Connection c, Integer idVenta) throws Exception {
+	public List<LineaVenta> findByVenta(Connection c, Integer idVenta) throws InstanceNotFoundException, DataException {
 		
 		List<LineaVenta> lvs = new ArrayList<LineaVenta>();
 		LineaVenta lv = null;
@@ -37,18 +40,18 @@ public class LineaVentaDAOImpl implements LineaVentaDAO{
 			resultSet = preparedStatement.executeQuery();	
 			
 			if (resultSet.next()) {				
-				while(resultSet.next()) {
+				do {
 					lv = loadNext(resultSet);
 					lvs.add(lv);
-				}
+				}while(!resultSet.isLast());
 			} else {
-				throw new Exception("La búsqueda que has realizado no ha producido ningún resultado");
+				throw new InstanceNotFoundException(idVenta, "LineaVentaDAOImpl.findByVenta");
 			}				
 			
 			return lvs;
 		} 
 		catch (SQLException ex) {
-			throw new Exception(ex);
+			throw new DataException(ex);
 		} 
 		finally {            
 			JDBCUtils.closeResultSet(resultSet);
@@ -57,7 +60,7 @@ public class LineaVentaDAOImpl implements LineaVentaDAO{
 	}
 
 	@Override
-	public void create(Connection c, LineaVenta lv, Integer idVenta) throws Exception {
+	public void create(Connection c, LineaVenta lv, Integer idVenta) throws DuplicateInstanceException, DataException{
 		
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -78,16 +81,13 @@ public class LineaVentaDAOImpl implements LineaVentaDAO{
 			int insertedRows = preparedStatement.executeUpdate();	
 			
 			if(insertedRows == 0) {
-				throw new SQLException("Operación fallida");
+				throw new DuplicateInstanceException(lv, "LineaVentaDAOImpl.create");
 			}
 			
 			resultSet = preparedStatement.getGeneratedKeys();
-			if (resultSet.next()) {	
-				lv = loadNext(resultSet);
-			}
 		} 
 		catch (SQLException ex) {
-			throw new Exception(ex);
+			throw new DataException(ex);
 		} 
 		finally {            
 			JDBCUtils.closeResultSet(resultSet);
@@ -96,7 +96,7 @@ public class LineaVentaDAOImpl implements LineaVentaDAO{
 	}
 
 	@Override
-	public void delete(Connection c, LineaVenta lv, Integer idCompra) throws Exception {
+	public void delete(Connection c, LineaVenta lv, Integer idVenta) throws InstanceNotFoundException, DataException{
 		
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -108,16 +108,16 @@ public class LineaVentaDAOImpl implements LineaVentaDAO{
 			preparedStatement = c.prepareStatement(sql);
 			
 			int i = 1;
-			preparedStatement.setInt(i++, idCompra);
+			preparedStatement.setInt(i++, idVenta);
 			
 			int insertedRows = preparedStatement.executeUpdate();	
 			
 			if(insertedRows == 0) {
-				throw new SQLException("Operación fallida");
+				throw new InstanceNotFoundException(idVenta, "LineaVentaDAOImpl.delete");
 			}
 		} 
 		catch (SQLException ex) {
-			throw new Exception(ex);
+			throw new DataException(ex);
 		} 
 		finally {            
 			JDBCUtils.closeResultSet(resultSet);
@@ -125,7 +125,7 @@ public class LineaVentaDAOImpl implements LineaVentaDAO{
 		}  	
 	}
 	
-	private LineaVenta loadNext(ResultSet resultSet) throws Exception {
+	private LineaVenta loadNext(ResultSet resultSet) throws SQLException {
 		
 		LineaVenta lv = new LineaVenta();
 		

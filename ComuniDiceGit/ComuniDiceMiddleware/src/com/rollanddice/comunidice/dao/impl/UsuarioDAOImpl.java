@@ -13,6 +13,9 @@ import org.apache.logging.log4j.Logger;
 import com.rollanddice.comunidice.dao.spi.UsuarioDAO;
 import com.rollanddice.comunidice.dao.util.DaoUtils;
 import com.rollanddice.comunidice.dao.util.JDBCUtils;
+import com.rollanddice.comunidice.exception.DataException;
+import com.rollanddice.comunidice.exception.DuplicateInstanceException;
+import com.rollanddice.comunidice.exception.InstanceNotFoundException;
 import com.rollanddice.comunidice.model.Usuario;
 import com.rollanddice.comunidice.util.PasswordEncryptionUtil;
 
@@ -21,7 +24,7 @@ public class UsuarioDAOImpl implements UsuarioDAO{
 	private static Logger logger = LogManager.getLogger(UsuarioDAOImpl.class);
 
 	@Override
-	public Usuario findById(Connection c, Integer id) throws Exception {
+	public Usuario findById(Connection c, Integer id) throws InstanceNotFoundException, DataException{
 		
 		if(logger.isDebugEnabled()) {
 			logger.debug("id = "+id);
@@ -48,12 +51,11 @@ public class UsuarioDAOImpl implements UsuarioDAO{
 			if (resultSet.next()) {				
 				u = loadNext(resultSet);				
 			} else {
-				throw new Exception("El usuario que buscas no existe");
+				throw new InstanceNotFoundException(id, "UsuarioDAOImpl.findById");
 			}				
 		} 
-		catch (Exception ex) {
-			
-			logger.warn(ex.getMessage(), ex);
+		catch (SQLException ex) {
+			throw new DataException();
 		} 
 		finally {            
 			JDBCUtils.closeResultSet(resultSet);
@@ -64,11 +66,7 @@ public class UsuarioDAOImpl implements UsuarioDAO{
 	}
 
 	@Override
-	public Usuario findByNombre(Connection c, String nombreUsuario) throws Exception {
-		
-		if(logger.isDebugEnabled()) {
-			logger.debug("Nombre = "+nombreUsuario);
-		}
+	public Usuario findByNombre(Connection c, String nombreUsuario) throws InstanceNotFoundException, DataException{
 		
 		Usuario u = null;
 		
@@ -77,9 +75,10 @@ public class UsuarioDAOImpl implements UsuarioDAO{
 		try {
 
 			String sql;
-			sql =  " SELECT ID_USUARIO, EMAIL, CONTRASENA, NOMBRE, APELLIDO1, APELLIDO2, NOMBRE_USUARIO, FECHA_ALTA, DESCRIPCION, TELEFONO "
-				  +" FROM USUARIO "
-				  +" WHERE NOMBRE_USUARIO LIKE ? ";
+			sql =  " SELECT ID_USUARIO, EMAIL, CONTRASENA, NOMBRE, APELLIDO1, APELLIDO2, NOMBRE_USUARIO, FECHA_ALTA, "
+					+" DESCRIPCION, TELEFONO "
+					+" FROM USUARIO "
+					+" WHERE NOMBRE_USUARIO LIKE ? ";
 			
 			preparedStatement = c.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			
@@ -90,11 +89,11 @@ public class UsuarioDAOImpl implements UsuarioDAO{
 			if (resultSet.next()) {				
 				u = loadNext(resultSet);				
 			} else {
-				throw new Exception("El usuario que buscas no existe");
+				throw new InstanceNotFoundException(nombreUsuario, "UsuarioDAOImpl.findByNombre");
 			}				
 		} 
-		catch (Exception ex) {
-			logger.warn(ex.getMessage(), ex);
+		catch (SQLException ex) {
+			throw new DataException();
 		} 
 		finally {            
 			JDBCUtils.closeResultSet(resultSet);
@@ -105,7 +104,7 @@ public class UsuarioDAOImpl implements UsuarioDAO{
 	}
 
 	@Override
-	public Usuario findByEmail(Connection c, String email) throws Exception {
+	public Usuario findByEmail(Connection c, String email) throws InstanceNotFoundException, DataException{
 		
 		if(logger.isDebugEnabled()) {
 			logger.debug("Email = "+email==null);
@@ -118,9 +117,10 @@ public class UsuarioDAOImpl implements UsuarioDAO{
 		try {
 
 			String sql;
-			sql =  " SELECT ID_USUARIO, EMAIL, CONTRASENA, NOMBRE, APELLIDO1, APELLIDO2, NOMBRE_USUARIO, FECHA_ALTA, DESCRIPCION, TELEFONO "
-				  +" FROM USUARIO "
-				  +" WHERE EMAIL LIKE ? ";
+			sql =  " SELECT ID_USUARIO, EMAIL, CONTRASENA, NOMBRE, APELLIDO1, APELLIDO2, NOMBRE_USUARIO, FECHA_ALTA, "
+					+" DESCRIPCION, TELEFONO "
+					+" FROM USUARIO "
+					+" WHERE EMAIL LIKE ? ";
 			
 			preparedStatement = c.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			
@@ -131,11 +131,11 @@ public class UsuarioDAOImpl implements UsuarioDAO{
 			if (resultSet.next()) {				
 				u = loadNext(resultSet);				
 			} else {
-				throw new Exception("El usuario que buscas no existe");
+				throw new InstanceNotFoundException(email, "UsuarioDAOImpl.findByEmail");
 			}				
 		} 
-		catch (Exception ex) {
-			logger.warn(ex.getMessage(), ex);
+		catch (SQLException ex) {
+			throw new DataException();
 		} 
 		finally {            
 			JDBCUtils.closeResultSet(resultSet);
@@ -146,7 +146,7 @@ public class UsuarioDAOImpl implements UsuarioDAO{
 	}
 
 	@Override
-	public void create(Connection c, Usuario u) throws Exception {
+	public void create(Connection c, Usuario u) throws DuplicateInstanceException, DataException{
 		
 		if(logger.isDebugEnabled()) {
 				logger.debug("id = "+u.getIdUsuario()+" email = "+(u.getEmail()==null)+" contraseña = "+(u.getContrasenha()==null)+
@@ -159,8 +159,9 @@ public class UsuarioDAOImpl implements UsuarioDAO{
 		try {
 
 			String sql;
-			sql =  "INSERT INTO USUARIO (EMAIL , CONTRASENA, NOMBRE, APELLIDO1, APELLIDO2, NOMBRE_USUARIO, FECHA_ALTA, DESCRIPCION, TELEFONO) "
-				  +" VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			sql =  "INSERT INTO USUARIO (EMAIL , CONTRASENA, NOMBRE, APELLIDO1, APELLIDO2, NOMBRE_USUARIO, FECHA_ALTA, "
+					+" DESCRIPCION, TELEFONO) "
+					+" VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			
 			preparedStatement = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			
@@ -178,7 +179,7 @@ public class UsuarioDAOImpl implements UsuarioDAO{
 			int insertedRows = preparedStatement.executeUpdate();	
 			
 			if(insertedRows == 0) {
-				throw new SQLException("Operación fallida");
+				throw new DuplicateInstanceException(u, "UsuarioDAOImpl.create");
 			}
 			
 			resultSet = preparedStatement.getGeneratedKeys();
@@ -190,8 +191,7 @@ public class UsuarioDAOImpl implements UsuarioDAO{
 		}
 		} 
 		catch (SQLException ex) {
-			logger.warn(ex.getMessage(), ex);
-			throw new Exception();
+			throw new DataException();
 		} 
 		finally {            
 			JDBCUtils.closeResultSet(resultSet);
@@ -201,7 +201,7 @@ public class UsuarioDAOImpl implements UsuarioDAO{
 	}
 
 	@Override
-	public void update(Connection c, Usuario u) throws Exception {
+	public void update(Connection c, Usuario u) throws InstanceNotFoundException, DataException{
 
 		if(logger.isDebugEnabled()) {
 				logger.debug("id = "+u.getIdUsuario()+" email = "+(u.getEmail()==null)+" contraseña = "+(u.getContrasenha()==null)+
@@ -279,14 +279,11 @@ public class UsuarioDAOImpl implements UsuarioDAO{
 			int insertedRows = preparedStatement.executeUpdate();	
 			
 			if(insertedRows == 0) {
-				throw new SQLException("Operación fallida");
+				throw new InstanceNotFoundException(u, "UsuarioDAOImpl.update");
 			}
-
-			System.out.println("Usuario actualizado con éxito");
 		} 
 		catch (SQLException ex) {
-			logger.warn(ex.getMessage(), ex);
-			throw new Exception();
+			throw new DataException();
 
 		} 
 		finally {            
@@ -296,7 +293,7 @@ public class UsuarioDAOImpl implements UsuarioDAO{
 	}
 
 	@Override
-	public void delete(Connection c, Usuario u) throws Exception {
+	public void delete(Connection c, Usuario u) throws InstanceNotFoundException, DataException{
 		
 		if(logger.isDebugEnabled()) {
 				logger.debug("id = "+u.getIdUsuario()+" email = "+(u.getEmail()==null)+" contraseña = "+(u.getContrasenha()==null)+
@@ -319,12 +316,12 @@ public class UsuarioDAOImpl implements UsuarioDAO{
 			int deletedRows = preparedStatement.executeUpdate();
 			
 			if(deletedRows == 0) {
-				throw new Exception("Operacion fallida");
+				throw new InstanceNotFoundException(u, "UsuarioDAOImpl.delete");
 			}
 		} 
 		catch (SQLException ex) {
 			logger.warn(ex.getMessage(), ex);
-			throw new Exception();
+			throw new DataException();
 		} 
 		finally {            
 			JDBCUtils.closeResultSet(resultSet);
@@ -332,7 +329,7 @@ public class UsuarioDAOImpl implements UsuarioDAO{
 		}  	
 	}
 	
-	private Usuario loadNext(ResultSet resultSet) throws Exception {
+	private Usuario loadNext(ResultSet resultSet) throws SQLException {
 		
 		Usuario u = new Usuario();
 		

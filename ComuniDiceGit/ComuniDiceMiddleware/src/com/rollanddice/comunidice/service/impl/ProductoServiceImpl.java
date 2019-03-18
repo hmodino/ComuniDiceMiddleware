@@ -3,6 +3,9 @@ package com.rollanddice.comunidice.service.impl;
 import java.sql.Connection;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.rollanddice.comunidice.dao.impl.ComentarioDAOImpl;
 import com.rollanddice.comunidice.dao.impl.FavoritoDAOImpl;
 import com.rollanddice.comunidice.dao.impl.JuegoDAOImpl;
@@ -17,6 +20,7 @@ import com.rollanddice.comunidice.model.Comentario;
 import com.rollanddice.comunidice.model.Criteria;
 import com.rollanddice.comunidice.model.Juego;
 import com.rollanddice.comunidice.model.Producto;
+import com.rollanddice.comunidice.model.Results;
 import com.rollanddice.comunidice.service.spi.ProductoService;
 
 public class ProductoServiceImpl implements ProductoService{
@@ -25,6 +29,9 @@ public class ProductoServiceImpl implements ProductoService{
 	FavoritoDAO favoritoDao = null;
 	JuegoDAO juegoDao = null;
 	ComentarioDAO comentarioDao = null;
+	
+	public static Logger logger = LogManager.getLogger(ProductoServiceImpl.class);
+	
 	public ProductoServiceImpl() {
 		
 		dao = new ProductoDAOImpl();
@@ -35,11 +42,14 @@ public class ProductoServiceImpl implements ProductoService{
 
 	@Override
 	public Producto findById(Integer id, String idioma) throws Exception {
+		long t1=0l, t2=0l, t3=0l, t4=0l;
 		
 		boolean commit = false;
 		Connection c = null;
 		try {
+			t1 = System.currentTimeMillis();
 			c = ConnectionManager.getConnection();
+			t2 = System.currentTimeMillis();
 			c.setAutoCommit(false);
 			Producto p = dao.findById(c, id, idioma);
 			Double media = favoritoDao.mediaValoraciones(c, p.getIdProducto());
@@ -48,41 +58,43 @@ public class ProductoServiceImpl implements ProductoService{
 			p.setNumeroFavoritos(favoritos);
 			p.setValoracion(media);
 			p.setComentarios(comentarios);
-			System.out.println(p);
+			logger.debug(p);
 			commit = true;
+			t3 = System.currentTimeMillis();
 			return p;
 		}
 		catch(Exception ex) {
-			System.out.println("Error");
+			logger.debug("Error");
 			throw ex;
 		}
-		finally { 
+		finally {
+			
 			JDBCUtils.closeConnection(c, commit);
+			t4 = System.currentTimeMillis();
+			System.out.println("Abrir conexion: "+(t2-t1)+" Proceso: "+(t3-t2)+" Cerrar conexion: "+(t4-t3));
 		}
 		
 	}
 
 	@Override
-	public List<Producto> findByCriteria(Criteria criteria, String idioma) throws Exception {
+	public Results<Producto> findByCriteria(Criteria criteria, String idioma, int startIndex, int count) throws Exception {
 		
 		boolean commit = false;
 		Connection c = null;
 		try {
 			c = ConnectionManager.getConnection();
 			c.setAutoCommit(false);
-			List<Producto> p = dao.findByCriteria(c, criteria, idioma);
-			for(Producto producto:p) {
+			Results<Producto> p = dao.findByCriteria(c, criteria, idioma, startIndex, count);
+			for(Producto producto:p.getPage()) {
 				Double media = favoritoDao.mediaValoraciones(c, producto.getIdProducto());
 				Double favoritos = favoritoDao.countFavoritos(c, producto.getIdProducto());
-				List<Comentario> comentarios = comentarioDao.findByProductoOForo(c, producto.getIdProducto(), null);
 				producto.setNumeroFavoritos(favoritos);
 				producto.setValoracion(media);
-				producto.setComentarios(comentarios);
 			}
 			
 			commit = true;
-			for(Producto producto:p) {
-			System.out.println(producto);
+			for(Producto producto:p.getPage()) {
+				logger.debug(producto);
 			}
 			return p;
 		}
@@ -111,7 +123,7 @@ public class ProductoServiceImpl implements ProductoService{
 			j.setValoracion(media);
 			j.setComentarios(comentarios);
 			commit = true;
-			System.out.println(j);
+			logger.debug(j);
 			return j;
 		}
 		catch(Exception exc) {
@@ -124,26 +136,24 @@ public class ProductoServiceImpl implements ProductoService{
 	}
 
 	@Override
-	public List<Juego> findJuegoByCriteria(Criteria criteria) throws Exception {
+	public Results<Juego> findJuegoByCriteria(Criteria criteria, int startIndex, int count) throws Exception {
 		
 		boolean commit = false;
 		Connection c = null;
 		try {
 			c = ConnectionManager.getConnection();
 			c.setAutoCommit(false);
-			List<Juego> j = juegoDao.findByCriteria(c, criteria);
-			for(Juego juego:j) {
+			Results<Juego> j = juegoDao.findByCriteria(c, criteria, startIndex, count);
+			for(Juego juego:j.getPage()) {
 				Double media = favoritoDao.mediaValoraciones(c, juego.getIdProducto());
 				Double favoritos = favoritoDao.countFavoritos(c, juego.getIdProducto());
-				List<Comentario> comentarios = comentarioDao.findByProductoOForo(c, juego.getIdProducto(), null);
 				juego.setNumeroFavoritos(favoritos);
 				juego.setValoracion(media);
-				juego.setComentarios(comentarios);
 			}
 			
 			commit = true;
-			for(Juego juego:j) {
-				System.out.println(juego);
+			for(Juego juego:j.getPage()) {
+				logger.debug(juego);
 			}
 			return j;
 		}

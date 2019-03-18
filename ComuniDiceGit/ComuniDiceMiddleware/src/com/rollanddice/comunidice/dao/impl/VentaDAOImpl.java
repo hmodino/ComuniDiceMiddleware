@@ -11,12 +11,14 @@ import java.util.List;
 import com.mysql.jdbc.Statement;
 import com.rollanddice.comunidice.dao.spi.VentaDAO;
 import com.rollanddice.comunidice.dao.util.JDBCUtils;
+import com.rollanddice.comunidice.exception.DataException;
+import com.rollanddice.comunidice.exception.InstanceNotFoundException;
 import com.rollanddice.comunidice.model.Venta;
 
 public class VentaDAOImpl implements VentaDAO{
 
 	@Override
-	public Venta findById(Connection c, Integer id) throws Exception {
+	public Venta findById(Connection c, Integer id) throws InstanceNotFoundException, DataException{
 		
 		Venta v = null;
 		
@@ -36,13 +38,13 @@ public class VentaDAOImpl implements VentaDAO{
 			resultSet = preparedStatement.executeQuery();			
 			
 			if (resultSet.next()) {				
-				v = loadNext(c, resultSet);				
+				v = loadNext(resultSet);				
 			} else {
-				throw new Exception("La búsqueda que has introducido no ha producido ningún resultado");
+				throw new InstanceNotFoundException(id, "VentaDAOImpl.findById");
 			}				
 		} 
-		catch (Exception ex) {
-			throw new Exception(ex);
+		catch (SQLException ex) {
+			throw new DataException(ex);
 		} 
 		finally {            
 			JDBCUtils.closeResultSet(resultSet);
@@ -53,7 +55,7 @@ public class VentaDAOImpl implements VentaDAO{
 	}
 
 	@Override
-	public List<Venta> findByUsuario(Connection c, Integer idUsuario) throws Exception {
+	public List<Venta> findByUsuario(Connection c, Integer idUsuario) throws InstanceNotFoundException, DataException{
 		
 		Venta v = null;
 		List<Venta> vs = new ArrayList<Venta>();
@@ -74,16 +76,16 @@ public class VentaDAOImpl implements VentaDAO{
 			resultSet = preparedStatement.executeQuery();			
 			
 			if (resultSet.next()) {	
-				while(resultSet.next()) {
-					v = loadNext(c, resultSet);
-					vs .add(v);
-				}				
+				do {
+					v = loadNext(resultSet);
+					vs.add(v);
+				}while(!resultSet.isLast()); 
 			} else {
-				throw new Exception("La búsqueda que has introducido no ha producido ningún resultado");
+				throw new InstanceNotFoundException(idUsuario, "VentaDAOImpl.findByUsuario");
 			}				
 		} 
-		catch (Exception ex) {
-			throw new Exception(ex);
+		catch (SQLException ex) {
+			throw new DataException(ex);
 		} 
 		finally {            
 			JDBCUtils.closeResultSet(resultSet);
@@ -94,7 +96,7 @@ public class VentaDAOImpl implements VentaDAO{
 	}
 
 	@Override
-	public void create(Connection c, Venta venta) throws Exception {
+	public void create(Connection c, Venta venta) throws DataException{
 		
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -114,13 +116,13 @@ public class VentaDAOImpl implements VentaDAO{
 			int insertedRows = preparedStatement.executeUpdate();	
 			
 			if(insertedRows == 0) {
-				throw new SQLException("Operación fallida");
+				throw new DataException();
 			}
 			
 			resultSet = preparedStatement.getGeneratedKeys();
 		} 
 		catch (SQLException ex) {
-			throw new Exception(ex);
+			throw new DataException(ex);
 		} 
 		finally {            
 			JDBCUtils.closeResultSet(resultSet);
@@ -129,7 +131,7 @@ public class VentaDAOImpl implements VentaDAO{
 	}
 
 	@Override
-	public void delete(Connection c, Venta venta) throws Exception {
+	public void delete(Connection c, Venta venta) throws InstanceNotFoundException, DataException{
 		
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -147,11 +149,11 @@ public class VentaDAOImpl implements VentaDAO{
 			int deletedRows = preparedStatement.executeUpdate();	
 			
 			if(deletedRows == 0) {
-				throw new SQLException("Operación fallida");
+				throw new InstanceNotFoundException(venta, "UsuarioDAOImpl.delete");
 			}
 		} 
 		catch (SQLException ex) {
-			throw new Exception(ex);
+			throw new DataException(ex);
 		} 
 		finally {            
 			JDBCUtils.closeResultSet(resultSet);
@@ -159,7 +161,7 @@ public class VentaDAOImpl implements VentaDAO{
 		}  	
 	}
 	
-	private Venta loadNext(Connection c, ResultSet resultSet) throws Exception {
+	private Venta loadNext(ResultSet resultSet) throws SQLException {
 		
 		Venta v = new Venta(); 
 		

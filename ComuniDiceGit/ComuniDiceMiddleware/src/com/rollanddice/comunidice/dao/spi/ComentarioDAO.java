@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.util.List;
 
 import com.rollanddice.comunidice.exception.DataException;
+import com.rollanddice.comunidice.exception.DuplicateInstanceException;
 import com.rollanddice.comunidice.exception.InstanceNotFoundException;
 import com.rollanddice.comunidice.model.Comentario;
 
@@ -22,7 +23,7 @@ public interface ComentarioDAO {
 			throws InstanceNotFoundException, DataException;
 	
 	public void create(Connection c, Comentario comentario, Integer idProducto, Integer idForo)
-		throws InstanceNotFoundException, DataException;
+		throws DataException;
 	
 	public void delete(Connection c, Comentario comentario)
 		throws InstanceNotFoundException, DataException;

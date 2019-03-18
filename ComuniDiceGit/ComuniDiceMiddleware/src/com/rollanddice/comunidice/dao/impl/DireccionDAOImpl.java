@@ -8,12 +8,14 @@ import java.sql.Statement;
 
 import com.rollanddice.comunidice.dao.spi.DireccionDAO;
 import com.rollanddice.comunidice.dao.util.JDBCUtils;
+import com.rollanddice.comunidice.exception.DataException;
+import com.rollanddice.comunidice.exception.InstanceNotFoundException;
 import com.rollanddice.comunidice.model.Direccion;
 
 public class DireccionDAOImpl implements DireccionDAO{
 
 	@Override
-	public Direccion findByUsuario(Connection c, Integer idUsuario) throws Exception {
+	public Direccion findByUsuario(Connection c, Integer idUsuario) throws InstanceNotFoundException, DataException {
 		
 		Direccion d = null;
 		
@@ -35,11 +37,11 @@ public class DireccionDAOImpl implements DireccionDAO{
 			if (resultSet.next()) {				
 				d = loadNext(resultSet);				
 			} else {
-				throw new Exception("No tienes ninguna dirección asociada a este usuario");
+				throw new InstanceNotFoundException(idUsuario, "DireccionDAOImpl.findByUsuario");
 			}				
 		} 
-		catch (Exception ex) {
-			throw new Exception(ex);
+		catch (SQLException ex) {
+			throw new DataException(ex);
 		} 
 		finally {            
 			JDBCUtils.closeResultSet(resultSet);
@@ -50,7 +52,7 @@ public class DireccionDAOImpl implements DireccionDAO{
 	}
 
 	@Override
-	public void create(Connection c, Direccion d, Integer idUsuario) throws Exception {
+	public void create(Connection c, Direccion d, Integer idUsuario) throws DataException {
 		
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -77,13 +79,13 @@ public class DireccionDAOImpl implements DireccionDAO{
 			int insertedRows = preparedStatement.executeUpdate();	
 			
 			if(insertedRows == 0) {
-				throw new SQLException("Operación fallida");
+				throw new DataException();
 			}
 			
 			resultSet = preparedStatement.getGeneratedKeys();
 		} 
 		catch (SQLException ex) {
-			throw new Exception(ex);
+			throw new DataException(ex);
 		} 
 		finally {            
 			JDBCUtils.closeResultSet(resultSet);
@@ -94,7 +96,7 @@ public class DireccionDAOImpl implements DireccionDAO{
 	}
 
 	@Override
-	public void delete(Connection c, Direccion d) throws Exception {
+	public void delete(Connection c, Direccion d) throws InstanceNotFoundException, DataException {
 		
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -111,11 +113,11 @@ public class DireccionDAOImpl implements DireccionDAO{
 			int deletedRows = preparedStatement.executeUpdate();	
 			
 			if(deletedRows == 0) {
-				throw new SQLException("Operación fallida");
+				throw new InstanceNotFoundException(d, "DireccionDAOImpl.delete");
 			}
 		} 
 		catch (SQLException ex) {
-			throw new Exception(ex);
+			throw new DataException(ex);
 		} 
 		finally {            
 			JDBCUtils.closeResultSet(resultSet);
@@ -123,7 +125,7 @@ public class DireccionDAOImpl implements DireccionDAO{
 		}  	
 	}
 	
-	private Direccion loadNext(ResultSet resultSet) throws Exception {
+	private Direccion loadNext(ResultSet resultSet) throws SQLException{
 		
 		Direccion d = new Direccion();
 		

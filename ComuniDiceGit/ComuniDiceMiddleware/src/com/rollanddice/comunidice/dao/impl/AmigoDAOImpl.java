@@ -84,7 +84,7 @@ public class AmigoDAOImpl implements AmigoDAO{
 	}
 
 	@Override
-	public List<Amigo> findAmigos(Connection c, Integer id) throws DataException {
+	public List<Amigo> findAmigos(Connection c, Integer id) throws InstanceNotFoundException, DataException {
 		
 		List<Amigo> amigos = new ArrayList<Amigo>();
 		Amigo a = null;
@@ -103,11 +103,15 @@ public class AmigoDAOImpl implements AmigoDAO{
 			int i = 1;
 			preparedStatement.setInt(i++, id);
 			resultSet = preparedStatement.executeQuery();	
-			
-				while(resultSet.next()) {
+			if(resultSet.next()) {
+				do {
 					a = loadNext(resultSet);
 					amigos.add(a);
-				}
+				}while(!resultSet.isLast());
+			}else {
+				throw new InstanceNotFoundException(id, "AmigoDAOImpl.delete");
+			}
+
 		} 
 		catch (Exception ex) {
 			throw new DataException(ex);
@@ -160,7 +164,8 @@ public class AmigoDAOImpl implements AmigoDAO{
 	}
 
 	@Override
-	public Amigo findByNombreAmigo(Connection c, String nombreUsuarioAmigo, Integer id) throws InstanceNotFoundException, DataException {
+	public Amigo findByNombreAmigo(Connection c, String nombreUsuarioAmigo, Integer id) 
+			throws InstanceNotFoundException, DataException {
 		
 		Amigo a = null;
 		
@@ -198,7 +203,7 @@ public class AmigoDAOImpl implements AmigoDAO{
 		return a;
 	}
 	
-	private Amigo loadNext(ResultSet resultSet) throws DataException, SQLException{
+	private Amigo loadNext(ResultSet resultSet) throws SQLException{
 		
 		Amigo amigo = new Amigo();
 		
@@ -212,5 +217,4 @@ public class AmigoDAOImpl implements AmigoDAO{
 		return amigo;
 		
 	}
-
 }

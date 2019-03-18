@@ -3,17 +3,20 @@ package com.rollanddice.comunidice.dao.impl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.rollanddice.comunidice.dao.spi.RegionDAO;
 import com.rollanddice.comunidice.dao.util.JDBCUtils;
+import com.rollanddice.comunidice.exception.DataException;
+import com.rollanddice.comunidice.exception.InstanceNotFoundException;
 import com.rollanddice.comunidice.model.Region;
 
 public class RegionDAOImpl implements RegionDAO{
 
 	@Override
-	public Region findById(Connection c, Integer id) throws Exception {
+	public Region findById(Connection c, Integer id) throws InstanceNotFoundException, DataException{
 		
 		Region r = null;
 		
@@ -35,11 +38,11 @@ public class RegionDAOImpl implements RegionDAO{
 			if (resultSet.next()) {				
 				r = loadNext(resultSet);				
 			} else {
-				throw new Exception("La búsqueda que has introducido no ha producido ningún resultado");
+				throw new InstanceNotFoundException(id, "RegionDAOImpl.findById");
 			}				
 		} 
-		catch (Exception ex) {
-			throw new Exception(ex);
+		catch (SQLException ex) {
+			throw new DataException(ex);
 		} 
 		finally {            
 			JDBCUtils.closeResultSet(resultSet);
@@ -50,7 +53,7 @@ public class RegionDAOImpl implements RegionDAO{
 	}
 
 	@Override
-	public List<Region> findByPais(Connection c, Integer idPais) throws Exception {
+	public List<Region> findByPais(Connection c, Integer idPais) throws InstanceNotFoundException, DataException{
 			
 			Region r = null;
 			List<Region> rs = new ArrayList<Region>();
@@ -70,17 +73,17 @@ public class RegionDAOImpl implements RegionDAO{
 				preparedStatement.setInt(i++, idPais);
 				resultSet = preparedStatement.executeQuery();			
 				
-				if (resultSet.next()) {	
-					while(resultSet.next()) {
+				if (resultSet.next()) {
+					do {
 						r = loadNext(resultSet);
 						rs.add(r);
-					}				
+					}while(!resultSet.isLast());
 				} else {
-					throw new Exception("La búsqueda que has introducido no ha producido ningún resultado");
+					throw new InstanceNotFoundException(idPais, "RegionDAOImpl.findByPais");
 				}				
 			} 
-			catch (Exception ex) {
-				throw new Exception(ex);
+			catch (SQLException ex) {
+				throw new DataException(ex);
 			} 
 			finally {            
 				JDBCUtils.closeResultSet(resultSet);
@@ -90,7 +93,7 @@ public class RegionDAOImpl implements RegionDAO{
 			return rs;
 	}
 
-	private Region loadNext(ResultSet resultSet) throws Exception {
+	private Region loadNext(ResultSet resultSet) throws SQLException {
 		
 		Region r = new Region();
 		

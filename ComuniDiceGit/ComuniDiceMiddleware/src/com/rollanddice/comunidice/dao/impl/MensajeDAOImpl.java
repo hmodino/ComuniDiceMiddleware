@@ -11,12 +11,14 @@ import java.util.List;
 import com.mysql.jdbc.Statement;
 import com.rollanddice.comunidice.dao.spi.MensajeDAO;
 import com.rollanddice.comunidice.dao.util.JDBCUtils;
+import com.rollanddice.comunidice.exception.DataException;
+import com.rollanddice.comunidice.exception.InstanceNotFoundException;
 import com.rollanddice.comunidice.model.Mensaje;
 
 public class MensajeDAOImpl implements MensajeDAO{
 
 	@Override
-	public Mensaje findById(Connection c, Integer id) throws Exception {
+	public Mensaje findById(Connection c, Integer id) throws InstanceNotFoundException, DataException{
 	
 		Mensaje m = null;
 		
@@ -38,11 +40,11 @@ public class MensajeDAOImpl implements MensajeDAO{
 			if (resultSet.next()) {				
 				m = loadNext(resultSet);				
 			} else {
-				throw new Exception("La búsqueda que has introducido no ha producido ningún resultado");
+				throw new InstanceNotFoundException(id, "MensajeDAOImpl.findById");
 			}				
 		} 
-		catch (Exception ex) {
-			throw new Exception(ex);
+		catch (SQLException ex) {
+			throw new DataException(ex);
 		} 
 		finally {            
 			JDBCUtils.closeResultSet(resultSet);
@@ -53,7 +55,7 @@ public class MensajeDAOImpl implements MensajeDAO{
 	}
 
 	@Override
-	public List<Mensaje> findByEmisor(Connection c, Integer id) throws Exception {
+	public List<Mensaje> findByEmisor(Connection c, Integer id) throws InstanceNotFoundException, DataException{
 		
 		Mensaje m = null;
 		List<Mensaje> ms = new ArrayList<Mensaje>();
@@ -73,13 +75,17 @@ public class MensajeDAOImpl implements MensajeDAO{
 			preparedStatement.setInt(i++, id);
 			resultSet = preparedStatement.executeQuery();			
 
-				while(resultSet.next()) {
+			if(resultSet.next()) {
+				do {
 					m = loadNext(resultSet);
 					ms.add(m);
-				}								
+				}while(!resultSet.isLast());
+			}else {
+				throw new InstanceNotFoundException(id, "MensajeDAOImpl.findByEmisor");
+			}
 		} 
-		catch (Exception ex) {
-			throw new Exception(ex);
+		catch (SQLException ex) {
+			throw new DataException(ex);
 		} 
 		finally {            
 			JDBCUtils.closeResultSet(resultSet);
@@ -90,7 +96,7 @@ public class MensajeDAOImpl implements MensajeDAO{
 	}
 
 	@Override
-	public List<Mensaje> findByReceptor(Connection c, Integer idReceptor) throws Exception {
+	public List<Mensaje> findByReceptor(Connection c, Integer idReceptor) throws InstanceNotFoundException, DataException{
 		
 		Mensaje m = null;
 		List<Mensaje> ms = new ArrayList<Mensaje>();
@@ -109,14 +115,17 @@ public class MensajeDAOImpl implements MensajeDAO{
 			int i = 1;
 			preparedStatement.setInt(i++, idReceptor);
 			resultSet = preparedStatement.executeQuery();			
-
-				while(resultSet.next()) {
+			if(resultSet.next()) {
+				do{
 					m = loadNext(resultSet);
 					ms.add(m);
-				}					
+				}while(resultSet.isLast());
+			}else {
+				throw new InstanceNotFoundException(idReceptor, "MensajeDAOImp`l.findByReceptor");
+			}
 		} 
-		catch (Exception ex) {
-			throw new Exception(ex);
+		catch (SQLException ex) {
+			throw new DataException(ex);
 		} 
 		finally {            
 			JDBCUtils.closeResultSet(resultSet);
@@ -127,7 +136,7 @@ public class MensajeDAOImpl implements MensajeDAO{
 	}
 
 	@Override
-	public void create(Connection c, Mensaje mensaje) throws Exception {
+	public void create(Connection c, Mensaje mensaje) throws DataException {
 		
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -147,13 +156,13 @@ public class MensajeDAOImpl implements MensajeDAO{
 			int insertedRows = preparedStatement.executeUpdate();	
 			
 			if(insertedRows == 0) {
-				throw new SQLException("Operación fallida");
+				throw new DataException();
 			}
 			
 			resultSet = preparedStatement.getGeneratedKeys();
 		}
 		catch (SQLException ex) {
-			throw new Exception(ex);
+			throw new DataException(ex);
 		} 
 		finally {            
 			JDBCUtils.closeResultSet(resultSet);
@@ -162,7 +171,7 @@ public class MensajeDAOImpl implements MensajeDAO{
 	}
 
 	@Override
-	public void delete(Connection c, Mensaje mensaje) throws Exception {
+	public void delete(Connection c, Mensaje mensaje) throws InstanceNotFoundException, DataException{
 		
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -178,11 +187,11 @@ public class MensajeDAOImpl implements MensajeDAO{
 			preparedStatement.setInt(i++, mensaje.getIdMensaje());
 			int deletedRows = preparedStatement.executeUpdate();
 			if(deletedRows==0) {
-				throw new SQLException("Operación fallida");
+				throw new InstanceNotFoundException(mensaje, "MensajeDAOImpl.delete");
 			}
 		} 
 		catch (SQLException ex) {
-			throw new Exception(ex);
+			throw new DataException(ex);
 		} 
 		finally {            
 			JDBCUtils.closeResultSet(resultSet);
@@ -191,7 +200,7 @@ public class MensajeDAOImpl implements MensajeDAO{
 		
 	}
 	
-	private Mensaje loadNext(ResultSet resultSet) throws Exception {
+	private Mensaje loadNext(ResultSet resultSet) throws SQLException {
 		
 		Mensaje m = new Mensaje();
 
