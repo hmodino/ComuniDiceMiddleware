@@ -1,5 +1,6 @@
 package com.rollanddice.comunidice.service.spi;
 
+import com.rollanddice.comunidice.model.Direccion;
 import com.rollanddice.comunidice.model.Usuario;
 
 public interface UsuarioService {
@@ -13,7 +14,7 @@ public interface UsuarioService {
 	public Usuario findByEmail(String email)
 		throws Exception;
 
-	public boolean signUp(Usuario u)
+	public void signUp(Usuario u, Direccion d)
 		throws Exception;
 	
 	public Usuario logIn(String email, String password)

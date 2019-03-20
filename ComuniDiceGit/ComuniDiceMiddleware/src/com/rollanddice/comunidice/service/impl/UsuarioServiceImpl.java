@@ -5,10 +5,13 @@ import java.sql.Connection;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.rollanddice.comunidice.dao.impl.DireccionDAOImpl;
 import com.rollanddice.comunidice.dao.impl.UsuarioDAOImpl;
+import com.rollanddice.comunidice.dao.spi.DireccionDAO;
 import com.rollanddice.comunidice.dao.spi.UsuarioDAO;
 import com.rollanddice.comunidice.dao.util.ConnectionManager;
 import com.rollanddice.comunidice.dao.util.JDBCUtils;
+import com.rollanddice.comunidice.model.Direccion;
 import com.rollanddice.comunidice.model.Usuario;
 import com.rollanddice.comunidice.service.spi.MailService;
 import com.rollanddice.comunidice.service.spi.UsuarioService;
@@ -18,6 +21,7 @@ public class UsuarioServiceImpl implements UsuarioService{
 	
 	UsuarioDAO dao = null;
 	MailService aviso = null;
+	DireccionDAO direccion = null;
 	
 	public static Logger logger = LogManager.getLogger(UsuarioServiceImpl.class);
 	
@@ -25,6 +29,7 @@ public class UsuarioServiceImpl implements UsuarioService{
 		
 		dao = new UsuarioDAOImpl();
 		aviso = new MailServiceImpl();
+		direccion = new DireccionDAOImpl();
 	}
 
 	@Override
@@ -99,7 +104,7 @@ public class UsuarioServiceImpl implements UsuarioService{
 	}
 
 	@Override
-	public boolean signUp(Usuario u) throws Exception {
+	public void signUp(Usuario u, Direccion d) throws Exception {
 		
 		boolean commit = false;
 		Connection c = null;
@@ -110,12 +115,14 @@ public class UsuarioServiceImpl implements UsuarioService{
 			u.setContrasenha(u.getContrasenha().toUpperCase());
 				
 			dao.create(c, u);
+			if(d!=null) {
+				direccion.create(c, d, u.getIdUsuario());
+			}
 			aviso.emailService("Bienvenido a ComuniDice", "Bienvenido a Comunidice "+u.getNombre()+" "+
 			u.getApellido1(), u.getEmail());
 			commit = true;
 			logger.info("Usuario creado con éxito");
 			
-			return true;
 		}
 		catch (Exception ex) {
 			logger.warn(ex.getMessage(), ex);

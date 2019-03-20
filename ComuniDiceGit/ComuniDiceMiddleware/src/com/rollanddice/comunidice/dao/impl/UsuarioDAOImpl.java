@@ -183,6 +183,9 @@ public class UsuarioDAOImpl implements UsuarioDAO{
 			}
 			
 			resultSet = preparedStatement.getGeneratedKeys();
+			if(resultSet.next()) {
+				u.setIdUsuario(resultSet.getInt(1));
+			}
 			
 			if(logger.isDebugEnabled()) {
 				logger.debug("id = "+u.getIdUsuario()+" email = "+(u.getEmail()==null)+" contraseña = "+(u.getContrasenha()==null)+
