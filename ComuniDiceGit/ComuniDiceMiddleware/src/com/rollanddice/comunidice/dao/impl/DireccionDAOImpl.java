@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import com.rollanddice.comunidice.dao.spi.DireccionDAO;
+import com.rollanddice.comunidice.dao.util.DaoUtils;
 import com.rollanddice.comunidice.dao.util.JDBCUtils;
 import com.rollanddice.comunidice.exception.DataException;
 import com.rollanddice.comunidice.exception.InstanceNotFoundException;
@@ -93,6 +94,100 @@ public class DireccionDAOImpl implements DireccionDAO{
 		}  	
 		
 
+	}
+	
+	@Override
+	public void update(Connection c, Direccion d) throws InstanceNotFoundException, DataException {
+		
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		StringBuilder sql = null;
+		try {
+			
+			sql = new StringBuilder(
+					"UPDATE DIRECCION ");
+			boolean first = true;
+			
+			if(d.getRegion()!=null) {
+				DaoUtils.update(sql, first, " ID_REGION = ?");
+				first = false;
+			}
+			if(d.getMunicipio()!=null) {
+				DaoUtils.update(sql, first, " MUNICIPIO = ? ");
+				first = false;
+			}
+			if(d.getLocalidad()!=null) {
+				DaoUtils.update(sql, first, " LOCALIDAD = ? ");
+				first = false;
+			}
+			if(d.getCp()!=null) {
+				DaoUtils.update(sql, first, " CP = ");
+				first = false;
+			}
+			if(d.getCalle()!=null) {
+				DaoUtils.update(sql, first, " CALLE = ");
+				first = false;
+			}
+			if(d.getNumero()!=null) {
+				DaoUtils.update(sql, first, " NUMERO = ");
+				first = false;
+			}
+			if(d.getPortal()!=null) {
+				DaoUtils.update(sql, first, " PORTAL = ");
+				first = false;
+			}
+			if(d.getPiso()!=null) {
+				DaoUtils.update(sql, first, " PISO = ");
+				first = false;
+			}
+			if(d.getOtros()!=null) {
+				DaoUtils.update(sql, first, " OTROS = ");
+				first = false;
+			}
+			
+			sql.append(" WHERE ID_DIRECCION = ? ");
+			preparedStatement = c.prepareStatement(sql.toString());
+			int i = 1;
+			
+			if(d.getRegion()!=null) {
+				preparedStatement.setInt(i++, d.getRegion());
+			}
+			if(d.getMunicipio()!=null) {
+				preparedStatement.setString(i++, d.getMunicipio());
+			}
+			if(d.getLocalidad()!=null) {
+				preparedStatement.setString(i++, d.getLocalidad());
+			}
+			if(d.getCp()!=null) {
+				preparedStatement.setString(i++, d.getCp());
+			}
+			if(d.getCalle()!=null) {
+				preparedStatement.setString(i++, d.getCalle());
+			}
+			if(d.getNumero()!=null) {
+				preparedStatement.setInt(i++, d.getNumero());
+			}
+			if(d.getPortal()!=null) {
+				preparedStatement.setString(i++, d.getPortal());
+			}
+			if(d.getPiso()!=null) {
+				preparedStatement.setInt(i++, d.getPiso());
+			}
+			if(d.getOtros()!=null) {
+				preparedStatement.setString(i++, d.getOtros());
+			}
+			preparedStatement.setInt(i++, d.getIdDireccion());
+			
+			int insertedRows = preparedStatement.executeUpdate();	
+			
+			if(insertedRows == 0) {
+				throw new InstanceNotFoundException(d, "DireccionDAOImpl.update");
+			}
+		}catch(SQLException ex){
+			throw new DataException(ex);
+			
+		}
+		
 	}
 
 	@Override

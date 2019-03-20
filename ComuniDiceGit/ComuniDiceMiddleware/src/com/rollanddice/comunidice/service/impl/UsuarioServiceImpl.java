@@ -164,7 +164,7 @@ public class UsuarioServiceImpl implements UsuarioService{
 	}
 
 	@Override
-	public void editar(Usuario u) throws Exception {
+	public void editar(Usuario u, Direccion d) throws Exception {
 		
 		boolean commit = false;
 		Connection c = null;
@@ -179,9 +179,13 @@ public class UsuarioServiceImpl implements UsuarioService{
 			if(u.getContrasenha()!=null) {
 				u.setContrasenha(u.getContrasenha().toUpperCase());
 			}
-			dao.update(c, u);
-			aviso.emailService("Usuario editado", "El Usuario "+u.getNombreUsuario()+" ha sido editado con éxito ", u.getEmail());
-			
+			if(u != null) {
+				dao.update(c, u);
+				aviso.emailService("Usuario editado", "El Usuario "+u.getNombreUsuario()+" ha sido editado con éxito ", u.getEmail());
+			}
+			if(d != null) {
+				direccion.update(c, d);
+			}
 			commit = true;
 			logger.info("Usuario editado con éxito");
 		}

@@ -20,7 +20,7 @@ public interface UsuarioService {
 	public Usuario logIn(String email, String password)
 		throws Exception;
 	
-	public void editar(Usuario u)
+	public void editar(Usuario u, Direccion d)
 		throws Exception;
 	
 	public void eliminar(Usuario u)

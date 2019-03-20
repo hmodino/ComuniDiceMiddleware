@@ -12,7 +12,10 @@ public interface DireccionDAO {
 		throws InstanceNotFoundException, DataException;
 	
 	public void create(Connection c, Direccion d, Integer idUsuario)
-			throws DataException;
+		throws DataException;
+	
+	public void update(Connection c, Direccion d)
+		throws InstanceNotFoundException, DataException;
 	
 	public void delete(Connection c, Direccion d)
 		throws InstanceNotFoundException, DataException;

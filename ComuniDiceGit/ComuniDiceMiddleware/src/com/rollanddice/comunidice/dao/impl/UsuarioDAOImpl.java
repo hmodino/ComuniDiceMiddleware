@@ -221,32 +221,36 @@ public class UsuarioDAOImpl implements UsuarioDAO{
 			
 			boolean first = true;
 			
+			if(u.getEmail()!=null) {
+				DaoUtils.update(sql, first, " EMAIL = ? ");
+				first = false;
+			}
 			if(u.getContrasenha()!=null) {
-				DaoUtils.update(sql, first, " CONTRASENA = ?");
+				DaoUtils.update(sql, first, " CONTRASENA = ? ");
 				first = false;
 			}
 			if(u.getNombre()!=null) {
-				DaoUtils.update(sql, first, " NOMBRE = ?");
+				DaoUtils.update(sql, first, " NOMBRE = ? ");
 				first = false;
 			}
 			if(u.getApellido1()!=null) {
-				DaoUtils.update(sql, first, " APELLIDO1 = ?");
+				DaoUtils.update(sql, first, " APELLIDO1 = ? ");
 				first = false;
 			}
 			if(u.getApellido2()!=null) {
-				DaoUtils.update(sql, first, " APELLIDO2 = ?");
+				DaoUtils.update(sql, first, " APELLIDO2 = ? ");
 				first = false;
 			}
 			if(u.getNombreUsuario()!=null) {
-				DaoUtils.update(sql, first, " NOMBRE_USUARIO = ?");
+				DaoUtils.update(sql, first, " NOMBRE_USUARIO = ? ");
 				first = false;
 			}
 			if(u.getDescripcion()!=null) {
-				DaoUtils.update(sql, first, " DESCRIPCION = ?");
+				DaoUtils.update(sql, first, " DESCRIPCION = ? ");
 				first = false;
 			}
 			if(u.getTelefono()!=null) {
-				DaoUtils.update(sql, first, " TELEFONO = ?");
+				DaoUtils.update(sql, first, " TELEFONO = ? ");
 				first = false;
 			}
 			
@@ -255,6 +259,9 @@ public class UsuarioDAOImpl implements UsuarioDAO{
 			preparedStatement = c.prepareStatement(sql.toString());
 			int i = 1;
 
+			if(u.getEmail()!=null) {
+				preparedStatement.setString(i++, u.getEmail());
+			}
 			if(u.getContrasenha()!=null) {
 				preparedStatement.setString(i++, PasswordEncryptionUtil.encryptPassword(u.getContrasenha()));
 			}
