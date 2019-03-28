@@ -44,7 +44,7 @@ public class LineaCompraDAOImpl implements LineaCompraDAO{
 					lc = loadNext(resultSet);
 					lcs.add(lc);
 				}
-				while(!resultSet.isLast()); 
+				while(resultSet.next()); 
 			} else {
 				throw new InstanceNotFoundException(idCompra, "LineaCompraDAOImpl.findByCompra");
 			}				

@@ -74,7 +74,7 @@ public class PaisDAOImpl implements PaisDAO{
 				do{
 					p = loadNext(resultSet);
 					ps.add(p);
-				}while(resultSet.isLast());				
+				}while(resultSet.next());				
 			}
 		} 
 		catch (SQLException ex) {

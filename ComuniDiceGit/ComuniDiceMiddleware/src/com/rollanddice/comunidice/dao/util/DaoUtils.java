@@ -8,5 +8,5 @@ public class DaoUtils {
 	public static void update(StringBuilder sql, boolean first, String update) {
 		sql.append(first?" SET ":" , ").append(update);
 	}
-	
+
 }

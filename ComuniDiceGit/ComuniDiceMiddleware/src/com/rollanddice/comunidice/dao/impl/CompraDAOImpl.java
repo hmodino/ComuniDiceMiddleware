@@ -79,7 +79,7 @@ public class CompraDAOImpl implements CompraDAO{
 				do {
 					compra = loadNext(resultSet);
 					compras.add(compra);
-				}while(!resultSet.isLast());
+				}while(resultSet.next());
 			} else {
 				throw new InstanceNotFoundException(idUsuario, "CompraDAOImpl.findByUsuario");
 			}				

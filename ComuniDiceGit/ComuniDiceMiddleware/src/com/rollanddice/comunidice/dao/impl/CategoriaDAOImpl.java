@@ -37,7 +37,7 @@ public class CategoriaDAOImpl implements CategoriaDAO{
 				do {
 					categoria = loadNext(resultSet);
 					categorias.add(categoria);
-				}while(!resultSet.isLast());
+				}while(resultSet.next());
 			} else {
 				throw new InstanceNotFoundException("Categorias", "CategoriaDAOImpl.findById");
 			}				

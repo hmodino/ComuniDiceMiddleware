@@ -43,7 +43,7 @@ public class LineaVentaDAOImpl implements LineaVentaDAO{
 				do {
 					lv = loadNext(resultSet);
 					lvs.add(lv);
-				}while(!resultSet.isLast());
+				}while(resultSet.next());
 			} else {
 				throw new InstanceNotFoundException(idVenta, "LineaVentaDAOImpl.findByVenta");
 			}				

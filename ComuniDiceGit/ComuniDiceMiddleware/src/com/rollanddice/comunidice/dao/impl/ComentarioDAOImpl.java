@@ -99,7 +99,7 @@ public class ComentarioDAOImpl implements ComentarioDAO{
 				do {
 					coment = loadNext(resultSet);
 					comentarios.add(coment);
-				}while(!resultSet.isLast());
+				}while(resultSet.next());
 			}else {
 				throw new InstanceNotFoundException(id, "ComentarioDAOImpl.findByProductoOForo");
 			}
@@ -159,7 +159,7 @@ public class ComentarioDAOImpl implements ComentarioDAO{
 				do {
 					coment = loadNext(resultSet);
 					comentarios.add(coment);
-				}while(!resultSet.isLast());
+				}while(resultSet.next());
 			}else {
 				throw new InstanceNotFoundException(id, "ComentarioDAOImpl.findByUsuarioProductoOForo");
 			}
@@ -211,7 +211,7 @@ public class ComentarioDAOImpl implements ComentarioDAO{
 				do {
 					coment = loadNext(resultSet);
 					comentarios.add(coment);
-				}while(!resultSet.isLast());		
+				}while(resultSet.next());		
 			}else {
 				throw new InstanceNotFoundException(tipo, "ComentarioDAOImpl.findByUsuarioTipo");
 			}

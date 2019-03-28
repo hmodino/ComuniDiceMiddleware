@@ -221,10 +221,6 @@ public class UsuarioDAOImpl implements UsuarioDAO{
 			
 			boolean first = true;
 			
-			if(u.getEmail()!=null) {
-				DaoUtils.update(sql, first, " EMAIL = ? ");
-				first = false;
-			}
 			if(u.getContrasenha()!=null) {
 				DaoUtils.update(sql, first, " CONTRASENA = ? ");
 				first = false;
@@ -259,9 +255,6 @@ public class UsuarioDAOImpl implements UsuarioDAO{
 			preparedStatement = c.prepareStatement(sql.toString());
 			int i = 1;
 
-			if(u.getEmail()!=null) {
-				preparedStatement.setString(i++, u.getEmail());
-			}
 			if(u.getContrasenha()!=null) {
 				preparedStatement.setString(i++, PasswordEncryptionUtil.encryptPassword(u.getContrasenha()));
 			}
@@ -286,9 +279,9 @@ public class UsuarioDAOImpl implements UsuarioDAO{
 
 			preparedStatement.setInt(i++, u.getIdUsuario());
 			
-			int insertedRows = preparedStatement.executeUpdate();	
+			int updatedRows = preparedStatement.executeUpdate();	
 			
-			if(insertedRows == 0) {
+			if(updatedRows == 0) {
 				throw new InstanceNotFoundException(u, "UsuarioDAOImpl.update");
 			}
 		} 
@@ -316,16 +309,17 @@ public class UsuarioDAOImpl implements UsuarioDAO{
 		try {
 
 			String sql;
-			sql =  "DELETE FROM `USUARIO`"
-				  +" WHERE ID_USUARIO = ? ";
+			sql =  "UPDATE `USUARIO` SET CONTRASENA = '', NOMBRE = '', APELLIDO1 = '', APELLIDO2 = '', NOMBRE_USUARIO = '', "
+					+ " EMAIL = '', DESCRIPCION = '', TELEFONO = 0 "
+					+" WHERE ID_USUARIO = ? ";
 			
 			preparedStatement = c.prepareStatement(sql);
 			
 			int i = 1;
 			preparedStatement.setInt(i++, u.getIdUsuario());
-			int deletedRows = preparedStatement.executeUpdate();
+			int updatedRows = preparedStatement.executeUpdate();
 			
-			if(deletedRows == 0) {
+			if(updatedRows == 0) {
 				throw new InstanceNotFoundException(u, "UsuarioDAOImpl.delete");
 			}
 		} 

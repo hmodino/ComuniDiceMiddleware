@@ -43,7 +43,7 @@ public class FavoritoDAOImpl implements FavoritoDAO{
 				do{
 					f = loadNext(resultSet);
 					favoritos.add(f);
-				}while(!resultSet.isLast()); 
+				}while(resultSet.next()); 
 			} else {
 				throw new InstanceNotFoundException(idUsuario, "FavoritoDAOImpl.findByFavoritosUsuario");
 			}				
@@ -85,7 +85,7 @@ public class FavoritoDAOImpl implements FavoritoDAO{
 				do{
 					f = loadNext(resultSet);
 					favoritos.add(f);
-				}while(!resultSet.isLast());
+				}while(resultSet.next());
 			} else {
 				throw new InstanceNotFoundException(idUsuario,"FavoritoDAOImpl.findValoracionesUsuario");
 			}				
@@ -159,10 +159,10 @@ public class FavoritoDAOImpl implements FavoritoDAO{
 			resultSet = preparedStatement.executeQuery();	
 			
 			if (resultSet.next()) {				
-				while(resultSet.next()) {	
+				do {	
 					f = loadNextP(resultSet);
 					fs.add(f);
-				}
+				}while(resultSet.next());
 			} else {
 				throw new InstanceNotFoundException(idProducto, "FavoritoDAOImpl.findValoracionesByProducto");
 			}				
@@ -221,7 +221,7 @@ public class FavoritoDAOImpl implements FavoritoDAO{
 		try {
 
 			String sql;
-			sql =  "INSERT INTO COMENTARIO (ID_PRODUCTO, ID_USUARIO, VALORACION, FAVORITO "
+			sql =  "INSERT INTO VALORACION_PRODUCTO_FAVORITOS (ID_PRODUCTO, ID_USUARIO, VALORACION, FAVORITO) "
 				  +" VALUES (?, ?, ?, ?) ";
 			
 			preparedStatement = c.prepareStatement(sql);

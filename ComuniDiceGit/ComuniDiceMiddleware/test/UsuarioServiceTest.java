@@ -22,8 +22,8 @@ public class UsuarioServiceTest {
 //			s.findByEmail(u.getEmail());
 //			s.findById(u.getIdUsuario());
 //			s.findByNombre(u.getNombreUsuario());
-			s.signUp(u);
-//			s.logIn("Estela.QUIjada@gmail.com", "1234");
+//			s.signUp(u);
+			s.logIn("Estela.QUIjada@gmail.com", "1234");
 //			s.editar(u);
 //			s.eliminar(u);
 		} catch (Exception e) {

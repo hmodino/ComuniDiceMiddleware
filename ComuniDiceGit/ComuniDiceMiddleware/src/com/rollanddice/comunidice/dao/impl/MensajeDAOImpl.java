@@ -79,7 +79,7 @@ public class MensajeDAOImpl implements MensajeDAO{
 				do {
 					m = loadNext(resultSet);
 					ms.add(m);
-				}while(!resultSet.isLast());
+				}while(resultSet.next());
 			}else {
 				throw new InstanceNotFoundException(id, "MensajeDAOImpl.findByEmisor");
 			}
@@ -119,7 +119,7 @@ public class MensajeDAOImpl implements MensajeDAO{
 				do{
 					m = loadNext(resultSet);
 					ms.add(m);
-				}while(resultSet.isLast());
+				}while(resultSet.next());
 			}else {
 				throw new InstanceNotFoundException(idReceptor, "MensajeDAOImp`l.findByReceptor");
 			}

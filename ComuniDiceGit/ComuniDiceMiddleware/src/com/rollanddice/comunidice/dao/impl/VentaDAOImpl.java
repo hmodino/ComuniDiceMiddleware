@@ -79,7 +79,7 @@ public class VentaDAOImpl implements VentaDAO{
 				do {
 					v = loadNext(resultSet);
 					vs.add(v);
-				}while(!resultSet.isLast()); 
+				}while(resultSet.next()); 
 			} else {
 				throw new InstanceNotFoundException(idUsuario, "VentaDAOImpl.findByUsuario");
 			}				

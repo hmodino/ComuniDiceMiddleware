@@ -77,7 +77,7 @@ public class RegionDAOImpl implements RegionDAO{
 					do {
 						r = loadNext(resultSet);
 						rs.add(r);
-					}while(!resultSet.isLast());
+					}while(resultSet.next());
 				} else {
 					throw new InstanceNotFoundException(idPais, "RegionDAOImpl.findByPais");
 				}				

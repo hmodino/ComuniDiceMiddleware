@@ -92,7 +92,6 @@ public class DireccionDAOImpl implements DireccionDAO{
 			JDBCUtils.closeResultSet(resultSet);
 			JDBCUtils.closeStatement(preparedStatement);
 		}  	
-		
 
 	}
 	
@@ -184,8 +183,10 @@ public class DireccionDAOImpl implements DireccionDAO{
 				throw new InstanceNotFoundException(d, "DireccionDAOImpl.update");
 			}
 		}catch(SQLException ex){
-			throw new DataException(ex);
-			
+			throw new DataException(ex);	
+		}finally {            
+			JDBCUtils.closeResultSet(resultSet);
+			JDBCUtils.closeStatement(preparedStatement);
 		}
 		
 	}
@@ -198,8 +199,8 @@ public class DireccionDAOImpl implements DireccionDAO{
 		try {
 
 			String sql;
-			sql =  "DELETE FROM `DIRECCION`"
-				  +"WHERE ID_DIRECCION = ? ";
+			sql =  "DELETE FROM `DIRECCION` "
+				  +" WHERE ID_DIRECCION = ? ";
 			
 			preparedStatement = c.prepareStatement(sql);
 			

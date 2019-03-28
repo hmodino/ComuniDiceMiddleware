@@ -107,7 +107,7 @@ public class AmigoDAOImpl implements AmigoDAO{
 				do {
 					a = loadNext(resultSet);
 					amigos.add(a);
-				}while(!resultSet.isLast());
+				}while(resultSet.next());
 			}else {
 				throw new InstanceNotFoundException(id, "AmigoDAOImpl.delete");
 			}

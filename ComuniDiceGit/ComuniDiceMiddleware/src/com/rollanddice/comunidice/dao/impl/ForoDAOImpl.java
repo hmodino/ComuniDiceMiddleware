@@ -98,7 +98,7 @@ public class ForoDAOImpl implements ForoDAO{
 				do {
 					f = loadNext(resultSet);
 					foros.add(f);
-				}while(!resultSet.isLast());
+				}while(resultSet.next());
 			}		 
 		} 
 		catch (SQLException ex) {
