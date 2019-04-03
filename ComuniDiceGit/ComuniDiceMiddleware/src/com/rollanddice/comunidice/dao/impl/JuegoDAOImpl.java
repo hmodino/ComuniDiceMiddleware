@@ -124,11 +124,11 @@ public class JuegoDAOImpl implements JuegoDAO{
 				first = false;
 			}
 			if(criteria.getAnhoPublicacionMaximo()!=null) {
-				DaoUtils.anadir(sql, first, "ANO_PUBLICACION <=?");
+				DaoUtils.anadir(sql, first, "ANO_PUBLICACION <= ?");
 				first = false;
 			}
 			if(criteria.getAnhoPublicacionMinimo()!=null) {
-				DaoUtils.anadir(sql, first, "ANO_PUBLICACION >=?");
+				DaoUtils.anadir(sql, first, "ANO_PUBLICACION >= ?");
 				first = false;
 			}
 			if(criteria.getFormato()!=null) {
@@ -136,7 +136,7 @@ public class JuegoDAOImpl implements JuegoDAO{
 				first = false;
 			}
 			if(criteria.getTipoTapa()!=null) {
-				DaoUtils.anadir(sql, first, "TIPO_TAPA >=?");
+				DaoUtils.anadir(sql, first, "TIPO_TAPA = ?");
 				first = false;
 			}
 			

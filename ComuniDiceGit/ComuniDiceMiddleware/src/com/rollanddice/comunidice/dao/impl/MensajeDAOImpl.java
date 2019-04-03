@@ -171,7 +171,7 @@ public class MensajeDAOImpl implements MensajeDAO{
 	}
 
 	@Override
-	public void delete(Connection c, Mensaje mensaje) throws InstanceNotFoundException, DataException{
+	public void delete(Connection c, Integer id) throws InstanceNotFoundException, DataException{
 		
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -184,10 +184,10 @@ public class MensajeDAOImpl implements MensajeDAO{
 			preparedStatement = c.prepareStatement(sql);
 			
 			int i = 1;
-			preparedStatement.setInt(i++, mensaje.getIdMensaje());
+			preparedStatement.setInt(i++, id);
 			int deletedRows = preparedStatement.executeUpdate();
 			if(deletedRows==0) {
-				throw new InstanceNotFoundException(mensaje, "MensajeDAOImpl.delete");
+				throw new InstanceNotFoundException(id, "MensajeDAOImpl.delete");
 			}
 		} 
 		catch (SQLException ex) {

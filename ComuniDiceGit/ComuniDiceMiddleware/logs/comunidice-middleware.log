@@ -1,11 +1,3 @@
-2019-03-28 09:49:25.637 DEBUG AmigoServiceImpl:45 - com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
-
-The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
-2019-03-28 10:12:48.021 DEBUG AmigoServiceImpl:45 - com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
-
-The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
-2019-03-28 10:39:01.566 DEBUG UsuarioDAOImpl:110 - false
-2019-03-28 10:39:01.639 INFO  UsuarioServiceImpl:94 - com.rollanddice.comunidice.model.Usuario@43bc63a3[idUsuario=7,nombreUsuario=EQuijada,nombre=Estela,apellido1=Quijada,apellido2=Viña,email=ESTELA.QUIJADA@GMAIL.COM,contrasenha=A6b19mAtgwQmhpBllKi6wcUhIQ+Ki58Inqxe1AOLv1Q9p80TzwmPqHyuAYs2KnKU,descripcion=<null>,idDireccion=<null>,amigos=<null>,favoritos=<null>,valoraciones=<null>,mensajes=<null>,compras=<null>,ventas=<null>,comentarios=<null>,fechaAlta=2019-02-14,telefono=<null>]
-2019-03-28 10:39:01.953 INFO  UsuarioServiceImpl:148 - Usuario EQuijada autenticado
-2019-03-28 10:39:36.590 INFO  AmigoServiceImpl:41 - [com.rollanddice.comunidice.model.Amigo@6771beb3[amigo=6,fecha=2019-02-14]]
-2019-03-28 10:39:36.590 INFO  AmigoServiceImpl:41 - [com.rollanddice.comunidice.model.Amigo@6771beb3[amigo=6,fecha=2019-02-14]]
+2019-04-02 13:11:33.738 DEBUG UsuarioDAOImpl:110 - false
+2019-04-02 13:11:33.889 INFO  UsuarioServiceImpl:94 - com.rollanddice.comunidice.model.Usuario@3b69e7d1[idUsuario=7,nombreUsuario=EQuijada,nombre=Estela,apellido1=Quijada,apellido2=Viña,email=ESTELA.QUIJADA@GMAIL.COM,contrasenha=A6b19mAtgwQmhpBllKi6wcUhIQ+Ki58Inqxe1AOLv1Q9p80TzwmPqHyuAYs2KnKU,descripcion=<null>,idDireccion=<null>,amigos=<null>,favoritos=<null>,valoraciones=<null>,mensajes=<null>,compras=<null>,ventas=<null>,comentarios=<null>,fechaAlta=2019-02-14,telefono=<null>]
+2019-04-02 13:11:34.045 INFO  UsuarioServiceImpl:148 - Usuario EQuijada autenticado

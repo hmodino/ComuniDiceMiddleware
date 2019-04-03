@@ -21,7 +21,7 @@ public interface MensajeDAO {
 	public void create(Connection c, Mensaje mensaje)
 		throws DataException;
 	
-	public void delete(Connection c, Mensaje mensaje) 
+	public void delete(Connection c, Integer id) 
 		throws InstanceNotFoundException, DataException;
 
 }

@@ -7,7 +7,10 @@ public class Amigo extends AbstractValueObject{
 	private Integer amigo = null;
 	private Date fecha = null;
 	
-	
+	public Amigo() {
+
+	}
+
 	public Integer getAmigo() {
 		return amigo;
 	}

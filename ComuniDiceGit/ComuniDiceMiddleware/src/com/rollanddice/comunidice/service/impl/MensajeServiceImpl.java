@@ -119,7 +119,7 @@ public class MensajeServiceImpl implements MensajeService{
 		}
 		
 		@Override
-		public void delete(Mensaje m) throws Exception{
+		public void delete(Integer id) throws Exception{
 			
 			boolean commit = false;
 			Connection c = null;
@@ -127,7 +127,7 @@ public class MensajeServiceImpl implements MensajeService{
 			try {
 				c = ConnectionManager.getConnection();
 				c.setAutoCommit(false);
-				dao.delete(c, m);
+				dao.delete(c, id);
 				
 				commit = true;
 				System.out.println("Mensaje eliminado");

@@ -18,6 +18,6 @@ public interface MensajeService {
 		public void create(Mensaje mensaje)
 			throws Exception;
 
-		public void delete(Mensaje m) 
+		public void delete(Integer id) 
 			throws Exception;
 }
