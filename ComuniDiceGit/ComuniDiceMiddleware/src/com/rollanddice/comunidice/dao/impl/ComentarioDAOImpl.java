@@ -228,7 +228,7 @@ public class ComentarioDAOImpl implements ComentarioDAO{
 	}
 
 	@Override
-	public void create(Connection c, Comentario comentario, Integer idProducto, Integer idForo) 
+	public void create(Connection c, Comentario comentario) 
 			throws DataException {
 		
 		PreparedStatement preparedStatement = null;
@@ -236,7 +236,7 @@ public class ComentarioDAOImpl implements ComentarioDAO{
 		try {
 
 			String sql;
-			if(idProducto!=null) {
+			if(comentario.getProducto()!=null) {
 				sql =  "INSERT INTO COMENTARIO (ID_USUARIO, ID_PRODUCTO, CONTENIDO, FECHA) "
 						+" VALUES (?, ?, ?, ?) ";
 			}
@@ -249,11 +249,11 @@ public class ComentarioDAOImpl implements ComentarioDAO{
 			
 			int i = 1;
 			preparedStatement.setInt(i++, comentario.getUsuario());
-			if(idProducto!=null) {
-			preparedStatement.setInt(i++, idProducto);
+			if(comentario.getProducto()!=null) {
+			preparedStatement.setInt(i++, comentario.getProducto());
 			}
-			if(idForo!=null) {
-			preparedStatement.setInt(i++, idForo);
+			if(comentario.getForo()!=null) {
+			preparedStatement.setInt(i++, comentario.getForo());
 			}
 			preparedStatement.setString(i++, comentario.getContenido());
 			preparedStatement.setDate(i++, (new java.sql.Date(new Date().getTime())));	
@@ -277,7 +277,7 @@ public class ComentarioDAOImpl implements ComentarioDAO{
 	}
 
 	@Override
-	public void delete(Connection c, Comentario comentario) throws InstanceNotFoundException, DataException {
+	public void delete(Connection c, Integer comentario) throws InstanceNotFoundException, DataException {
 		
 
 		PreparedStatement preparedStatement = null;
@@ -291,7 +291,7 @@ public class ComentarioDAOImpl implements ComentarioDAO{
 			preparedStatement = c.prepareStatement(sql);
 			
 			int i = 1;
-			preparedStatement.setInt(i++, comentario.getIdComentario());
+			preparedStatement.setInt(i++, comentario);
 			int deletedRows = preparedStatement.executeUpdate();
 			
 			if(deletedRows == 0) {

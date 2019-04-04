@@ -22,9 +22,9 @@ public interface ComentarioDAO {
 	public List<Comentario> findByUsuarioTipo(Connection c, Integer idUsuario, Boolean booleano)
 			throws InstanceNotFoundException, DataException;
 	
-	public void create(Connection c, Comentario comentario, Integer idProducto, Integer idForo)
+	public void create(Connection c, Comentario comentario)
 		throws DataException;
 	
-	public void delete(Connection c, Comentario comentario)
+	public void delete(Connection c, Integer comentario)
 		throws InstanceNotFoundException, DataException;
 }

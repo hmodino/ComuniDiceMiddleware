@@ -18,9 +18,9 @@ public interface ComentarioService {
 	public List<Comentario> findByUsuarioTipo(Integer idUsuario, Boolean booleano)
 		throws Exception;
 
-	public void create(Comentario comentario, Integer idProducto, Integer idForo)
+	public void create(Comentario comentario)
 		throws Exception;
 	
-	public void delete(Comentario comentario)
+	public void delete(Integer comentario)
 		throws Exception;
 }

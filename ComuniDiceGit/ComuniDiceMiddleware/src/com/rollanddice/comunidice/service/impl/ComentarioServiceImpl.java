@@ -125,7 +125,7 @@ public class ComentarioServiceImpl implements ComentarioService{
 	
 
 	@Override
-	public void create(Comentario comentario, Integer idProducto, Integer idForo) throws Exception {
+	public void create(Comentario comentario) throws Exception {
 		
 		boolean commit = false;
 		Connection c = null;
@@ -134,7 +134,7 @@ public class ComentarioServiceImpl implements ComentarioService{
 			c.setTransactionIsolation(
                     Connection.TRANSACTION_READ_COMMITTED);
 			c.setAutoCommit(false);
-			dao.create(c, comentario, idProducto, idForo);
+			dao.create(c, comentario);
 			
 			commit = true;
 			System.out.println("Comentario añadido con éxito");
@@ -150,7 +150,7 @@ public class ComentarioServiceImpl implements ComentarioService{
 	}
 
 	@Override
-	public void delete(Comentario comentario) throws Exception {
+	public void delete(Integer comentario) throws Exception {
 		
 		boolean commit = false;
 		Connection c = null;
