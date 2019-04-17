@@ -112,7 +112,7 @@ public class UsuarioServiceImpl implements UsuarioService{
 			c = ConnectionManager.getConnection();
 			c.setAutoCommit(false);
 			u.setEmail(u.getEmail().toUpperCase());
-			u.setContrasenha(u.getContrasenha().toUpperCase());
+			u.setContrasenha(u.getContrasenha());
 				
 			dao.create(c, u);
 			if(d!=null) {
@@ -144,10 +144,13 @@ public class UsuarioServiceImpl implements UsuarioService{
 			email = email.toUpperCase();
 			Usuario u = findByEmail(email);
 			if(u!=null) {
-				if(PasswordEncryptionUtil.checkPassword(password.toUpperCase(), u.getContrasenha())==true) {
+				if(PasswordEncryptionUtil.checkPassword(password, u.getContrasenha())) {
 					logger.info("Usuario "+u.getNombreUsuario()+" autenticado");
 				}
-				else {logger.info("Problema en la contraseña");}
+				else {
+					logger.info("Problema en la contraseña");
+					u = null;
+				}
 			}
 			else {logger.info("Usuario no encontrado");}
 			commit = true;
@@ -177,7 +180,7 @@ public class UsuarioServiceImpl implements UsuarioService{
 				u.setEmail(u.getEmail().toUpperCase());
 			}
 			if(u.getContrasenha()!=null) {
-				u.setContrasenha(u.getContrasenha().toUpperCase());
+				u.setContrasenha(u.getContrasenha());
 			}
 			if(u != null) {
 				dao.update(c, u);

@@ -25,12 +25,15 @@ public interface FavoritoDAO {
 	public Double mediaValoraciones(Connection c, Integer idProducto)
 		throws InstanceNotFoundException, DataException;
 	
-	public void create(Connection c, Favorito favorito, Integer idUsuario)
+	public void create(Connection c, Favorito favorito)
 		throws DuplicateInstanceException, DataException;
 	
-	public void update(Connection c, Favorito favorito, Integer idUsuario, Integer idProducto)
+	public void update(Connection c, Favorito favorito)
 		throws InstanceNotFoundException, DataException;
 	
-	public void delete(Connection c, Favorito favorito, Integer idUsuario, Integer idProducto)
+	public void delete(Connection c, Favorito favorito)
 		throws InstanceNotFoundException, DataException;
+	
+	public Boolean exist(Connection c, Integer idUsuario, Integer idProducto)
+		throws DataException;
 }

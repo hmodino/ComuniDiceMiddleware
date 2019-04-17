@@ -84,10 +84,12 @@ public class ProductoServiceImpl implements ProductoService{
 		try {
 			c = ConnectionManager.getConnection();
 			c.setAutoCommit(false);
+			Double media = null;
+			Double favoritos = null;
 			Results<Producto> p = dao.findByCriteria(c, criteria, idioma, startIndex, count);
 			for(Producto producto:p.getPage()) {
-				Double media = favoritoDao.mediaValoraciones(c, producto.getIdProducto());
-				Double favoritos = favoritoDao.countFavoritos(c, producto.getIdProducto());
+				media = favoritoDao.mediaValoraciones(c, producto.getIdProducto());
+				favoritos = favoritoDao.countFavoritos(c, producto.getIdProducto());
 				producto.setNumeroFavoritos(favoritos);
 				producto.setValoracion(media);
 			}
@@ -143,10 +145,12 @@ public class ProductoServiceImpl implements ProductoService{
 		try {
 			c = ConnectionManager.getConnection();
 			c.setAutoCommit(false);
+			Double media = null;
+			Double favoritos = null;
 			Results<Juego> j = juegoDao.findByCriteria(c, criteria, startIndex, count);
 			for(Juego juego:j.getPage()) {
-				Double media = favoritoDao.mediaValoraciones(c, juego.getIdProducto());
-				Double favoritos = favoritoDao.countFavoritos(c, juego.getIdProducto());
+				media = favoritoDao.mediaValoraciones(c, juego.getIdProducto());
+				favoritos = favoritoDao.countFavoritos(c, juego.getIdProducto());
 				juego.setNumeroFavoritos(favoritos);
 				juego.setValoracion(media);
 			}

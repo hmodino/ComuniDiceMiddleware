@@ -214,7 +214,7 @@ public class FavoritoDAOImpl implements FavoritoDAO{
 	}
 
 	@Override
-	public void create(Connection c, Favorito favorito, Integer idUsuario) throws DuplicateInstanceException, DataException {
+	public void create(Connection c, Favorito favorito) throws DuplicateInstanceException, DataException {
 		
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -228,7 +228,7 @@ public class FavoritoDAOImpl implements FavoritoDAO{
 			
 			int i = 1;
 			preparedStatement.setInt(i++, favorito.getProducto());
-			preparedStatement.setInt(i++, idUsuario);
+			preparedStatement.setInt(i++, favorito.getUsuario());
 			preparedStatement.setDouble(i++, favorito.getValoracion());
 			preparedStatement.setBoolean(i++, favorito.getFavorito());
 			
@@ -248,7 +248,7 @@ public class FavoritoDAOImpl implements FavoritoDAO{
 	}
 
 	@Override
-	public void update(Connection c, Favorito favorito, Integer idUsuario, Integer idProducto) 
+	public void update(Connection c, Favorito favorito) 
 			throws InstanceNotFoundException, DataException {
 		
 		PreparedStatement preparedStatement = null;
@@ -265,8 +265,8 @@ public class FavoritoDAOImpl implements FavoritoDAO{
 			int i = 1;
 			preparedStatement.setDouble(i++, favorito.getValoracion());
 			preparedStatement.setBoolean(i++, favorito.getFavorito());
-			preparedStatement.setInt(i++, idProducto);
-			preparedStatement.setInt(i++, idUsuario);	
+			preparedStatement.setInt(i++, favorito.getProducto());
+			preparedStatement.setInt(i++, favorito.getUsuario());	
 			
 			int insertedRows = preparedStatement.executeUpdate();	
 			
@@ -289,7 +289,7 @@ public class FavoritoDAOImpl implements FavoritoDAO{
 	}
 
 	@Override
-	public void delete(Connection c, Favorito favorito, Integer idUsuario, Integer idProducto) 
+	public void delete(Connection c, Favorito favorito) 
 			throws InstanceNotFoundException, DataException {
 		
 		PreparedStatement preparedStatement = null;
@@ -303,8 +303,8 @@ public class FavoritoDAOImpl implements FavoritoDAO{
 			preparedStatement = c.prepareStatement(sql);
 			
 			int i = 1;
-			preparedStatement.setInt(i++, idProducto);
-			preparedStatement.setInt(i++, idUsuario);
+			preparedStatement.setInt(i++, favorito.getProducto());
+			preparedStatement.setInt(i++, favorito.getUsuario());
 			int deletedRows = preparedStatement.executeUpdate();
 			
 			if(deletedRows == 0) {
@@ -320,7 +320,42 @@ public class FavoritoDAOImpl implements FavoritoDAO{
 		}  	
 	}
 	
+	@Override
+	public Boolean exist(Connection c, Integer idUsuario, Integer idProducto) throws DataException {
+	
+		Boolean b = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		try {
 
+			String sql;
+			sql =  "SELECT ID_USUARIO "
+				  +" FROM VALORACION_PRODUCTO_FAVORITOS "
+				  +" WHERE ID_USUARIO = ? AND ID_PRODUCTO = ? ";
+			
+			preparedStatement = c.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			
+			int i = 1;
+			preparedStatement.setInt(i++, idUsuario);
+			preparedStatement.setInt(i++, idProducto);
+			
+			resultSet = preparedStatement.executeQuery();	
+			
+			if (resultSet.next()) {				
+					b = true;
+			} else {
+				b = false;
+			}				
+			return b;
+		} 
+		catch (SQLException ex) {
+			throw new DataException(ex);
+		}	finally {            
+			JDBCUtils.closeResultSet(resultSet);
+			JDBCUtils.closeStatement(preparedStatement);
+		}  	
+	}
+	
 	private Favorito loadNext(ResultSet resultSet) throws SQLException{
 		
 		Favorito f = new Favorito();

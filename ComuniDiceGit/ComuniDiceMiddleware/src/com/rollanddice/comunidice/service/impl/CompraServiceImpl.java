@@ -92,7 +92,7 @@ public class CompraServiceImpl implements CompraService{
 			c.setAutoCommit(false);
 			for(LineaCompra linea:lcs) {
 				linea.setPrecioUnitario(linea.getProducto().getPrecio());
-				totalLinea = (linea.getProducto().getPrecio()-linea.getDescuento())*linea.getCantidad();
+				totalLinea = (linea.getProducto().getPrecio()*linea.getCantidad()-linea.getDescuento())*linea.getCantidad();
 				linea.setPrecioTotal(totalLinea);
 				subtotal = subtotal + totalLinea;
 			}
