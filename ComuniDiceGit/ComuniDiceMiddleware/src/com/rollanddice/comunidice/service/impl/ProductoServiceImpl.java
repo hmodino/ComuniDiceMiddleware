@@ -42,14 +42,11 @@ public class ProductoServiceImpl implements ProductoService{
 
 	@Override
 	public Producto findById(Integer id, String idioma) throws Exception {
-		long t1=0l, t2=0l, t3=0l, t4=0l;
 		
 		boolean commit = false;
 		Connection c = null;
 		try {
-			t1 = System.currentTimeMillis();
 			c = ConnectionManager.getConnection();
-			t2 = System.currentTimeMillis();
 			c.setAutoCommit(false);
 			Producto p = dao.findById(c, id, idioma);
 			Double media = favoritoDao.mediaValoraciones(c, p.getIdProducto());
@@ -60,7 +57,6 @@ public class ProductoServiceImpl implements ProductoService{
 			p.setComentarios(comentarios);
 			logger.debug(p);
 			commit = true;
-			t3 = System.currentTimeMillis();
 			return p;
 		}
 		catch(Exception ex) {
@@ -68,10 +64,7 @@ public class ProductoServiceImpl implements ProductoService{
 			throw ex;
 		}
 		finally {
-			
 			JDBCUtils.closeConnection(c, commit);
-			t4 = System.currentTimeMillis();
-			System.out.println("Abrir conexion: "+(t2-t1)+" Proceso: "+(t3-t2)+" Cerrar conexion: "+(t4-t3));
 		}
 		
 	}

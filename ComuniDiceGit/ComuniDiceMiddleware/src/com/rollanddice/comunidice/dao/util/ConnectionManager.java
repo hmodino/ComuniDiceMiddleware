@@ -8,8 +8,10 @@ public class ConnectionManager	 {
 
 
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
-	static final String DB_URL = "jdbc:mysql://10.53.124.211:3306/comunidice?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+//	static final String DB_URL = "jdbc:mysql://10.53.124.211:3306/comunidice?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
 //	static final String DB_URL = "jdbc:mysql://192.168.0.24:3306/comunidice?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+//	static final String DB_URL = "jdbc:mysql://192.168.1.31:3306/comunidice?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+	static final String DB_URL = "jdbc:mysql://127.0.0.1:3306/comunidice?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
 	//  Database credentials
 	static final String USER = "eclipse";
 	static final String PASS = "e1204VGA92";

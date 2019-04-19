@@ -89,7 +89,7 @@ public class ProductoDAOImpl implements ProductoDAO{
 					first = false;
 				}
 				if(criteria.getNombre() !=null) {
-					DaoUtils.anadir(sql, first, " P.NOMBRE LIKE ? ");
+					DaoUtils.anadir(sql, first, " I.NOMBRE LIKE ? ");
 					first = false;
 				}
 				if(criteria.getPrecioDesde()!=null) {

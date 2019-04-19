@@ -26,14 +26,14 @@ public class UsuarioServiceTest {
 //			s.findById(u.getIdUsuario());
 //			s.findByNombre(u.getNombreUsuario());
 //			s.signUp(u);
-//			s.logIn("Estela.QUIjada@gmail.com", "1234");
+			s.logIn("hector.modino.otero@gmail.com", "1234");
 			
-			Properties systemProperties = System.getProperties();
-			String key = null;
-			for(Enumeration keys = systemProperties.keys(); keys.hasMoreElements();) {
-				key = (String) keys.nextElement();
-				System.out.println(key+"="+System.getProperty(key));
-			}
+//			Properties systemProperties = System.getProperties();
+//			String key = null;
+//			for(Enumeration keys = systemProperties.keys(); keys.hasMoreElements();) {
+//				key = (String) keys.nextElement();
+//				System.out.println(key+"="+System.getProperty(key));
+//			}
 //			s.editar(u);
 //			s.eliminar(u);
 		} catch (Exception e) {
