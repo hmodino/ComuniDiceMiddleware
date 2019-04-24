@@ -85,19 +85,9 @@ public class CompraServiceImpl implements CompraService{
 		boolean commit = false;
 		Connection c = null;
 		
-		double subtotal = 0.0;
-		double totalLinea = 0.0;
 		try {
 			c = ConnectionManager.getConnection();
 			c.setAutoCommit(false);
-			for(LineaCompra linea:lcs) {
-				linea.setPrecioUnitario(linea.getProducto().getPrecio());
-				totalLinea = (linea.getProducto().getPrecio()*linea.getCantidad()-linea.getDescuento())*linea.getCantidad();
-				linea.setPrecioTotal(totalLinea);
-				subtotal = subtotal + totalLinea;
-			}
-			compra.setSubtotal(subtotal);
-			compra.setTotal(subtotal + compra.getGastosEnvio());
 			if(!lcs.isEmpty()) {
 				compraDao.create(c, compra);
 				for(LineaCompra linea:lcs) {

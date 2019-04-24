@@ -74,7 +74,7 @@ public class LineaCompraDAOImpl implements LineaCompraDAO{
 			
 			int i = 1;
 			preparedStatement.setInt(i++, idCompra);
-			preparedStatement.setInt(i++, lc.getProducto().getIdProducto());
+			preparedStatement.setInt(i++, lc.getIdProducto());
 			preparedStatement.setInt(i++, lc.getCantidad());
 			preparedStatement.setDouble(i++, lc.getPrecioUnitario());
 			preparedStatement.setDouble(i++, lc.getPrecioTotal());

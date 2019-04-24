@@ -117,5 +117,37 @@ public class Producto extends AbstractValueObject{
 	public void setValoracion(Double valoracion) {
 		this.valoracion = valoracion;
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		Boolean b = true;
+		
+		if(o==null) {
+			b=false;
+		}
+		if(!(o instanceof Producto)) {
+			b=false;
+		}
+		if(this.getIdProducto()== null || this.getNombre()==null) {
+			b=false;
+		}
+		Producto p = (Producto) o;
+		if(!this.getIdProducto().equals(p.getIdProducto()) || !this.getNombre().equals(p.getNombre())) {
+			b=false;
+		}
+		return b;
+	}
 
+	@Override
+	public int hashCode() {
+		Integer s = null;
+		if(idProducto!=null && nombre!=null) {
+			s = idProducto+nombre.hashCode();
+			return s;
+		}
+		else {
+			s = "null".hashCode();
+			return s;
+		}
+	}
 }

@@ -34,11 +34,12 @@ public class ProductoServiceTest {
 //		j.setTipoTapa(1);
 		
 		try {
-			s.create(p, "es_ES");
+//			s.create(p, "es_ES");
 			
 //			for(int i = 0; i<3;i++) {
 //				s.findById(30, "es_ES");
 //			}
+			s.findById(31, "es_ES");
 //			s.createJuego(j);
 //			s.findJuegoById(58);
 //			s.findByCriteria(c, "es_ES");

@@ -274,10 +274,6 @@ public class FavoritoDAOImpl implements FavoritoDAO{
 				throw new InstanceNotFoundException(favorito, "FavoritoDAOImpl.update");
 			}
 			
-			resultSet = preparedStatement.getResultSet();
-			if (resultSet.next()) {	
-				favorito = loadNext(resultSet);
-			}
 		} 
 		catch (SQLException ex) {
 			throw new DataException(ex);

@@ -100,11 +100,7 @@ public class ComentarioDAOImpl implements ComentarioDAO{
 					coment = loadNext(resultSet);
 					comentarios.add(coment);
 				}while(resultSet.next());
-			}else {
-				throw new InstanceNotFoundException(id, "ComentarioDAOImpl.findByProductoOForo");
 			}
-						
-
 		} 
 		catch (SQLException ex) {
 			throw new DataException(ex);

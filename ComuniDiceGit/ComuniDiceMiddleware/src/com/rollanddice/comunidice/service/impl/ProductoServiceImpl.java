@@ -47,6 +47,7 @@ public class ProductoServiceImpl implements ProductoService{
 		Connection c = null;
 		try {
 			c = ConnectionManager.getConnection();
+			logger.debug(c);
 			c.setAutoCommit(false);
 			Producto p = dao.findById(c, id, idioma);
 			Double media = favoritoDao.mediaValoraciones(c, p.getIdProducto());
