@@ -10,6 +10,7 @@ public class Comentario extends AbstractValueObject{
 	private Integer producto = null;
 	private String contenido = null;
 	private Date fecha = null;
+	private String nombreUsuario = null;
 	
 	public Comentario() {
 		
@@ -61,6 +62,14 @@ public class Comentario extends AbstractValueObject{
 
 	public void setFecha(Date fecha) {
 		this.fecha = fecha;
+	}
+
+	public String getNombreUsuario() {
+		return nombreUsuario;
+	}
+
+	public void setNombreUsuario(String nombreUsuario) {
+		this.nombreUsuario = nombreUsuario;
 	}
 
 }

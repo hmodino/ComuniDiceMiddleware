@@ -156,10 +156,10 @@ public class JuegoDAOImpl implements JuegoDAO{
 				preparedStatement.setDouble(i++, criteria.getPrecioHasta());
 			}
 			if(criteria.getFechaMaxima()!=null) {
-				preparedStatement.setDate(i++, (java.sql.Date)criteria.getFechaMaxima());
+				preparedStatement.setDate(i++, new java.sql.Date(criteria.getFechaMaxima().getTime()));
 			}
 			if(criteria.getFechaMinima()!=null) {
-				preparedStatement.setDate(i++, (java.sql.Date)criteria.getFechaMinima());
+				preparedStatement.setDate(i++, new java.sql.Date(criteria.getFechaMinima().getTime()));
 			}
 			if(criteria.getNumeroFavoritos()!=null) {
 				preparedStatement.setInt(i++, criteria.getNumeroFavoritos());
@@ -174,10 +174,10 @@ public class JuegoDAOImpl implements JuegoDAO{
 				preparedStatement.setInt(i++, criteria.getTipoVendedor());
 			}
 			if(criteria.getAnhoPublicacionMaximo()!=null) {
-				preparedStatement.setDate(i++, (java.sql.Date)criteria.getAnhoPublicacionMaximo());
+				preparedStatement.setInt(i++, criteria.getAnhoPublicacionMaximo());
 			}
 			if(criteria.getAnhoPublicacionMinimo()!=null) {
-				preparedStatement.setDate(i++, (java.sql.Date)criteria.getAnhoPublicacionMinimo());
+				preparedStatement.setInt(i++, criteria.getAnhoPublicacionMinimo());
 			}
 			if(criteria.getFormato()!=null) {
 				preparedStatement.setInt(i++, criteria.getFormato());

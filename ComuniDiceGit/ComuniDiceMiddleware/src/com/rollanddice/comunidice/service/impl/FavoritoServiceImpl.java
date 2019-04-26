@@ -1,6 +1,8 @@
 package com.rollanddice.comunidice.service.impl;
 
 import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.rollanddice.comunidice.dao.impl.FavoritoDAOImpl;
 import com.rollanddice.comunidice.dao.spi.FavoritoDAO;
@@ -18,9 +20,9 @@ public class FavoritoServiceImpl implements FavoritoService{
 	}
 
 	@Override
-	public Boolean exist(Integer idUsuario, Integer idProducto) throws Exception {
+	public Favorito exist(Integer idUsuario, Integer idProducto) throws Exception {
 		
-		Boolean b = null;
+		Favorito f = new Favorito();;
 		
 		boolean commit = false;
 		Connection c = null;
@@ -28,10 +30,10 @@ public class FavoritoServiceImpl implements FavoritoService{
 			c = ConnectionManager.getConnection();
 			c.setAutoCommit(false);
 			
-			b = dao.exist(c, idUsuario, idProducto);
+			f = dao.exist(c, idUsuario, idProducto);
 			commit = true;
 			
-			return b;
+			return f;
 			
 		} catch (Exception e) {
 			
@@ -44,14 +46,14 @@ public class FavoritoServiceImpl implements FavoritoService{
 	}
 
 	@Override
-	public void create(Favorito f) throws Exception {
+	public void create(Favorito f, Integer fav) throws Exception {
 		
 		boolean commit = false;
 		Connection c = null;
 		try {
 			c = ConnectionManager.getConnection();
 			c.setAutoCommit(false);
-			dao.create(c, f);
+			dao.create(c, f, fav);
 			commit = true;
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -61,14 +63,14 @@ public class FavoritoServiceImpl implements FavoritoService{
 	}
 
 	@Override
-	public void update(Favorito f) throws Exception {
+	public void update(Favorito f, Integer fav) throws Exception {
 		
 		boolean commit = false;
 		Connection c = null;
 		try {
 			c = ConnectionManager.getConnection();
 			c.setAutoCommit(false);
-			dao.update(c, f);
+			dao.update(c, f, fav);
 			commit = true;
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -77,4 +79,22 @@ public class FavoritoServiceImpl implements FavoritoService{
 		}
 	}
 
+	@Override
+	public List<Favorito> findByUsuario(Integer idUsuario, String idioma) throws Exception {
+		
+		boolean commit = false;
+		Connection c =null;
+		List<Favorito> favoritos = new ArrayList<Favorito>();
+		try {
+			c = ConnectionManager.getConnection();
+			c.setAutoCommit(false);
+			favoritos = dao.findByFavoritosUsuario(c, idUsuario, idioma);
+			commit = true;
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			JDBCUtils.closeConnection(c, commit);
+		}
+		return favoritos;
+	}
 }

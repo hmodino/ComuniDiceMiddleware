@@ -15,8 +15,8 @@ public class Criteria {
 	private Integer valoracion = null;
 	private Integer idVendedor = null;
 	private Integer tipoVendedor = null;
-	private Date anhoPublicacionMaximo = null;
-	private Date anhoPublicacionMinimo = null;
+	private Integer anhoPublicacionMaximo = null;
+	private Integer anhoPublicacionMinimo = null;
 	private Integer formato = null;
 	private Integer tipoTapa = null;
 	
@@ -104,19 +104,19 @@ public class Criteria {
 		this.tipoVendedor = tipoVendedor;
 	}
 
-	public Date getAnhoPublicacionMaximo() {
+	public Integer getAnhoPublicacionMaximo() {
 		return anhoPublicacionMaximo;
 	}
 
-	public void setAnhoPublicacionMaximo(Date anhoPublicacionMaximo) {
+	public void setAnhoPublicacionMaximo(Integer anhoPublicacionMaximo) {
 		this.anhoPublicacionMaximo = anhoPublicacionMaximo;
 	}
 
-	public Date getAnhoPublicacionMinimo() {
+	public Integer getAnhoPublicacionMinimo() {
 		return anhoPublicacionMinimo;
 	}
 
-	public void setAnhoPublicacionMinimo(Date anhoPublicacionMinimo) {
+	public void setAnhoPublicacionMinimo(Integer anhoPublicacionMinimo) {
 		this.anhoPublicacionMinimo = anhoPublicacionMinimo;
 	}
 

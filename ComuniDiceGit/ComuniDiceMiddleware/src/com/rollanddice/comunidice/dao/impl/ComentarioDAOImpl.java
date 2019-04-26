@@ -29,8 +29,8 @@ public class ComentarioDAOImpl implements ComentarioDAO{
 		try {
 
 			sql = new StringBuilder(
-				"SELECT ID_COMENTARIO, ID_USUARIO, ID_FORO, ID_PRODUCTO, CONTENIDO, FECHA "
-				+" FROM COMENTARIO "
+				"SELECT C.ID_COMENTARIO, C.ID_USUARIO, C.ID_FORO, C.ID_PRODUCTO, C.CONTENIDO, C.FECHA, U.NOMBRE_USUARIO "
+				+" FROM COMENTARIO C INNER JOIN USUARIO U ON (C.ID_USUARIO=U.ID_USUARIO) "
 				+" WHERE ID_COMENTARIO = ? ");
 
 			preparedStatement = c.prepareStatement(sql.toString(), ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -70,17 +70,17 @@ public class ComentarioDAOImpl implements ComentarioDAO{
 		ResultSet resultSet = null;
 		try {
 			sql = new StringBuilder(
-					"SELECT ID_COMENTARIO, ID_USUARIO, ID_FORO, ID_PRODUCTO, CONTENIDO, FECHA "
-					+" FROM COMENTARIO ");
+					"SELECT C.ID_COMENTARIO, C.ID_USUARIO, C.ID_FORO, C.ID_PRODUCTO, C.CONTENIDO, C.FECHA, U.NOMBRE_USUARIO "
+					+" FROM COMENTARIO C INNER JOIN USUARIO U ON(C.ID_USUARIO=U.ID_USUARIO) ");
 			
 			boolean first = true;
 			if(idProducto!=null) {
-				DaoUtils.anadir(sql, first, " ID_PRODUCTO = ? ");
+				DaoUtils.anadir(sql, first, " C.ID_PRODUCTO = ? ");
 				id = idProducto;
 				first = false;
 			}
 			if(idForo != null) {
-				DaoUtils.anadir(sql, first, " ID_FORO = ? ");
+				DaoUtils.anadir(sql, first, " C.ID_FORO = ? ");
 				id = idForo;
 				first = false;
 			}
@@ -126,17 +126,17 @@ public class ComentarioDAOImpl implements ComentarioDAO{
 		ResultSet resultSet = null;
 		try {
 			sql = new StringBuilder(
-					"SELECT ID_COMENTARIO, ID_USUARIO, ID_FORO, ID_PRODUCTO, CONTENIDO, FECHA "
-					+" FROM COMENTARIO "
+					"SELECT C.ID_COMENTARIO, C.ID_USUARIO, C.ID_FORO, C.ID_PRODUCTO, C.CONTENIDO, C.FECHA, U.NOMBRE_USUARIO "
+					+" FROM COMENTARIO C INNER JOIN USUARIO U ON (C.ID_USUARIO=U.ID_USUARIO) "
 					+" WHERE ID_USUARIO = ? ");
 			
 			boolean first = false;
 			if(idProducto!=null) {
-				DaoUtils.anadir(sql, first, " ID_PRODUCTO = ? ");
+				DaoUtils.anadir(sql, first, " C.ID_PRODUCTO = ? ");
 				id = idProducto;
 			}
 			if(idForo != null) {
-				DaoUtils.anadir(sql, first, " ID_FORO = ? ");
+				DaoUtils.anadir(sql, first, " C.ID_FORO = ? ");
 				id = idForo;
 			}
 			preparedStatement = c.prepareStatement(sql.toString(), ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -184,17 +184,17 @@ public class ComentarioDAOImpl implements ComentarioDAO{
 		ResultSet resultSet = null;
 		try {
 			sql = new StringBuilder(
-					"SELECT ID_COMENTARIO, ID_USUARIO, ID_PRODUCTO, ID_FORO, CONTENIDO, FECHA "
-					+" FROM COMENTARIO "
-					+" WHERE ID_USUARIO = ? ");
+					"SELECT C.ID_COMENTARIO, C.ID_USUARIO, C.ID_PRODUCTO, C.ID_FORO, C.CONTENIDO, C.FECHA, U.NOMBRE_USUARIO "
+					+" FROM COMENTARIO C INNER JOIN USUARIO U ON (C.ID_USUARIO=U.ID_USUARIO) "
+					+" WHERE C.ID_USUARIO = ? ");
 			
 			boolean first = false;
 			if(booleano==true) {
-				DaoUtils.anadir(sql, first, " ID_PRODUCTO IS NOT NULL ");
+				DaoUtils.anadir(sql, first, " C.ID_PRODUCTO IS NOT NULL ");
 				tipo = "producto";
 			}
 			if(booleano==false) {
-				DaoUtils.anadir(sql, first, " ID_FORO IS NOT NULL ");
+				DaoUtils.anadir(sql, first, " C.ID_FORO IS NOT NULL ");
 				tipo = "foro";
 			}
 			preparedStatement = c.prepareStatement(sql.toString(), ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -314,6 +314,7 @@ public class ComentarioDAOImpl implements ComentarioDAO{
 		Integer foro = resultSet.getInt(i++);
 		String contenido = resultSet.getString(i++);
 		Date fecha = resultSet.getDate(i++);
+		String nombre = resultSet.getString(i++);
 		
 		coment.setIdComentario(id);
 		coment.setUsuario(usuario);
@@ -321,6 +322,7 @@ public class ComentarioDAOImpl implements ComentarioDAO{
 		coment.setProducto(producto);
 		coment.setContenido(contenido);
 		coment.setFecha(fecha);
+		coment.setNombreUsuario(nombre);
 		
 		return coment;
 	}

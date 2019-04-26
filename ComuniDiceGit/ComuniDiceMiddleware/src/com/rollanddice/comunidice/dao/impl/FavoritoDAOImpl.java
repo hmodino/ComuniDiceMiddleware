@@ -17,7 +17,7 @@ import com.rollanddice.comunidice.model.Favorito;
 public class FavoritoDAOImpl implements FavoritoDAO{
 
 	@Override
-	public List<Favorito> findByFavoritosUsuario(Connection c, Integer idUsuario) 
+	public List<Favorito> findByFavoritosUsuario(Connection c, Integer idUsuario, String idioma) 
 			throws InstanceNotFoundException, DataException{
 		
 		List<Favorito> favoritos = new ArrayList<Favorito>();
@@ -28,14 +28,15 @@ public class FavoritoDAOImpl implements FavoritoDAO{
 		try {
 
 			String sql;
-			sql =  "SELECT ID_PRODUCTO, ID_USUARIO, VALORACION, FAVORITO "
-				  +" FROM VALORACION_PRODUCTO_FAVORITOS "
-				  +" WHERE ID_USUARIO = ? ";
+			sql =  "SELECT V.ID_PRODUCTO, V.ID_USUARIO, V.VALORACION, V.FAVORITO, P.NOMBRE "
+				  +" FROM VALORACION_PRODUCTO_FAVORITOS V INNER JOIN IDIOMA_PRODUCTO P ON(V.ID_PRODUCTO=P.ID_PRODUCTO) "
+				  +" WHERE V.ID_USUARIO = ? AND P.IDIOMA LIKE ? AND FAVORITO=1 ";
 			
 			preparedStatement = c.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			
 			int i = 1;
 			preparedStatement.setInt(i++, idUsuario);
+			preparedStatement.setString(i++, idioma);
 			
 			resultSet = preparedStatement.executeQuery();	
 			
@@ -59,7 +60,7 @@ public class FavoritoDAOImpl implements FavoritoDAO{
 	}
 
 	@Override
-	public List<Favorito> findByValoracionesUsuario(Connection c, Integer idUsuario) 
+	public List<Favorito> findByValoracionesUsuario(Connection c, Integer idUsuario, String idioma) 
 			throws InstanceNotFoundException, DataException {
 		
 		List<Favorito> favoritos = new ArrayList<Favorito>();
@@ -70,15 +71,15 @@ public class FavoritoDAOImpl implements FavoritoDAO{
 		try {
 
 			String sql;
-			sql =  "SELECT ID_PRODUCTO, ID_USUARIO, VALORACION, FAVORITO "
-				  +" FROM VALORACION_PRODUCTO_FAVORITOS "
-				  +" WHERE ID_USUARIO = ? ";
+			sql =  "SELECT V.ID_PRODUCTO, V.ID_USUARIO, V.VALORACION, V.FAVORITO, P.NOMBRE "
+				  +" FROM VALORACION_PRODUCTO_FAVORITOS V INNER JOIN IDIOMA_PRODUCTO P ON(V.ID_PRODUCTO=P.ID_PRODUCTO)"
+				  +" WHERE V.ID_USUARIO = ? AND P.IDIOMA LIKE ? AND ";
 			
 			preparedStatement = c.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			
 			int i = 1;
 			preparedStatement.setInt(i++, idUsuario);
-			
+			preparedStatement.setString(i++, idioma);
 			resultSet = preparedStatement.executeQuery();	
 			
 			if (resultSet.next()) {				
@@ -214,23 +215,29 @@ public class FavoritoDAOImpl implements FavoritoDAO{
 	}
 
 	@Override
-	public void create(Connection c, Favorito favorito) throws DuplicateInstanceException, DataException {
+	public void create(Connection c, Favorito favorito, Integer fav) throws DuplicateInstanceException, DataException {
 		
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
+		StringBuilder sql = null;
 		try {
 
-			String sql;
-			sql =  "INSERT INTO VALORACION_PRODUCTO_FAVORITOS (ID_PRODUCTO, ID_USUARIO, VALORACION, FAVORITO) "
-				  +" VALUES (?, ?, ?, ?) ";
+			sql = new StringBuilder(
+					"INSERT INTO VALORACION_PRODUCTO_FAVORITOS (ID_PRODUCTO, ID_USUARIO,  FAVORITO");
 			
-			preparedStatement = c.prepareStatement(sql);
-			
+			if(favorito.getValoracion()!=null) {
+				sql.append(", VALORACION) VALUES (?, ?, ?, ?) "); 
+			} else {
+				sql.append(") VALUES (?, ?, ?) ");
+			}
+			preparedStatement = c.prepareStatement(sql.toString());
 			int i = 1;
 			preparedStatement.setInt(i++, favorito.getProducto());
 			preparedStatement.setInt(i++, favorito.getUsuario());
-			preparedStatement.setDouble(i++, favorito.getValoracion());
-			preparedStatement.setBoolean(i++, favorito.getFavorito());
+			preparedStatement.setInt(i++, fav);
+			if(favorito.getValoracion()!=null) {
+				preparedStatement.setDouble(i++, favorito.getValoracion());
+			}
 			
 			int insertedRows = preparedStatement.executeUpdate();	
 			
@@ -248,23 +255,30 @@ public class FavoritoDAOImpl implements FavoritoDAO{
 	}
 
 	@Override
-	public void update(Connection c, Favorito favorito) 
+	public void update(Connection c, Favorito favorito, Integer fav) 
 			throws InstanceNotFoundException, DataException {
 		
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 		try {
 
-			String sql;
-			sql =  "UPDATE `VALORACION_PRODUCTO_FAVORITOS` "
-					+"SET `VALORACION` = ?, `FAVORITO` = ? "
-					+" WHERE ID_PRODUCTO = ? AND ID_USUARIO = ?";
+			StringBuilder sql;
+			sql = new StringBuilder(
+					"UPDATE `VALORACION_PRODUCTO_FAVORITOS` "
+					+"SET `FAVORITO` = ? ");
+			if(favorito.getValoracion()!=null) {
+				sql.append(", `VALORACION` = ? WHERE ID_PRODUCTO = ? AND ID_USUARIO = ?");
+			} else {
+				sql.append(" WHERE ID_PRODUCTO = ? AND ID_USUARIO = ? ");
+			}
 			
-			preparedStatement = c.prepareStatement(sql);
+			preparedStatement = c.prepareStatement(sql.toString());
 			
 			int i = 1;
-			preparedStatement.setDouble(i++, favorito.getValoracion());
-			preparedStatement.setBoolean(i++, favorito.getFavorito());
+			preparedStatement.setInt(i++, fav);
+			if(favorito.getValoracion()!=null) {
+				preparedStatement.setDouble(i++, favorito.getValoracion());
+			}
 			preparedStatement.setInt(i++, favorito.getProducto());
 			preparedStatement.setInt(i++, favorito.getUsuario());	
 			
@@ -317,15 +331,16 @@ public class FavoritoDAOImpl implements FavoritoDAO{
 	}
 	
 	@Override
-	public Boolean exist(Connection c, Integer idUsuario, Integer idProducto) throws DataException {
+	public Favorito exist(Connection c, Integer idUsuario, Integer idProducto) 
+			throws InstanceNotFoundException, DataException {
 	
-		Boolean b = null;
+		Favorito f = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 		try {
 
 			String sql;
-			sql =  "SELECT ID_USUARIO "
+			sql =  "SELECT FAVORITO "
 				  +" FROM VALORACION_PRODUCTO_FAVORITOS "
 				  +" WHERE ID_USUARIO = ? AND ID_PRODUCTO = ? ";
 			
@@ -338,11 +353,11 @@ public class FavoritoDAOImpl implements FavoritoDAO{
 			resultSet = preparedStatement.executeQuery();	
 			
 			if (resultSet.next()) {				
-					b = true;
+					f = loadNextE(resultSet);
 			} else {
-				b = false;
+				throw new InstanceNotFoundException(idProducto, "FavoritoDAOImpl.exist");
 			}				
-			return b;
+			return f;
 		} 
 		catch (SQLException ex) {
 			throw new DataException(ex);
@@ -352,6 +367,21 @@ public class FavoritoDAOImpl implements FavoritoDAO{
 		}  	
 	}
 	
+	private Favorito loadNextE(ResultSet resultSet) throws SQLException{
+		
+		Favorito f = new Favorito();
+		Boolean b = null;
+		int i = 1;
+		Integer favorito = resultSet.getInt(i++);
+		if(favorito==1) {
+			b = true;
+		} else {
+			b = false;
+		}
+		f.setFavorito(b);
+		return f;
+	}
+
 	private Favorito loadNext(ResultSet resultSet) throws SQLException{
 		
 		Favorito f = new Favorito();
@@ -360,12 +390,18 @@ public class FavoritoDAOImpl implements FavoritoDAO{
 		Integer idProducto = resultSet.getInt(i++);
 		Integer idUsuario = resultSet.getInt(i++);
 		Double valoracion = resultSet.getDouble(i++);
-		Boolean favorito = resultSet.getBoolean(i++);
+		Integer favoritoInt = resultSet.getInt(i++);
+		Boolean favorito = false;
+		if(favoritoInt==1) {
+			favorito = true;
+		} 
+		String nombreProducto = resultSet.getString(i++);
 
 		f.setProducto(idProducto);
 		f.setUsuario(idUsuario);
 		f.setValoracion(valoracion);
 		f.setFavorito(favorito);
+		f.setNombreProducto(nombreProducto);
 		
 		return f;
 	}

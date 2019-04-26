@@ -78,14 +78,20 @@ public class ProductoDAOImpl implements ProductoDAO{
 		try {
 
 			sql = new StringBuilder(
-					" SELECT P.ID_PRODUCTO, P.ID_CATEGORIA, P.PRECIO, P.FECHA_ENTRADA, P.STOCK, P.IMAGEN, I.DESCRIPCION, "
-					+" I.NOMBRE FROM PRODUCTO P INNER JOIN IDIOMA_PRODUCTO I ON(P.ID_PRODUCTO = I.ID_PRODUCTO) "
-					+" WHERE I.IDIOMA LIKE ? ");
+					" SELECT P.ID_PRODUCTO, P.ID_CATEGORIA, P.PRECIO, P.FECHA_ENTRADA, P.STOCK, P.IMAGEN, "
+					+ "I.DESCRIPCION, I.NOMBRE FROM PRODUCTO P "
+					+ "INNER JOIN IDIOMA_PRODUCTO I ON(P.ID_PRODUCTO = I.ID_PRODUCTO) ");
 			
 			boolean first = false;
 			
+				if(criteria.getNumeroFavoritos()!=null || criteria.getValoracion()!=null) {
+					sql.append("INNER JOIN VALORACION_PRODUCTO_FAVORITOS V ON(P.ID_PRODUCTO=V.ID_PRODUCTO) ");
+				}
+				
+				sql.append(" WHERE I.IDIOMA LIKE ? ");
+				
 				if(criteria.getIdCategoria()!=null) {
-					DaoUtils.anadir(sql, first, "P.ID_CATEGORIA = ?");
+					DaoUtils.anadir(sql, first, "P.ID_CATEGORIA = ? ");
 					first = false;
 				}
 				if(criteria.getNombre() !=null) {
@@ -93,27 +99,27 @@ public class ProductoDAOImpl implements ProductoDAO{
 					first = false;
 				}
 				if(criteria.getPrecioDesde()!=null) {
-					DaoUtils.anadir(sql, first, "P.PRECIO >= ?");
+					DaoUtils.anadir(sql, first, "P.PRECIO >= ? ");
 					first = false;
 				}
 				if(criteria.getPrecioHasta()!=null) {
-					DaoUtils.anadir(sql, first, "P.PRECIO <=?");
+					DaoUtils.anadir(sql, first, "P.PRECIO <=? ");
 					first = false;
 				}
 				if(criteria.getFechaMaxima()!=null) {
-					DaoUtils.anadir(sql, first, "P.FECHA_ENTRADA <= ?");
+					DaoUtils.anadir(sql, first, "P.FECHA_ENTRADA <= ? ");
 					first = false;
 				}
 				if(criteria.getFechaMinima()!=null) {
-					DaoUtils.anadir(sql, first, "P.FECHA_ENTRADA >= ?");
+					DaoUtils.anadir(sql, first, "P.FECHA_ENTRADA >= ? ");
 					first = false;
 				}
 				if(criteria.getNumeroFavoritos()!=null) {
-					DaoUtils.anadir(sql, first, " (SELECT COUNT(FAVORITO) FROM VALORACION_PRODUCTO_FAVORITOS) >= ? ");
+					DaoUtils.anadir(sql, first, " (SELECT COUNT(FAVORITO) FROM VALORACION_PRODUCTO_FAVORITOS WHERE FAVORITO = 1) >= ? ");
 					first = false;
 				}
 				if(criteria.getValoracion()!=null) {
-					DaoUtils.anadir(sql, first, " (SELECT AVG(VALORACION) FROM VALORACION_PRODUCTO_FAVORITOS) >= ?");
+					DaoUtils.anadir(sql, first, " (SELECT AVG(VALORACION) FROM VALORACION_PRODUCTO_FAVORITOS) >= ? ");
 					first = false;
 			}
 			
@@ -134,10 +140,10 @@ public class ProductoDAOImpl implements ProductoDAO{
 				preparedStatement.setDouble(i++, criteria.getPrecioHasta());
 			}
 			if(criteria.getFechaMaxima()!=null) {
-				preparedStatement.setDate(i++, (java.sql.Date)criteria.getFechaMaxima());
+				preparedStatement.setDate(i++, new java.sql.Date(criteria.getFechaMaxima().getTime()));
 			}
 			if(criteria.getFechaMinima()!=null) {
-				preparedStatement.setDate(i++, (java.sql.Date)criteria.getFechaMinima());
+				preparedStatement.setDate(i++, new java.sql.Date(criteria.getFechaMinima().getTime()));
 			}
 			if(criteria.getNumeroFavoritos()!=null) {
 				preparedStatement.setInt(i++, criteria.getNumeroFavoritos());

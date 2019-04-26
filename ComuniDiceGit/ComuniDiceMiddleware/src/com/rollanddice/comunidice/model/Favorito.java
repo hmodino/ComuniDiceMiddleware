@@ -6,6 +6,7 @@ public class Favorito extends AbstractValueObject{
 	private Integer usuario = null;
 	private Boolean favorito = null;
 	private Double valoracion = null;
+	private String nombreProducto = null;
 	
 	public Favorito() {
 		
@@ -41,6 +42,14 @@ public class Favorito extends AbstractValueObject{
 
 	public void setValoracion(Double valoracion) {
 		this.valoracion = valoracion;
+	}
+
+	public String getNombreProducto() {
+		return nombreProducto;
+	}
+
+	public void setNombreProducto(String nombreProducto) {
+		this.nombreProducto = nombreProducto;
 	}
 	
 }

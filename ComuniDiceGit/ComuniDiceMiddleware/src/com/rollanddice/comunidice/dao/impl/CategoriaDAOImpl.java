@@ -26,8 +26,8 @@ public class CategoriaDAOImpl implements CategoriaDAO{
 		try {
 
 			String sql;
-			sql =  "SELECT ID_CATEGORIA, NOMBRE"
-				  +"FROM CATEGORIA";
+			sql =  "SELECT ID_CATEGORIA, NOMBRE "
+				  +" FROM CATEGORIA ";
 			
 			preparedStatement = c.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			
