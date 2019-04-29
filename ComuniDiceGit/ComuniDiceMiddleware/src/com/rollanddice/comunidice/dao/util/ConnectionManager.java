@@ -1,30 +1,50 @@
 package com.rollanddice.comunidice.dao.util;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ResourceBundle;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 public class ConnectionManager	 {
 
 
-	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
-//	static final String DB_URL = "jdbc:mysql://10.53.124.211:3306/comunidice?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
-//	static final String DB_URL = "jdbc:mysql://192.168.0.24:3306/comunidice?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
-//	static final String DB_URL = "jdbc:mysql://192.168.1.31:3306/comunidice?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
-	static final String DB_URL = "jdbc:mysql://127.0.0.1:3306/comunidice?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
-	//  Database credentials
-	static final String USER = "eclipse";
-	static final String PASS = "e1204VGA92";
+	private static Logger logger = LogManager.getLogger(ConnectionManager.class.getName());
+
+	private static ResourceBundle dbConfiguration = ResourceBundle.getBundle("DBConfiguration");
+
+	private static final String DRIVER_CLASS_NAME_PARAMETER = "jdbc.driver.classname";
+	private static final String URL_PARAMETER = "jdbc.url";
+	private static final String USER_PARAMETER = "jdbc.user";
+	private static final String PASSWORD_PARAMETER = "jdbc.password";
+
+	private static String url;
+	private static String user;
+	private static String password;
+
+	private static ComboPooledDataSource dataSource = null;
 
 	static {
 
 		try {
-			// Carga el driver directamente, sin pool 
-			 Class.forName(JDBC_DRIVER);
+
+			String driverClassName = dbConfiguration.getString(DRIVER_CLASS_NAME_PARAMETER);
+			url = dbConfiguration.getString(URL_PARAMETER);
+			user = dbConfiguration.getString(USER_PARAMETER);
+			password = dbConfiguration.getString(PASSWORD_PARAMETER);
+
+
+			dataSource = new ComboPooledDataSource();
+			dataSource.setDriverClass(driverClassName);           
+			dataSource.setJdbcUrl(url);
+			dataSource.setUser(user);                                  
+			dataSource.setPassword(password);
 			
 		} catch (Exception e) {
-			e.printStackTrace();
-//			logger.fatal(e.getMessage(), e); 
+			logger.fatal(e.getMessage(), e); 
 		}
 
 	}
@@ -32,7 +52,7 @@ public class ConnectionManager	 {
 	private ConnectionManager() {}
 
 	public final static Connection getConnection() throws SQLException {
-		return DriverManager.getConnection(DB_URL, USER, PASS);
+		return dataSource.getConnection();
 	}
 	
 }

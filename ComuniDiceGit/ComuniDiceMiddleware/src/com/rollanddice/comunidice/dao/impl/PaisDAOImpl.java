@@ -25,7 +25,7 @@ public class PaisDAOImpl implements PaisDAO{
 		try {
 
 			String sql;
-			sql =  "SELECT ID_PAIS, NOMBRE "
+			sql =  "SELECT ID_PAIS, NOMBRE_PAIS "
 				  +" FROM PAIS "
 				  +" WHERE ID_PAIS = ? ";
 			
@@ -63,7 +63,7 @@ public class PaisDAOImpl implements PaisDAO{
 		try {
 
 			String sql;
-			sql =  "SELECT ID_PAIS, NOMBRE "
+			sql =  "SELECT ID_PAIS, NOMBRE_PAIS "
 				  +" FROM PAIS ";
 			
 			preparedStatement = c.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);

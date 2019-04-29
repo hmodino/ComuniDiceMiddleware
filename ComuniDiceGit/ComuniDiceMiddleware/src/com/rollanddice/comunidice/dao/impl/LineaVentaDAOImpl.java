@@ -4,10 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mysql.jdbc.Statement;
 import com.rollanddice.comunidice.dao.spi.LineaVentaDAO;
 import com.rollanddice.comunidice.dao.util.JDBCUtils;
 import com.rollanddice.comunidice.exception.DataException;

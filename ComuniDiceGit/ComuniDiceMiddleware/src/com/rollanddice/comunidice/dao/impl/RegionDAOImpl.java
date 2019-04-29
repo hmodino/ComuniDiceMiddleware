@@ -25,7 +25,7 @@ public class RegionDAOImpl implements RegionDAO{
 		try {
 
 			String sql;
-			sql =  "SELECT ID_REGION, ID_PAIS, NOMBRE "
+			sql =  "SELECT ID_REGION, ID_PAIS, NOMBRE_REGION "
 				  +" FROM REGION "
 				  +" WHERE ID_REGION = ? ";
 			
@@ -63,7 +63,7 @@ public class RegionDAOImpl implements RegionDAO{
 			try {
 
 				String sql;
-				sql =  "SELECT ID_REGION, ID_PAIS, NOMBRE "
+				sql =  "SELECT ID_REGION, ID_PAIS, NOMBRE_REGION "
 					  +" FROM REGION "
 					  +" WHERE ID_PAIS = ? ";
 				

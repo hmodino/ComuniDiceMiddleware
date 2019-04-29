@@ -13,8 +13,9 @@ public class AmigoServiceTest {
 
 		try {
 //			s.create(7, 6);
-//			s.findAmigos(7);
-//			s.findByEmailAmigo("ESTELA.quijada@GMAIL.COM", 6);
+//			s.findAmigos(6);
+			Usuario u = s.findByEmailAmigo("ESTELA.quijada@GMAIL.COM", 6);
+			System.out.println(u);
 //			s.findByNombreAmigo("HModino", 7);
 //			s.delete(7, 6);
 		} catch (Exception e) {
