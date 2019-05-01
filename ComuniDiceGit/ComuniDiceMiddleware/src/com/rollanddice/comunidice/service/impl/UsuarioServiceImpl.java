@@ -110,6 +110,7 @@ public class UsuarioServiceImpl implements UsuarioService{
 		Connection c = null;
 		try {
 			c = ConnectionManager.getConnection();
+			c.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
 			c.setAutoCommit(false);
 			u.setEmail(u.getEmail().toUpperCase());
 			u.setContrasenha(u.getContrasenha());
@@ -184,7 +185,6 @@ public class UsuarioServiceImpl implements UsuarioService{
 			}
 			if(u != null) {
 				dao.update(c, u);
-				aviso.emailService("Usuario editado", "El Usuario "+u.getNombreUsuario()+" ha sido editado con éxito ", u.getEmail());
 			}
 			if(d != null) {
 				direccion.update(c, d);

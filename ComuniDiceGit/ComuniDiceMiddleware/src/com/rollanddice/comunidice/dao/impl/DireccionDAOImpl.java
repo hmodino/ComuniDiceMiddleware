@@ -59,24 +59,74 @@ public class DireccionDAOImpl implements DireccionDAO{
 		ResultSet resultSet = null;
 		try {
 
-			String sql;
-			sql =  "INSERT INTO DIRECCION (ID_REGION, ID_USUARIO, MUNICIPIO, LOCALIDAD, CP, CALLE, NUMERO, PORTAL, PISO, OTROS) "
-				  +" VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			StringBuilder sql;
+			sql = new StringBuilder("INSERT INTO DIRECCION (ID_REGION, ID_USUARIO, MUNICIPIO, CP");
+				  
+			if(d.getLocalidad()!=null) {
+				sql.append(", LOCALIDAD");
+			}
+			if(d.getCalle()!=null) {
+				sql.append(", CALLE");
+			}
+			if(d.getNumero()!=null) {
+				sql.append(", NUMERO");
+			}
+			if(d.getPortal()!=null) {
+				sql.append(", PORTAL");
+			}
+			if(d.getPiso()!=null) {
+				sql.append(", PISO");
+			}
+			if(d.getOtros()!=null) {
+				sql.append(", OTROS");
+			}
+			sql.append(") VALUES (?, ?, ?, ?");
+			if(d.getLocalidad()!=null) {
+				sql.append(", ?");
+			}
+			if(d.getCalle()!=null) {
+				sql.append(", ?");
+			}
+			if(d.getNumero()!=null) {
+				sql.append(", ?");
+			}
+			if(d.getPortal()!=null) {
+				sql.append(", ?");
+			}
+			if(d.getPiso()!=null) {
+				sql.append(", ?");
+			}
+			if(d.getOtros()!=null) {
+				sql.append(", ?");
+			}
+			sql.append(")");
 			
-			preparedStatement = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			preparedStatement = c.prepareStatement(sql.toString(), Statement.RETURN_GENERATED_KEYS);
 			
 			int i = 1;
 			preparedStatement.setInt(i++, d.getRegion());
 			preparedStatement.setInt(i++, idUsuario);
 			preparedStatement.setString(i++, d.getMunicipio());
-			preparedStatement.setString(i++, d.getLocalidad());
 			preparedStatement.setString(i++, d.getCp());
-			preparedStatement.setString(i++, d.getCalle());
-			preparedStatement.setInt(i++, d.getNumero());
-			preparedStatement.setString(i++, d.getPortal());
-			preparedStatement.setInt(i++, d.getPiso());
-			preparedStatement.setString(i++, d.getOtros());	
-			
+			if(d.getLocalidad()!=null) {
+				preparedStatement.setString(i++, d.getLocalidad());
+			}
+			if(d.getCalle()!=null) {
+				preparedStatement.setString(i++, d.getCalle());
+			}
+			if(d.getNumero()!=null) {
+				preparedStatement.setInt(i++, d.getNumero());
+			}
+			if(d.getPortal()!=null) {
+				preparedStatement.setString(i++, d.getPortal());
+			}
+			if(d.getPiso()!=null) {
+				preparedStatement.setInt(i++, d.getPiso());
+			}
+			if(d.getOtros()!=null) {
+				preparedStatement.setString(i++, d.getOtros());
+			}
+						
 			int insertedRows = preparedStatement.executeUpdate();	
 			
 			if(insertedRows == 0) {

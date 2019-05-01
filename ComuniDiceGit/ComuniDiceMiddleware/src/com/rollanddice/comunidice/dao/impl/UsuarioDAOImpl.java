@@ -156,25 +156,53 @@ public class UsuarioDAOImpl implements UsuarioDAO{
 		
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
+		
 		try {
+			StringBuilder sql;
+			sql =  new StringBuilder("INSERT INTO USUARIO (EMAIL , CONTRASENA, NOMBRE, APELLIDO1, "
+					+ "NOMBRE_USUARIO, FECHA_ALTA");
 
-			String sql;
-			sql =  "INSERT INTO USUARIO (EMAIL , CONTRASENA, NOMBRE, APELLIDO1, APELLIDO2, NOMBRE_USUARIO, FECHA_ALTA, "
-					+" DESCRIPCION, TELEFONO) "
-					+" VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			if(u.getApellido2()!=null) {
+				sql.append(", APELLIDO2");
+			}
+			if(u.getDescripcion()!=null) {
+				sql.append(", DESCRIPCION");
+			}
+			if(u.getTelefono()!=null) {
+				sql.append(", TELEFONO");
+			}
+			sql.append(") VALUES(?, ?, ?, ?, ?, ?");
 			
-			preparedStatement = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-			
+			if(u.getApellido2()!=null) {
+				sql.append(", ?");
+			}
+			if(u.getDescripcion()!=null) {
+				sql.append(", ?");
+			}
+			if(u.getTelefono()!=null) {
+				sql.append(", ?");
+			}
+			sql.append(")");
+			logger.debug(sql);
+			preparedStatement = c.prepareStatement(sql.toString(), Statement.RETURN_GENERATED_KEYS);
+
 			int i = 1;
 			preparedStatement.setString(i++, u.getEmail());
 			preparedStatement.setString(i++, PasswordEncryptionUtil.encryptPassword(u.getContrasenha()));
 			preparedStatement.setString(i++, u.getNombre());
 			preparedStatement.setString(i++, u.getApellido1());
-			preparedStatement.setString(i++, u.getApellido2());
 			preparedStatement.setString(i++, u.getNombreUsuario());
 			preparedStatement.setDate(i++, (new java.sql.Date(new Date().getTime())));
-			preparedStatement.setString(i++, u.getDescripcion());
-			preparedStatement.setString(i++, u.getTelefono());
+			if(u.getApellido2()!=null) {
+				preparedStatement.setString(i++, u.getApellido2());
+			}
+			if(u.getDescripcion()!=null) {
+				preparedStatement.setString(i++, u.getDescripcion());
+			}
+			if(u.getTelefono()!=null) {
+				preparedStatement.setInt(i++, Integer.parseInt(u.getTelefono()));
+			}
+			logger.debug(preparedStatement.toString());
 			
 			int insertedRows = preparedStatement.executeUpdate();	
 			

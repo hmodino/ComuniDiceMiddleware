@@ -1,8 +1,149 @@
-2019-04-05 11:52:38.239 DEBUG UsuarioDAOImpl:110 - false
-2019-04-05 11:52:38.368 INFO  UsuarioServiceImpl:94 - com.rollanddice.comunidice.model.Usuario@3b69e7d1[idUsuario=6,nombreUsuario=HModino,nombre=Hector,apellido1=Modino,apellido2=Otero,email=HECTOR.MODINO.OTERO@GMAIL.COM,contrasenha=RisDolxMKk+LterIwX4Y3G5TXb9DWIadyhR1D6HfgmOln+ZEaunS6/bgNA2wcarr,descripcion=Administrador de ComuniDice,idDireccion=<null>,amigos=<null>,favoritos=<null>,valoraciones=<null>,mensajes=<null>,compras=<null>,ventas=<null>,comentarios=<null>,fechaAlta=2019-02-13,telefono=<null>]
-2019-04-05 11:52:38.618 INFO  UsuarioServiceImpl:150 - Problema en la contraseña
-2019-04-05 11:52:51.200 DEBUG UsuarioDAOImpl:110 - false
-2019-04-05 11:52:51.354 INFO  UsuarioServiceImpl:94 - com.rollanddice.comunidice.model.Usuario@43bc63a3[idUsuario=6,nombreUsuario=HModino,nombre=Hector,apellido1=Modino,apellido2=Otero,email=HECTOR.MODINO.OTERO@GMAIL.COM,contrasenha=RisDolxMKk+LterIwX4Y3G5TXb9DWIadyhR1D6HfgmOln+ZEaunS6/bgNA2wcarr,descripcion=Administrador de ComuniDice,idDireccion=<null>,amigos=<null>,favoritos=<null>,valoraciones=<null>,mensajes=<null>,compras=<null>,ventas=<null>,comentarios=<null>,fechaAlta=2019-02-13,telefono=<null>]
-2019-04-05 11:52:51.570 INFO  UsuarioServiceImpl:150 - Problema en la contraseña
-2019-04-05 11:53:33.158 DEBUG UsuarioDAOImpl:110 - false
-2019-04-05 11:53:33.285 INFO  UsuarioServiceImpl:94 - com.rollanddice.comunidice.model.Usuario@2371aaca[idUsuario=6,nombreUsuario=HModino,nombre=Hector,apellido1=Modino,apellido2=Otero,email=HECTOR.MODINO.OTERO@GMAIL.COM,contrasenha=RisDolxMKk+LterIwX4Y3G5TXb9DWIadyhR1D6HfgmOln+ZEaunS6/bgNA2wcarr,descripcion=Administrador de ComuniDice,idDireccion=<null>,amigos=<null>,favoritos=<null>,valoraciones=<null>,mensajes=<null>,compras=<null>,ventas=<null>,comentarios=<null>,fechaAlta=2019-02-13,telefono=<null>]
+2019-05-01 14:19:18.425 DEBUG UsuarioDAOImpl:152 - id = 7 email = false contraseña = false nombre = Estela apellido = Quijada apellido = Viña nombre usuario fmeñwlf fecha alta null descripción null telefono 468794132
+2019-05-01 14:19:18.445 DEBUG UsuarioDAOImpl:186 - INSERT INTO USUARIO (EMAIL , CONTRASENA, NOMBRE, APELLIDO1, NOMBRE_USUARIO, FECHA_ALTA, APELLIDO2 , TELEFONO ) VALUES(?, ?, ?, ?, ?, ? , ? , ? )
+2019-05-01 14:19:18.707 DEBUG UsuarioDAOImpl:205 - com.mchange.v2.c3p0.impl.NewProxyPreparedStatement@4e91d63f [wrapping: com.mysql.cj.jdbc.ClientPreparedStatement: INSERT INTO USUARIO (EMAIL , CONTRASENA, NOMBRE, APELLIDO1, NOMBRE_USUARIO, FECHA_ALTA, APELLIDO2 , TELEFONO ) VALUES('JDAIJDAO@FJLL.COM', 'Z6KuunMvemdLOUIB3qb4qxpwp/6jXpbe/IVlIQRY9Mh6WSe6G0bQajkA5Dt0/9h8', 'Estela', 'Quijada', 'fmeñwlf', '2019-05-01' , 'Viña' , '468794132' )]
+2019-05-01 14:19:18.846 DEBUG UsuarioDAOImpl:219 - id = 54 email = false contraseña = false nombre = Estela apellido = Quijada apellido = Viña nombre usuario fmeñwlf fecha alta null descripción null telefono 468794132
+2019-05-01 14:19:18.849 WARN  UsuarioServiceImpl:128 - null
+java.lang.NullPointerException: null
+	at com.rollanddice.comunidice.dao.impl.DireccionDAOImpl.create(DireccionDAOImpl.java:69) ~[bin/:?]
+	at com.rollanddice.comunidice.service.impl.UsuarioServiceImpl.signUp(UsuarioServiceImpl.java:119) [bin/:?]
+	at UsuarioServiceTest.main(UsuarioServiceTest.java:30) [bin/:?]
+2019-05-01 14:20:45.664 DEBUG UsuarioDAOImpl:152 - id = 7 email = false contraseña = false nombre = Estela apellido = Quijada apellido = Viña nombre usuario fmeñwlf fecha alta null descripción null telefono 468794132
+2019-05-01 14:20:45.673 DEBUG UsuarioDAOImpl:186 - INSERT INTO USUARIO (EMAIL , CONTRASENA, NOMBRE, APELLIDO1, NOMBRE_USUARIO, FECHA_ALTA, APELLIDO2 , TELEFONO ) VALUES(?, ?, ?, ?, ?, ? , ? , ? )
+2019-05-01 14:20:45.973 DEBUG UsuarioDAOImpl:205 - com.mchange.v2.c3p0.impl.NewProxyPreparedStatement@25d250c6 [wrapping: com.mysql.cj.jdbc.ClientPreparedStatement: INSERT INTO USUARIO (EMAIL , CONTRASENA, NOMBRE, APELLIDO1, NOMBRE_USUARIO, FECHA_ALTA, APELLIDO2 , TELEFONO ) VALUES('JDAIJDAO@FJLL.COM', '1xzloNvhJdaAwO8MH05Fp0jukGAks0C1jPdw0u0jP8YImHX06cEIivevkzPaqd0Y', 'Estela', 'Quijada', 'fmeñwlf', '2019-05-01' , 'Viña' , '468794132' )]
+2019-05-01 14:20:46.060 DEBUG UsuarioDAOImpl:219 - id = 55 email = false contraseña = false nombre = Estela apellido = Quijada apellido = Viña nombre usuario fmeñwlf fecha alta null descripción null telefono 468794132
+2019-05-01 14:20:48.889 INFO  UsuarioServiceImpl:124 - Usuario creado con éxito
+2019-05-01 15:10:55.731 DEBUG UsuarioDAOImpl:152 - id = 7 email = false contraseña = false nombre = Estela apellido = Quijada apellido = Viña nombre usuario fmeñwlf fecha alta null descripción null telefono 468794132
+2019-05-01 15:10:55.750 DEBUG UsuarioDAOImpl:186 - INSERT INTO USUARIO (EMAIL , CONTRASENA, NOMBRE, APELLIDO1, NOMBRE_USUARIO, FECHA_ALTA, APELLIDO2 , TELEFONO ) VALUES(?, ?, ?, ?, ?, ? , ? , ? )
+2019-05-01 15:10:55.993 DEBUG UsuarioDAOImpl:205 - com.mchange.v2.c3p0.impl.NewProxyPreparedStatement@222114ba [wrapping: com.mysql.cj.jdbc.ClientPreparedStatement: INSERT INTO USUARIO (EMAIL , CONTRASENA, NOMBRE, APELLIDO1, NOMBRE_USUARIO, FECHA_ALTA, APELLIDO2 , TELEFONO ) VALUES('JDAIJDAO@FJL.COM', 'XbfBo+ghAheuCHyWaSrII5i23H2nO7tCADNX0jWsfWzItqNEevxY1VJ1Fe2xWgLY', 'Estela', 'Quijada', 'fmeñwlf', '2019-05-01' , 'Viña' , '468794132' )]
+2019-05-01 15:10:56.026 WARN  UsuarioServiceImpl:128 - null
+com.rollanddice.comunidice.exception.DataException: null
+	at com.rollanddice.comunidice.dao.impl.UsuarioDAOImpl.create(UsuarioDAOImpl.java:225) ~[bin/:?]
+	at com.rollanddice.comunidice.service.impl.UsuarioServiceImpl.signUp(UsuarioServiceImpl.java:117) [bin/:?]
+	at UsuarioServiceTest.main(UsuarioServiceTest.java:30) [bin/:?]
+2019-05-01 15:11:54.554 DEBUG UsuarioDAOImpl:152 - id = 7 email = false contraseña = false nombre = Estela apellido = Quijada apellido = Viña nombre usuario fmeñwlf fecha alta null descripción null telefono 468794132
+2019-05-01 15:11:54.562 DEBUG UsuarioDAOImpl:186 - INSERT INTO USUARIO (EMAIL , CONTRASENA, NOMBRE, APELLIDO1, NOMBRE_USUARIO, FECHA_ALTA, APELLIDO2 , TELEFONO ) VALUES(?, ?, ?, ?, ?, ? , ? , ? )
+2019-05-01 15:11:54.811 DEBUG UsuarioDAOImpl:205 - com.mchange.v2.c3p0.impl.NewProxyPreparedStatement@4445629 [wrapping: com.mysql.cj.jdbc.ClientPreparedStatement: INSERT INTO USUARIO (EMAIL , CONTRASENA, NOMBRE, APELLIDO1, NOMBRE_USUARIO, FECHA_ALTA, APELLIDO2 , TELEFONO ) VALUES('JDAIJDAO@FJL.COM', 'jf9s6YpCymMhrQQ4UVIP1Y0GI23xZ9Jlp6L5FFyOoFeB9n+1e1gV2RxQvAf+oRGc', 'Estela', 'Quijada', 'fmeñwlf', '2019-05-01' , 'Viña' , '468794132' )]
+2019-05-01 15:11:54.874 WARN  UsuarioServiceImpl:128 - null
+com.rollanddice.comunidice.exception.DataException: null
+	at com.rollanddice.comunidice.dao.impl.UsuarioDAOImpl.create(UsuarioDAOImpl.java:225) ~[bin/:?]
+	at com.rollanddice.comunidice.service.impl.UsuarioServiceImpl.signUp(UsuarioServiceImpl.java:117) [bin/:?]
+	at UsuarioServiceTest.main(UsuarioServiceTest.java:30) [bin/:?]
+2019-05-01 15:16:29.366 DEBUG UsuarioDAOImpl:152 - id = 7 email = false contraseña = false nombre = Estela apellido = Quijada apellido = Viña nombre usuario fmeñwlf fecha alta null descripción null telefono 468794132
+2019-05-01 15:16:29.375 DEBUG UsuarioDAOImpl:186 - INSERT INTO USUARIO (EMAIL , CONTRASENA, NOMBRE, APELLIDO1, NOMBRE_USUARIO, FECHA_ALTA, APELLIDO2 , TELEFONO ) VALUES(?, ?, ?, ?, ?, ? , ? , ? )
+2019-05-01 15:16:29.652 DEBUG UsuarioDAOImpl:205 - com.mchange.v2.c3p0.impl.NewProxyPreparedStatement@222114ba [wrapping: com.mysql.cj.jdbc.ClientPreparedStatement: INSERT INTO USUARIO (EMAIL , CONTRASENA, NOMBRE, APELLIDO1, NOMBRE_USUARIO, FECHA_ALTA, APELLIDO2 , TELEFONO ) VALUES('JDAIJDAO@FJL.COM', '7ZQ06dhpIyXdx9sC2phXZ6eeDPqeRhKFGYKJN7ODNsKZ886IywQqnzN7FNuEvEpP', 'Estela', 'Quijada', 'fmeñwlf', '2019-05-01' , 'Viña' , '468794132' )]
+2019-05-01 15:16:29.790 WARN  UsuarioServiceImpl:129 - null
+com.rollanddice.comunidice.exception.DataException: null
+	at com.rollanddice.comunidice.dao.impl.UsuarioDAOImpl.create(UsuarioDAOImpl.java:225) ~[bin/:?]
+	at com.rollanddice.comunidice.service.impl.UsuarioServiceImpl.signUp(UsuarioServiceImpl.java:118) [bin/:?]
+	at UsuarioServiceTest.main(UsuarioServiceTest.java:30) [bin/:?]
+2019-05-01 15:20:48.705 DEBUG UsuarioDAOImpl:152 - id = 7 email = false contraseña = false nombre = Estela apellido = Quijada apellido = Viña nombre usuario fmeñwlf fecha alta null descripción null telefono 468794132
+2019-05-01 15:20:48.727 DEBUG UsuarioDAOImpl:186 - INSERT INTO USUARIO (EMAIL , CONTRASENA, NOMBRE, APELLIDO1, NOMBRE_USUARIO, FECHA_ALTA, APELLIDO2 , TELEFONO ) VALUES(?, ?, ?, ?, ?, ? , ? , ? )
+2019-05-01 15:20:49.380 DEBUG UsuarioDAOImpl:205 - com.mchange.v2.c3p0.impl.NewProxyPreparedStatement@25d250c6 [wrapping: com.mysql.cj.jdbc.ClientPreparedStatement: INSERT INTO USUARIO (EMAIL , CONTRASENA, NOMBRE, APELLIDO1, NOMBRE_USUARIO, FECHA_ALTA, APELLIDO2 , TELEFONO ) VALUES('JDAIJDAO@FJL.COM', '5WU0d6DWVkTiTN5DWY+D82NO5IFOU1EZ0CHvFFBTNQbZR/mvX9jJlhb9yHdKRVnz', 'Estela', 'Quijada', 'fmeñwlf', '2019-05-01' , 'Viña' , '468794132' )]
+2019-05-01 15:20:49.543 WARN  UsuarioServiceImpl:129 - null
+com.rollanddice.comunidice.exception.DataException: null
+	at com.rollanddice.comunidice.dao.impl.UsuarioDAOImpl.create(UsuarioDAOImpl.java:225) ~[bin/:?]
+	at com.rollanddice.comunidice.service.impl.UsuarioServiceImpl.signUp(UsuarioServiceImpl.java:118) [bin/:?]
+	at UsuarioServiceTest.main(UsuarioServiceTest.java:30) [bin/:?]
+2019-05-01 15:24:57.221 DEBUG UsuarioDAOImpl:152 - id = 7 email = false contraseña = false nombre = Estela apellido = Quijada apellido = Viña nombre usuario fmeñwlf fecha alta null descripción null telefono 468794132
+2019-05-01 15:24:57.233 DEBUG UsuarioDAOImpl:186 - INSERT INTO USUARIO (EMAIL , CONTRASENA, NOMBRE, APELLIDO1, NOMBRE_USUARIO, FECHA_ALTA, APELLIDO2 , TELEFONO ) VALUES(?, ?, ?, ?, ?, ? , ? , ? )
+2019-05-01 15:24:57.560 DEBUG UsuarioDAOImpl:205 - com.mchange.v2.c3p0.impl.NewProxyPreparedStatement@222114ba [wrapping: com.mysql.cj.jdbc.ClientPreparedStatement: INSERT INTO USUARIO (EMAIL , CONTRASENA, NOMBRE, APELLIDO1, NOMBRE_USUARIO, FECHA_ALTA, APELLIDO2 , TELEFONO ) VALUES('JDAIJDAO@FJL.COM', 'PQyYJg1apYW0IleD15SAmY+qoPfzWuLGeCWCnExgIMutotEUlQqZbyq5mPMe94tW', 'Estela', 'Quijada', 'fmeñwlf', '2019-05-01' , 'Viña' , 468794132 )]
+2019-05-01 15:24:57.742 WARN  UsuarioServiceImpl:129 - null
+com.rollanddice.comunidice.exception.DataException: null
+	at com.rollanddice.comunidice.dao.impl.UsuarioDAOImpl.create(UsuarioDAOImpl.java:225) ~[bin/:?]
+	at com.rollanddice.comunidice.service.impl.UsuarioServiceImpl.signUp(UsuarioServiceImpl.java:118) [bin/:?]
+	at UsuarioServiceTest.main(UsuarioServiceTest.java:30) [bin/:?]
+2019-05-01 15:29:27.882 WARN  UsuarioServiceImpl:129 - Access denied for user 'fran'@'localhost' (using password: YES)
+java.sql.SQLException: Access denied for user 'fran'@'localhost' (using password: YES)
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:129) ~[mysql-connector-java-8.0.13%20(1).jar:8.0.13]
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:97) ~[mysql-connector-java-8.0.13%20(1).jar:8.0.13]
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122) ~[mysql-connector-java-8.0.13%20(1).jar:8.0.13]
+	at com.mysql.cj.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:835) ~[mysql-connector-java-8.0.13%20(1).jar:8.0.13]
+	at com.mysql.cj.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:455) ~[mysql-connector-java-8.0.13%20(1).jar:8.0.13]
+	at com.mysql.cj.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:240) ~[mysql-connector-java-8.0.13%20(1).jar:8.0.13]
+	at com.mysql.cj.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:207) ~[mysql-connector-java-8.0.13%20(1).jar:8.0.13]
+	at java.sql.DriverManager.getConnection(Unknown Source) ~[?:1.8.0_191]
+	at java.sql.DriverManager.getConnection(Unknown Source) ~[?:1.8.0_191]
+	at com.rollanddice.comunidice.dao.util.ConnectionManager.getConnection(ConnectionManager.java:39) ~[bin/:?]
+	at com.rollanddice.comunidice.service.impl.UsuarioServiceImpl.signUp(UsuarioServiceImpl.java:112) [bin/:?]
+	at UsuarioServiceTest.main(UsuarioServiceTest.java:30) [bin/:?]
+2019-05-01 15:30:18.950 DEBUG UsuarioDAOImpl:152 - id = 7 email = false contraseña = false nombre = Estela apellido = Quijada apellido = Viña nombre usuario fmeñwlf fecha alta null descripción null telefono 468794132
+2019-05-01 15:30:18.958 DEBUG UsuarioDAOImpl:186 - INSERT INTO USUARIO (EMAIL , CONTRASENA, NOMBRE, APELLIDO1, NOMBRE_USUARIO, FECHA_ALTA, APELLIDO2 , TELEFONO ) VALUES(?, ?, ?, ?, ?, ? , ? , ? )
+2019-05-01 15:30:19.289 DEBUG UsuarioDAOImpl:205 - com.mysql.cj.jdbc.ClientPreparedStatement: INSERT INTO USUARIO (EMAIL , CONTRASENA, NOMBRE, APELLIDO1, NOMBRE_USUARIO, FECHA_ALTA, APELLIDO2 , TELEFONO ) VALUES('JDAIJDAO@FJL.COM', 'BgtxI0oWdJFWEoxM6BirpMCuTjdQGQOAXvWFQ2sElVCCw2+CVih+eLw8PdhrJ/Fs', 'Estela', 'Quijada', 'fmeñwlf', '2019-05-01' , 'Viña' , 468794132 )
+2019-05-01 15:30:19.340 WARN  UsuarioServiceImpl:129 - null
+com.rollanddice.comunidice.exception.DataException: null
+	at com.rollanddice.comunidice.dao.impl.UsuarioDAOImpl.create(UsuarioDAOImpl.java:225) ~[bin/:?]
+	at com.rollanddice.comunidice.service.impl.UsuarioServiceImpl.signUp(UsuarioServiceImpl.java:118) [bin/:?]
+	at UsuarioServiceTest.main(UsuarioServiceTest.java:30) [bin/:?]
+2019-05-01 15:31:06.644 DEBUG UsuarioDAOImpl:152 - id = 7 email = false contraseña = false nombre = Estela apellido = Quijada apellido = Viña nombre usuario fmeñwlf fecha alta null descripción null telefono 468794132
+2019-05-01 15:31:06.658 DEBUG UsuarioDAOImpl:186 - INSERT INTO USUARIO (EMAIL , CONTRASENA, NOMBRE, APELLIDO1, NOMBRE_USUARIO, FECHA_ALTA, APELLIDO2 , TELEFONO ) VALUES(?, ?, ?, ?, ?, ? , ? , ? )
+2019-05-01 15:31:07.443 DEBUG UsuarioDAOImpl:205 - com.mchange.v2.c3p0.impl.NewProxyPreparedStatement@4445629 [wrapping: com.mysql.cj.jdbc.ClientPreparedStatement: INSERT INTO USUARIO (EMAIL , CONTRASENA, NOMBRE, APELLIDO1, NOMBRE_USUARIO, FECHA_ALTA, APELLIDO2 , TELEFONO ) VALUES('JDAIJDAO@FJL.COM', 'jY2dg5AsBjc9VnowD4iwfhm3u7FA0TMwXH3WU+XH78gMY1IwHTwv2aPqPruYP+ZC', 'Estela', 'Quijada', 'fmeñwlf', '2019-05-01' , 'Viña' , 468794132 )]
+2019-05-01 15:31:07.581 WARN  UsuarioServiceImpl:129 - null
+com.rollanddice.comunidice.exception.DataException: null
+	at com.rollanddice.comunidice.dao.impl.UsuarioDAOImpl.create(UsuarioDAOImpl.java:225) ~[bin/:?]
+	at com.rollanddice.comunidice.service.impl.UsuarioServiceImpl.signUp(UsuarioServiceImpl.java:118) [bin/:?]
+	at UsuarioServiceTest.main(UsuarioServiceTest.java:30) [bin/:?]
+2019-05-01 15:33:45.155 DEBUG UsuarioDAOImpl:152 - id = 7 email = false contraseña = false nombre = Estela apellido = Quijada apellido = Viña nombre usuario fmeñwlf fecha alta null descripción null telefono 468794132
+2019-05-01 15:33:45.165 DEBUG UsuarioDAOImpl:186 - INSERT INTO USUARIO (EMAIL , CONTRASENA, NOMBRE, APELLIDO1, NOMBRE_USUARIO, FECHA_ALTA, APELLIDO2 , TELEFONO ) VALUES(?, ?, ?, ?, ?, ? , ? , ? )
+2019-05-01 15:33:45.377 DEBUG UsuarioDAOImpl:205 - com.mchange.v2.c3p0.impl.NewProxyPreparedStatement@25d250c6 [wrapping: com.mysql.cj.jdbc.ClientPreparedStatement: INSERT INTO USUARIO (EMAIL , CONTRASENA, NOMBRE, APELLIDO1, NOMBRE_USUARIO, FECHA_ALTA, APELLIDO2 , TELEFONO ) VALUES('JDAIJDAO@FJL.COM', '5OCXV/d+U7M8cpatrCJc9CCkPSEub4BYkwtPRQmfcq1K/25Sw7YZPlfaQcWVdzT8', 'Estela', 'Quijada', 'fmeñwlf', '2019-05-01' , 'Viña' , 468794132 )]
+2019-05-01 15:33:45.490 WARN  UsuarioServiceImpl:129 - null
+com.rollanddice.comunidice.exception.DataException: null
+	at com.rollanddice.comunidice.dao.impl.UsuarioDAOImpl.create(UsuarioDAOImpl.java:225) ~[bin/:?]
+	at com.rollanddice.comunidice.service.impl.UsuarioServiceImpl.signUp(UsuarioServiceImpl.java:118) [bin/:?]
+	at UsuarioServiceTest.main(UsuarioServiceTest.java:30) [bin/:?]
+2019-05-01 15:36:20.094 DEBUG UsuarioDAOImpl:152 - id = 7 email = false contraseña = false nombre = Estela apellido = Quijada apellido = Viña nombre usuario fmeñwlf fecha alta null descripción null telefono 468794132
+2019-05-01 15:36:20.101 DEBUG UsuarioDAOImpl:186 - INSERT INTO USUARIO (EMAIL , CONTRASENA, NOMBRE, APELLIDO1, NOMBRE_USUARIO, FECHA_ALTA, APELLIDO2 , TELEFONO ) VALUES(?, ?, ?, ?, ?, ? , ? , ? )
+2019-05-01 15:36:20.311 DEBUG UsuarioDAOImpl:205 - com.mchange.v2.c3p0.impl.NewProxyPreparedStatement@222114ba [wrapping: com.mysql.cj.jdbc.ClientPreparedStatement: INSERT INTO USUARIO (EMAIL , CONTRASENA, NOMBRE, APELLIDO1, NOMBRE_USUARIO, FECHA_ALTA, APELLIDO2 , TELEFONO ) VALUES('JDAIJDAO@FJL.COM', '67qrdPegRSTR3pz4MDsXSfrlT+LH+NRW1mDRE4R7X3UO3wENWHROwmbRPgMqvb3q', 'Estela', 'Quijada', 'fmeñwlf', '2019-05-01' , 'Viña' , 468794132 )]
+2019-05-01 15:36:20.446 WARN  UsuarioServiceImpl:129 - null
+com.rollanddice.comunidice.exception.DataException: null
+	at com.rollanddice.comunidice.dao.impl.UsuarioDAOImpl.create(UsuarioDAOImpl.java:225) ~[bin/:?]
+	at com.rollanddice.comunidice.service.impl.UsuarioServiceImpl.signUp(UsuarioServiceImpl.java:118) [bin/:?]
+	at UsuarioServiceTest.main(UsuarioServiceTest.java:30) [bin/:?]
+2019-05-01 15:43:03.233 DEBUG UsuarioDAOImpl:152 - id = 7 email = false contraseña = false nombre = Estela apellido = Quijada apellido = Viña nombre usuario fmeñwlf fecha alta null descripción null telefono 468794132
+2019-05-01 15:43:03.262 DEBUG UsuarioDAOImpl:186 - INSERT INTO USUARIO (EMAIL , CONTRASENA, NOMBRE, APELLIDO1, NOMBRE_USUARIO, FECHA_ALTA, APELLIDO2 , TELEFONO ) VALUES(?, ?, ?, ?, ?, ? , ? , ? )
+2019-05-01 15:43:03.485 DEBUG UsuarioDAOImpl:205 - com.mchange.v2.c3p0.impl.NewProxyPreparedStatement@25d250c6 [wrapping: com.mysql.cj.jdbc.ClientPreparedStatement: INSERT INTO USUARIO (EMAIL , CONTRASENA, NOMBRE, APELLIDO1, NOMBRE_USUARIO, FECHA_ALTA, APELLIDO2 , TELEFONO ) VALUES('JDAIJDAO@FJL.COM', 'pIPfJfosdjufbinuf2E83bNyoCKbIWFGPX7Xfni2KMstCwNF8PvCS95RAjGo/J+6', 'Estela', 'Quijada', 'fmeñwlf', '2019-05-01' , 'Viña' , 468794132 )]
+2019-05-01 15:43:03.565 WARN  UsuarioServiceImpl:129 - null
+com.rollanddice.comunidice.exception.DataException: null
+	at com.rollanddice.comunidice.dao.impl.UsuarioDAOImpl.create(UsuarioDAOImpl.java:225) ~[bin/:?]
+	at com.rollanddice.comunidice.service.impl.UsuarioServiceImpl.signUp(UsuarioServiceImpl.java:118) [bin/:?]
+	at UsuarioServiceTest.main(UsuarioServiceTest.java:30) [bin/:?]
+2019-05-01 16:35:31.092 DEBUG UsuarioDAOImpl:152 - id = 7 email = false contraseña = false nombre = Estela apellido = Quijada apellido = Viña nombre usuario fmwlf fecha alta null descripción null telefono 468794132
+2019-05-01 16:35:31.107 DEBUG UsuarioDAOImpl:186 - INSERT INTO USUARIO (EMAIL , CONTRASENA, NOMBRE, APELLIDO1, NOMBRE_USUARIO, FECHA_ALTA, APELLIDO2 , TELEFONO ) VALUES(?, ?, ?, ?, ?, ? , ? , ? )
+2019-05-01 16:35:31.864 DEBUG UsuarioDAOImpl:152 - id = 7 email = false contraseña = false nombre = Estela apellido = Quijada apellido = Viña nombre usuario fmwlf fecha alta null descripción null telefono 468794132
+2019-05-01 16:35:31.873 DEBUG UsuarioDAOImpl:186 - INSERT INTO USUARIO (EMAIL , CONTRASENA, NOMBRE, APELLIDO1, NOMBRE_USUARIO, FECHA_ALTA, APELLIDO2 , TELEFONO ) VALUES(?, ?, ?, ?, ?, ? , ? , ? )
+2019-05-01 16:35:32.287 DEBUG UsuarioDAOImpl:205 - com.mchange.v2.c3p0.impl.NewProxyPreparedStatement@25d250c6 [wrapping: com.mysql.cj.jdbc.ClientPreparedStatement: INSERT INTO USUARIO (EMAIL , CONTRASENA, NOMBRE, APELLIDO1, NOMBRE_USUARIO, FECHA_ALTA, APELLIDO2 , TELEFONO ) VALUES('JDAIJDAO@FJL.COM', 'IyMwoSaSp0C2CNHKqfiZZXbCiWKh+wPsnUNbkv1XgtpK7VaR600Udd+U+CwXUWEa', 'Estela', 'Quijada', 'fmwlf', '2019-05-01' , 'Viña' , 468794132 )]
+2019-05-01 16:35:32.560 DEBUG UsuarioDAOImpl:219 - id = 71 email = false contraseña = false nombre = Estela apellido = Quijada apellido = Viña nombre usuario fmwlf fecha alta null descripción null telefono 468794132
+2019-05-01 16:35:32.947 DEBUG UsuarioDAOImpl:205 - com.mchange.v2.c3p0.impl.NewProxyPreparedStatement@3d121db3 [wrapping: com.mysql.cj.jdbc.ClientPreparedStatement: INSERT INTO USUARIO (EMAIL , CONTRASENA, NOMBRE, APELLIDO1, NOMBRE_USUARIO, FECHA_ALTA, APELLIDO2 , TELEFONO ) VALUES('JDAIJDAO@FJL.COM', 'rIFtLFEoKtPVlHA+E1qB+0cBzOUiIcycOJBdc99gy+vGYD0skUdIr0zbWwNa3GQ4', 'Estela', 'Quijada', 'fmwlf', '2019-05-01' , 'Viña' , 468794132 )]
+2019-05-01 16:35:36.222 INFO  UsuarioServiceImpl:125 - Usuario creado con éxito
+2019-05-01 16:35:36.344 WARN  UsuarioServiceImpl:129 - null
+com.rollanddice.comunidice.exception.DataException: null
+	at com.rollanddice.comunidice.dao.impl.UsuarioDAOImpl.create(UsuarioDAOImpl.java:225) ~[bin/:?]
+	at com.rollanddice.comunidice.service.impl.UsuarioServiceImpl.signUp(UsuarioServiceImpl.java:118) [bin/:?]
+	at UsuarioServiceTest.main(UsuarioServiceTest.java:30) [bin/:?]
+2019-05-01 18:05:08.756 DEBUG UsuarioDAOImpl:238 - id = 6 email = true contraseña = false nombre = null apellido = null apellido = null nombre usuario null fecha alta null descripción null telefono null
+2019-05-01 18:05:09.133 WARN  UsuarioServiceImpl:197 - null
+java.lang.NullPointerException: null
+	at javax.mail.internet.InternetAddress.parse(InternetAddress.java:673) ~[mailapi.jar:1.4.5]
+	at javax.mail.internet.InternetAddress.parse(InternetAddress.java:633) ~[mailapi.jar:1.4.5]
+	at javax.mail.internet.InternetAddress.<init>(InternetAddress.java:111) ~[mailapi.jar:1.4.5]
+	at org.apache.commons.mail.Email.createInternetAddress(Email.java:1949) ~[commons-email-1.5.jar:1.5]
+	at org.apache.commons.mail.Email.addTo(Email.java:846) ~[commons-email-1.5.jar:1.5]
+	at org.apache.commons.mail.Email.addTo(Email.java:829) ~[commons-email-1.5.jar:1.5]
+	at org.apache.commons.mail.Email.addTo(Email.java:778) ~[commons-email-1.5.jar:1.5]
+	at com.rollanddice.comunidice.service.impl.MailServiceImpl.emailService(MailServiceImpl.java:26) ~[bin/:?]
+	at com.rollanddice.comunidice.service.impl.UsuarioServiceImpl.editar(UsuarioServiceImpl.java:188) [bin/:?]
+	at UsuarioServiceTest.main(UsuarioServiceTest.java:32) [bin/:?]
+2019-05-01 18:09:12.048 DEBUG UsuarioDAOImpl:238 - id = 6 email = true contraseña = false nombre = null apellido = null apellido = null nombre usuario null fecha alta null descripción null telefono null
+2019-05-01 18:12:57.231 WARN  UsuarioServiceImpl:197 - null
+java.lang.NullPointerException: null
+	at javax.mail.internet.InternetAddress.parse(InternetAddress.java:673) ~[mailapi.jar:1.4.5]
+	at javax.mail.internet.InternetAddress.parse(InternetAddress.java:633) ~[mailapi.jar:1.4.5]
+	at javax.mail.internet.InternetAddress.<init>(InternetAddress.java:111) ~[mailapi.jar:1.4.5]
+	at org.apache.commons.mail.Email.createInternetAddress(Email.java:1949) ~[commons-email-1.5.jar:1.5]
+	at org.apache.commons.mail.Email.addTo(Email.java:846) ~[commons-email-1.5.jar:1.5]
+	at org.apache.commons.mail.Email.addTo(Email.java:829) ~[commons-email-1.5.jar:1.5]
+	at org.apache.commons.mail.Email.addTo(Email.java:778) ~[commons-email-1.5.jar:1.5]
+	at com.rollanddice.comunidice.service.impl.MailServiceImpl.emailService(MailServiceImpl.java:26) ~[bin/:?]
+	at com.rollanddice.comunidice.service.impl.UsuarioServiceImpl.editar(UsuarioServiceImpl.java:188) [bin/:?]
+	at UsuarioServiceTest.main(UsuarioServiceTest.java:32) [bin/:?]
+2019-05-01 18:13:32.509 DEBUG UsuarioDAOImpl:238 - id = 6 email = true contraseña = false nombre = null apellido = null apellido = null nombre usuario null fecha alta null descripción null telefono null
+2019-05-01 18:13:32.800 INFO  UsuarioServiceImpl:193 - Usuario editado con éxito
