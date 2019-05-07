@@ -16,7 +16,7 @@ public interface ProductoService {
 	public Juego findJuegoById(Integer id) 
 		throws Exception;
 
-	public Results<Juego> findJuegoByCriteria(Criteria criteria, int startIndex, int count) 
+	public Results<Juego> findJuegoByCriteria(Criteria criteria, int startIndex, int count, String idioma) 
 		throws Exception;
 	
 	public void create(Producto p, String idioma)

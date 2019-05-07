@@ -15,7 +15,7 @@ public interface JuegoDAO {
 	public Juego findById(Connection c, Integer id)
 		throws InstanceNotFoundException, DataException;
 	
-	public Results<Juego> findByCriteria(Connection c, Criteria criteria, int startIndex, int count)
+	public Results<Juego> findByCriteria(Connection c, Criteria criteria, int startIndex, int count, String idioma)
 		throws InstanceNotFoundException, DataException;
 	
 	public void create(Connection c, Juego j)

@@ -65,7 +65,7 @@ public class JuegoDAOImpl implements JuegoDAO{
 	}
 
 	@Override
-	public Results<Juego> findByCriteria(Connection c, Criteria criteria, int startIndex, int count) 
+	public Results<Juego> findByCriteria(Connection c, Criteria criteria, int startIndex, int count, String idioma) 
 			throws InstanceNotFoundException, DataException{
 		
 		Juego j = null;
@@ -80,8 +80,10 @@ public class JuegoDAOImpl implements JuegoDAO{
 			sql = new StringBuilder(
 					" SELECT P.ID_PRODUCTO, P.ID_CATEGORIA, J.NOMBRE, P.PRECIO, J.DESCRIPCION, P.FECHA_ENTRADA, P.STOCK, "
 					+" P.IMAGEN, J.ID_USUARIO, J.FORMATO, J.PAGINAS, J.TIPO_VENDEDOR, J.ANO_PUBLICACION, J.TIPO_TAPA "
-					+" FROM PRODUCTO P INNER JOIN JUEGO J ON(P.ID_PRODUCTO = J.ID_PRODUCTO) ");
-			boolean first = true;
+					+" FROM PRODUCTO P INNER JOIN JUEGO J ON(P.ID_PRODUCTO = J.ID_PRODUCTO) INNER JOIN IDIOMA_PRODUCTO I "
+					+ " ON(I.ID_PRODUCTO=P.ID_PRODUCTO) "
+					+ " WHERE I.IDIOMA LIKE ? ");
+			boolean first = false;
 			
 			if(criteria.getIdCategoria()!=null) {
 				DaoUtils.anadir(sql, first, "ID_CATEGORIA = ?");
@@ -143,6 +145,7 @@ public class JuegoDAOImpl implements JuegoDAO{
 			int i = 1;
 			preparedStatement = c.prepareStatement(sql.toString(), ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			
+			preparedStatement.setString(i++, idioma);
 			if(criteria.getIdCategoria()!=null) {
 				preparedStatement.setInt(i++, criteria.getIdCategoria());
 			}

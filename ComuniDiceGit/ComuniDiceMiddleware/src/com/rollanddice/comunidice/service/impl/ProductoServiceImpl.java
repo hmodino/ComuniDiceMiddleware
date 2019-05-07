@@ -132,7 +132,7 @@ public class ProductoServiceImpl implements ProductoService{
 	}
 
 	@Override
-	public Results<Juego> findJuegoByCriteria(Criteria criteria, int startIndex, int count) throws Exception {
+	public Results<Juego> findJuegoByCriteria(Criteria criteria, int startIndex, int count, String idioma) throws Exception {
 		
 		boolean commit = false;
 		Connection c = null;
@@ -141,7 +141,7 @@ public class ProductoServiceImpl implements ProductoService{
 			c.setAutoCommit(false);
 			Double media = null;
 			Double favoritos = null;
-			Results<Juego> j = juegoDao.findByCriteria(c, criteria, startIndex, count);
+			Results<Juego> j = juegoDao.findByCriteria(c, criteria, startIndex, count, idioma);
 			for(Juego juego:j.getPage()) {
 				media = favoritoDao.mediaValoraciones(c, juego.getIdProducto());
 				favoritos = favoritoDao.countFavoritos(c, juego.getIdProducto());

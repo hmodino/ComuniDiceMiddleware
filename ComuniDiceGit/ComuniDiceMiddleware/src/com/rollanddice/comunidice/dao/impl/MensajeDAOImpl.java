@@ -32,7 +32,7 @@ public class MensajeDAOImpl implements MensajeDAO{
 				  +" WHERE ID_MENSAJE = ? ";
 			
 			preparedStatement = c.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-			
+		
 			int i = 1;
 			preparedStatement.setInt(i++, id);
 			resultSet = preparedStatement.executeQuery();			
@@ -65,9 +65,9 @@ public class MensajeDAOImpl implements MensajeDAO{
 		try {
 
 			String sql;
-			sql =  "SELECT ID_MENSAJE, ID_USUARIO1, ID_USUARIO2, CONTENIDO, FECHA_HORA "
-				  +" FROM MENSAJE "
-				  +" WHERE ID_USUARIO1 = ? ";
+			sql =  "SELECT M.ID_MENSAJE, M.ID_USUARIO1, M.ID_USUARIO2, M.CONTENIDO, M.FECHA_HORA, U.NOMBRE  "
+				  +" FROM MENSAJE M INNER JOIN USUARIO U ON(M.ID_USUARIO2=U.ID_USUARIO) "
+				  +" WHERE ID_USUARIO1 = ? ORDER BY M.FECHA_HORA DESC";
 			
 			preparedStatement = c.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			
@@ -77,7 +77,7 @@ public class MensajeDAOImpl implements MensajeDAO{
 
 			if(resultSet.next()) {
 				do {
-					m = loadNext(resultSet);
+					m = loadNextN(resultSet);
 					ms.add(m);
 				}while(resultSet.next());
 			}else {
@@ -106,9 +106,9 @@ public class MensajeDAOImpl implements MensajeDAO{
 		try {
 
 			String sql;
-			sql =  "SELECT ID_MENSAJE, ID_USUARIO1, ID_USUARIO2, CONTENIDO, FECHA_HORA "
-				  +" FROM MENSAJE "
-				  +" WHERE ID_USUARIO2 = ?";
+			sql =  "SELECT M.ID_MENSAJE, M.ID_USUARIO1, M.ID_USUARIO2, M.CONTENIDO, M.FECHA_HORA, U.NOMBRE "
+				  +" FROM MENSAJE M INNER JOIN USUARIO U ON(M.ID_USUARIO1=U.ID_USUARIO) "
+				  +" WHERE ID_USUARIO2 = ? ORDER BY M.FECHA_HORA DESC";
 			
 			preparedStatement = c.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			
@@ -117,7 +117,7 @@ public class MensajeDAOImpl implements MensajeDAO{
 			resultSet = preparedStatement.executeQuery();			
 			if(resultSet.next()) {
 				do{
-					m = loadNext(resultSet);
+					m = loadNextN(resultSet);
 					ms.add(m);
 				}while(resultSet.next());
 			}else {
@@ -219,5 +219,26 @@ public class MensajeDAOImpl implements MensajeDAO{
 		
 		return m;
 	}
+	
+	private Mensaje loadNextN(ResultSet resultSet) throws SQLException {
+		Mensaje m = new Mensaje();
 
+		int i = 1;
+		Integer id = resultSet.getInt(i++);
+		Integer idUsuario1 = resultSet.getInt(i++);
+		Integer idUsuario2 = resultSet.getInt(i++);
+		String contenido = resultSet.getString(i++);
+		Date fecha = resultSet.getDate(i++);
+		String nombre = resultSet.getString(i++);
+
+		m.setIdMensaje(id);
+		m.setUsuarioEmisor(idUsuario1);
+		m.setUsuarioReceptor(idUsuario2);
+		m.setContenido(contenido);
+		m.setFechaHora(fecha);
+		m.setNombre(nombre);
+
+		
+		return m;
+	}
 }

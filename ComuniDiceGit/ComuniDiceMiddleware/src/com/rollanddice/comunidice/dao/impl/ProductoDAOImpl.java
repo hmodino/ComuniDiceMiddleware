@@ -121,7 +121,9 @@ public class ProductoDAOImpl implements ProductoDAO{
 				if(criteria.getValoracion()!=null) {
 					DaoUtils.anadir(sql, first, " (SELECT AVG(VALORACION) FROM VALORACION_PRODUCTO_FAVORITOS) >= ? ");
 					first = false;
-			}
+				}
+				
+				sql.append(" ORDER BY PRECIO ASC");
 			
 			int i = 1;
 			preparedStatement = c.prepareStatement(sql.toString(), ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -131,7 +133,7 @@ public class ProductoDAOImpl implements ProductoDAO{
 				preparedStatement.setInt(i++, criteria.getIdCategoria());
 			}
 			if(criteria.getNombre() !=null) {
-				preparedStatement.setString(i++, criteria.getNombre());
+				preparedStatement.setString(i++, "%"+criteria.getNombre()+"%");
 			}
 			if(criteria.getPrecioDesde()!=null) {
 				preparedStatement.setDouble(i++, criteria.getPrecioDesde());

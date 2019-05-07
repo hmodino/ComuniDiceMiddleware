@@ -9,6 +9,7 @@ public class Mensaje extends AbstractValueObject{
 	private Integer usuarioReceptor = null;
 	private String contenido = null;
 	private Date fechaHora = null;
+	private String nombre = null;
 	
 	public Mensaje() {
 		
@@ -53,4 +54,11 @@ public class Mensaje extends AbstractValueObject{
 		this.fechaHora = fechaHora;
 	}
 
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
 }
